@@ -13,7 +13,7 @@ setup(
     author="Greyson R. LaLonde",
     author_email="greyson.r.lalonde@gmail.com",
     packages=find_packages(),
-    install_requires=['sphinx-rtd-dark-mode'],
+    install_requires=[],
     version="v0.1-alpha",
     license="MIT",
     description="React-native development for python users",
