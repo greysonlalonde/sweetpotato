@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Text, View } from "react-native";
+import { View, Text, Button } from "react-native";
 export class ScreenTwo extends React.Component {
   constructor(props) {
     super(props);

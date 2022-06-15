@@ -12,7 +12,11 @@ setup(
     download_url="https://github.com/greysonlalonde/sweetpotato/v0.1.0-alpha.tar.gz",
     author="Greyson R. LaLonde",
     author_email="greyson.r.lalonde@gmail.com",
-    packages=find_packages(),
+    packages=find_packages(
+        where='.',
+        include=['sweetpotato*'],
+        exclude=['sweetpotato.tests'],
+    ),
     install_requires=[],
     version="v0.1.0-alpha",
     license="MIT",
