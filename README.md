@@ -3,6 +3,8 @@
 -----
 [![alt text](https://img.shields.io/badge/pypi-0.1.a0-blue)](https://pypi.org/project/shareable) [![alt text](https://img.shields.io/badge/license-MIT-green)](https://github.com/greysonlalonde/shareable/blob/main/LICENSE)
 
+### *This project is still in early stages of development.*
+
 Sweetpotato provides an intuitive wrapper around React Native, making cross-platform development accessible from Python.
 - Supported packages:
   - [react-native](https://reactnative.dev)
