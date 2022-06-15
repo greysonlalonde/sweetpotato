@@ -39,7 +39,6 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
-    'myst_parser',
     'sphinx.ext.todo',
     "sphinx_rtd_dark_mode",
 ]
