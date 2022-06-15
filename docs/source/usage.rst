@@ -71,7 +71,7 @@ Example:
 
    from sweetpotato.components import View, Button, Text
    from sweetpotato.ui_kitten import Layout
-   from sweetpotato import settings
+   from sweetpotato.config import settings
    from sweetpotato.app import App
 
    settings.USE_UI_KITTEN = True
