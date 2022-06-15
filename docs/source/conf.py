@@ -87,6 +87,6 @@ html_theme_options = {
     'logo_only': True,
 
 }
-default_dark_mode = True
+default_light_mode = True
 
 html_logo = "_static/sweetpotato.png"
