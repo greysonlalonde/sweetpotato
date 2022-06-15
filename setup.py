@@ -14,6 +14,7 @@ setup(
     author_email="greyson.r.lalonde@gmail.com",
     packages=find_packages(),
     install_requires=[],
+    extra_requirements=['sphinx-rtd-dark-mode', ],
     version="v0.1-alpha",
     license="MIT",
     description="React-native development for python users",
