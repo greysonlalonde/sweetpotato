@@ -1,7 +1,7 @@
-# Sweetpotato
+<img src="https://raw.githubusercontent.com/greysonlalonde/sweetpotato/main/media/sweetpotato_github_banner.png" height=25% alt="">
 
 -----
-[![alt text](https://img.shields.io/badge/pypi-0.1.a0-blue)](https://pypi.org/project/shareable) [![alt text](https://img.shields.io/badge/license-MIT-green)](https://github.com/greysonlalonde/shareable/blob/main/LICENSE)
+[![alt text](https://img.shields.io/badge/pypi-0.1.a0-blue)](https://pypi.org/project/sweetpotato) [![alt text](https://img.shields.io/badge/license-MIT-green)](https://github.com/greysonlalonde/sweetpotato/blob/main/LICENSE)
 
 ### *This project is still in early stages of development.*
 
@@ -40,7 +40,7 @@ app = App(
 if __name__ == "__main__":
     app.run()                
 ```
-<img src="https://raw.githubusercontent.com/greysonlalonde/sweetpotato/main/media/readme_example.png?token=GHSAT0AAAAAABRVMLYCCZOSMGMRDYIRP4QCYSYUQRA" width=25% height=25%>
+<img src="https://raw.githubusercontent.com/greysonlalonde/sweetpotato/main/media/readme_example.png?token=GHSAT0AAAAAABRVMLYCCZOSMGMRDYIRP4QCYSYUQRA" width=25% height=25% alt="">
 
 Navigation example:
 ```python
