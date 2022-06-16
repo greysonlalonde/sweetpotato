@@ -3,6 +3,7 @@
 Provides functionality similar to the App component in an App.js file.
 """
 import json
+import logging
 import subprocess
 from typing import Optional
 
@@ -140,12 +141,20 @@ class App(Component, UIKitten):
             f"{settings.REACT_NATIVE_PATH}/App.js", "w", encoding="utf-8"
         ) as file:
             file.write(self._app_repr)
-
-        subprocess.run(
-            f"cd {settings.REACT_NATIVE_PATH} && yarn prettier --write .",
-            shell=True,
-            check=True,
-        )
+        try:
+            subprocess.run(
+                f"cd {settings.REACT_NATIVE_PATH} && yarn prettier",
+                shell=True,
+                check=True,
+            )
+        except subprocess.CalledProcessError as e:
+            logging.warning(f"{e}\nTrying yarn install...")
+            subprocess.run(
+                f"cd {settings.REACT_NATIVE_PATH} && yarn install",
+                shell=True,
+                check=True,
+            )
+            self.write_file()
 
     def compile_app(self) -> None:
         """Calls all relevant methods to write App.js file.

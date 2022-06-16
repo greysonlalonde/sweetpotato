@@ -32,8 +32,7 @@ class AbstractUIKitten(ABC):
 
 
 class UIKitten:
-    """Contains UI Kitten package methods.
-    """
+    """Contains UI Kitten package methods."""
 
     _ui_kitten_imports = {}
     _ui_kitten_component = {}
