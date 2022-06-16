@@ -1,5 +1,5 @@
 from os import path
-from setuptools import setup, find_packages
+from setuptools import setup
 
 this_directory = path.abspath(path.dirname(__file__))
 with open(path.join(this_directory, "README.md"), encoding="utf-8") as f:
@@ -12,11 +12,8 @@ setup(
     download_url="https://github.com/greysonlalonde/sweetpotato/v0.1.0-alpha.tar.gz",
     author="Greyson R. LaLonde",
     author_email="greyson.r.lalonde@gmail.com",
-    packages=find_packages(
-        where='.',
-        include=['sweetpotato*'],
-        exclude=['sweetpotato.tests'],
-    ),
+    package_dir={"": "src"},
+    include_package_data=True,
     install_requires=[],
     version="v0.1.0-alpha",
     license="MIT",

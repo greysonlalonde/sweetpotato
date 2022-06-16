@@ -1,0 +1,15 @@
+include README.md
+include LICENSE
+include src/sweetpotato/frontend/.expo/*
+include src/sweetpotato/frontend/.expo-shared/*
+include src/sweetpotato/frontend/assets/*
+include src/sweetpotato/frontend/src/*
+include src/sweetpotato/frontend/tests/*
+include src/sweetpotato/frontend/.gitignore
+include src/sweetpotato/frontend/.prettierignore
+include src/sweetpotato/frontend/.prettierrc.json
+include src/sweetpotato/frontend/app.json
+include src/sweetpotato/frontend/babel.config.js
+include src/sweetpotato/frontend/package.json
+include src/sweetpotato/frontend/App.js
+include src/sweetpotato/frontend/yarn.lock
