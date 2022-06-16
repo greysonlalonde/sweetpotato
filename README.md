@@ -1,7 +1,7 @@
 <img src="https://raw.githubusercontent.com/greysonlalonde/sweetpotato/main/media/sweetpotato_github_banner.png" height=25% alt="">
 
 -----
-[![alt text](https://img.shields.io/badge/pypi-0.1.a0-blue)](https://pypi.org/project/sweetpotato) [![alt text](https://img.shields.io/badge/license-MIT-green)](https://github.com/greysonlalonde/sweetpotato/blob/main/LICENSE)[![Documentation Status](https://readthedocs.org/projects/sweetpotato/badge/?version=latest)](https://sweetpotato.readthedocs.io/en/latest/?badge=latest)
+[![alt text](https://img.shields.io/badge/pypi-0.1.a0-blue)](https://pypi.org/project/sweetpotato) [![alt text](https://img.shields.io/badge/license-MIT-green)](https://github.com/greysonlalonde/sweetpotato/blob/main/LICENSE) [![Documentation Status](https://readthedocs.org/projects/sweetpotato/badge/?version=latest)](https://sweetpotato.readthedocs.io/en/latest/?badge=latest)
 
 
 ### *This project is still in early stages of development.*
