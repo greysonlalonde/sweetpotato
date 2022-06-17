@@ -3,6 +3,6 @@
 Todo:
     *
 """
-from sweetpotato.config import default_settings
+from sweetpotato.config.default_settings import Settings
 
-settings = default_settings
+settings = Settings()
