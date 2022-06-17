@@ -27,11 +27,11 @@ class App(Component, UIKitten):
         _app_repr: String representation of App.js file.
 
     Todo:
-        Refactor away from the Component parent.
+        * Refactor away from the Component parent.
     """
 
     def __init__(
-        self, theme: Optional[str] = None, state: Optional[dict] = None, **kwargs
+            self, theme: Optional[str] = None, state: Optional[dict] = None, **kwargs
     ) -> None:
         super().__init__(**kwargs)
         if state is None:
@@ -138,7 +138,7 @@ class App(Component, UIKitten):
             None
         """
         with open(
-            f"{settings.REACT_NATIVE_PATH}/App.js", "w", encoding="utf-8"
+                f"{settings.REACT_NATIVE_PATH}/App.js", "w", encoding="utf-8"
         ) as file:
             file.write(self._app_repr)
         try:

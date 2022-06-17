@@ -61,7 +61,7 @@ class ApplicationProvider(Component, UIKitten):
 
     See https://akveo.github.io/react-native-ui-kitten/docs/components/application-provider
     Todo:
-        Need to refactor this entirely.
+        * Need to refactor this entirely.
     """
 
     def __init__(self, **kwargs) -> None:

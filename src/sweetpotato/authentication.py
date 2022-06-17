@@ -80,7 +80,7 @@ class Login(Component):
         _stack: ...
 
     Todo:
-        Refactor into a child of :class:`sweetpotato.navigation.Screen`.
+        * Refactor into a child of :class:`sweetpotato.navigation.Screen`.
 
     """
 

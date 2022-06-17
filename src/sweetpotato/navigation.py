@@ -28,8 +28,8 @@ class Screen(Component):
         _functions (str): String representation of .js based functions.
 
     Todo:
-        Evaluate changing from Component inheritance to a BaseScreen class
-        and use as an interface to the underlying components.
+        * Evaluate changing from Component inheritance to a BaseScreen class
+          and use as an interface to the underlying components.
     """
 
     def __init__(
@@ -76,7 +76,7 @@ class Screen(Component):
             React Native friendly string representation.
 
         Todo:
-            Need to refactor this into smaller helper methods.
+            * Need to refactor this into smaller helper methods.
         """
         screen_name = "{'" + self._screen_name + "'}"
         screen_name_spaced = "{" + self._const_name + "}"
@@ -199,7 +199,7 @@ class NavigationContainer(Component):
         _attrs (str): String representation of key=value pair for RootNavigation.
 
     Todo:
-        Refactor _attrs method here.
+        * Refactor _attrs method here.
     """
 
     def __init__(self, theme: Optional[dict] = None, **kwargs) -> None:
