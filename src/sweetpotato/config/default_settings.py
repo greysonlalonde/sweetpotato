@@ -5,11 +5,11 @@ https://docs.sweetpotato.com/en/1.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.sweetpotato.com/en/1.0/ref/settings/
 """
-from threading import Lock
 from pathlib import Path
+from threading import Lock
 
-import sweetpotato.functions.authentication_functions as auth_functions
 import sweetpotato.defaults as defaults
+import sweetpotato.functions.authentication_functions as auth_functions
 
 
 # Navigation configuration
@@ -25,8 +25,7 @@ class UIKitten:
 
 
 class SettingsMeta(type):
-    """Metaclass for making Settings class a thread-safe singleton.
-    """
+    """Metaclass for making Settings class a thread-safe singleton."""
 
     _instances = {}
     _lock: Lock = Lock()
@@ -80,6 +79,9 @@ class Settings(metaclass=SettingsMeta):
     TIMEOUT = auth_functions.TIMEOUT
     AUTH_FUNCTIONS = {APP_COMPONENT: LOGIN_FUNCTION, LOGIN_COMPONENT: SET_CREDENTIALS}
 
+    # Navigation settings
+    USE_NAVIGATION = False
+
     # React Native settings
     RESOURCE_FOLDER = "frontend"
     SOURCE_FOLDER = "src"
@@ -90,7 +92,6 @@ class Settings(metaclass=SettingsMeta):
         "components": "react-native",
         "ui_kitten": UIKitten.ui_kitten_components,
         "navigation": ReactNavigation.native,
-        "app": ReactNavigation.native,
     }
     REPLACE_COMPONENTS = {
         "StackNavigator": {
@@ -104,6 +105,10 @@ class Settings(metaclass=SettingsMeta):
         "SafeAreaProvider": {
             "package": "react-native-safe-area-context",
             "import": "SafeAreaProvider",
+        },
+        "NavigationContainer": {
+            "package": ReactNavigation.native,
+            "import": "NavigationContainer",
         },
         **UI_KITTEN_REPLACEMENTS,
     }
@@ -123,12 +128,18 @@ class Settings(metaclass=SettingsMeta):
     def set_ui_kitten(cls):
         cls.UI_KITTEN_REPLACEMENTS.update(
             {
-                "TextInput": {"import": "Input", "package": UIKitten.ui_kitten_components},
+                "TextInput": {
+                    "import": "Input",
+                    "package": UIKitten.ui_kitten_components,
+                },
                 "Text": {
                     "import": "Text",
                     "package": UIKitten.ui_kitten_components,
                 },
-                "Button": {"import": "Button", "package": UIKitten.ui_kitten_components},
+                "Button": {
+                    "import": "Button",
+                    "package": UIKitten.ui_kitten_components,
+                },
             }
         )
 
@@ -136,11 +147,16 @@ class Settings(metaclass=SettingsMeta):
     def set_api(cls):
         cls.LOGIN_FUNCTION = auth_functions.LOGIN.replace("API_URL", cls.API_URL)
         cls.LOGOUT_FUNCTION = auth_functions.LOGOUT.replace("API_URL", cls.API_URL)
-        cls.AUTH_FUNCTIONS = {cls.APP_COMPONENT: cls.LOGIN_FUNCTION, cls.LOGIN_COMPONENT: cls.SET_CREDENTIALS}
+        cls.AUTH_FUNCTIONS = {
+            cls.APP_COMPONENT: cls.LOGIN_FUNCTION,
+            cls.LOGIN_COMPONENT: cls.SET_CREDENTIALS,
+        }
 
     @classmethod
     def set_react_native(cls):
-        cls.REACT_NATIVE_PATH = f"{Path(__file__).resolve().parent.parent}/{cls.RESOURCE_FOLDER}"
+        cls.REACT_NATIVE_PATH = (
+            f"{Path(__file__).resolve().parent.parent}/{cls.RESOURCE_FOLDER}"
+        )
 
     @classmethod
     def __setattr__(cls, key, value):
