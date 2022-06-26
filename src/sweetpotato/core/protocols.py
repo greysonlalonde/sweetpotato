@@ -1,4 +1,5 @@
-from typing import Protocol, Optional, List, Iterable, Union
+from typing import Protocol, Optional, List, Union
+
 from sweetpotato.config import settings
 
 
@@ -6,6 +7,7 @@ class Component(Protocol):
     name: str
     parent: "Component"
     is_composite: bool = False
+    is_root: bool = False
     package: dict
     children: Optional[Union[int, str]] = None
 
@@ -14,50 +16,49 @@ class Component(Protocol):
 
 
 class Composite(Component):
-    is_composite: bool = True
-    children: Optional[List[Union["Component", "Composite"]]] = None
+    is_composite: bool
+    children: Optional[List[Union[Component, "Composite"]]]
 
 
 class Visitor(Protocol):
     ...
 
 
-def register(children: Iterable[Component], visitor: Visitor) -> Union[dict, list]:
-    res = []
-    for child in children:
-        value = child.register(visitor)
-        if value not in res:
-            res.append(value)
-    return res
+def register(component: Union[Component, Composite], visitor: Visitor) -> None:
+    if component.is_composite and component.children:
+        for child in component.children:
+            register(child, visitor)
+    component.register(visitor)
 
 
 class Renderer:
     @classmethod
-    def accept(cls, obj: Component) -> str:
-        left, right = cls.format_name(obj)
-        if obj.is_composite:
-            children = "".join([cls.accept(child) for child in obj.children])
-            return f"{left}{children}{right}"
-        return f"{left}<{obj.name}>{obj.children}</{obj.name}>{right}"
+    def accept(cls, obj: Component) -> None:
+        obj.rendition = cls.format_component(obj)
 
     @classmethod
-    def format_name(cls, obj: Component) -> tuple:
-        return (
-            (f"<{obj.parent.name}>", f"</{obj.parent.name}>")
-            if obj.parent
-            else ("", "")
-        )
+    def render(cls, component) -> str:
+        if component.is_composite:
+            return "".join(list(map(lambda x: x.rendition, component.children)))
+        return component.children
+
+    @classmethod
+    def format_component(cls, obj: Component) -> str:
+        if obj.children:
+            return f"<{obj.name}>{cls.render(obj)}</{obj.name}>"
+        return f"<{obj.name}/>"
 
 
 class Importer:
-    temp_storage = {}
+    temp_storage = {"react": {"React"}, "imported": set()}
 
     @classmethod
     def accept(cls, obj: Component) -> dict:
-        for child in obj.children:
-            cls.format_imports(cls.replace_import(child))
-        cls.format_imports(cls.replace_import(obj))
-        return cls.temp_storage
+        if obj.name not in cls.temp_storage["imported"]:
+            cls.temp_storage["imported"].add(obj.name)
+            cls.format_imports(cls.replace_import(obj))
+            obj.imports = cls.temp_storage
+            return cls.temp_storage
 
     @classmethod
     def replace_import(cls, obj: Component) -> dict:
