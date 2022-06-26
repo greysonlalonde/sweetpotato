@@ -2,11 +2,11 @@
 Provides props for react-navigation components.
 """
 
-NAVIGATION_CONTAINER_PROPS = {"theme"}
+NAVIGATION_CONTAINER_PROPS = {"children", "theme"}
 
 NATIVE_STACK_NAVIGATOR_PROPS = {}
 
-BOTTOM_TAB_NAVIGATOR_PROPS = {}
+TAB_NAVIGATOR_PROPS = {}
 
 DRAWER_NAVIGATOR_PROPS = {}
 

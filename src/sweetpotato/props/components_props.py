@@ -176,6 +176,7 @@ TEXT_PROPS = {
     "suppressHighlighting",
     "textBreakStrategy",
     "style",
+    "text"
     # "suppressHighlighting",
     # "ellipsizeMode",
     # "dataDetectorType",
@@ -356,6 +357,7 @@ VIEW_PROPS = {
     # "accessibilityIgnoresInvertColors",
     # "onAccessibilityEscape",
     # "onMagicTap",
+    "children",
 }
 
 ACTIVITY_INDICATOR_PROPS = {
@@ -372,4 +374,6 @@ STYLE_SHEET_PROPS = {}
 
 APP_PROPS = {"state"}
 
-SAFE_AREA_PROVIDER_PROPS = {"theme"}
+SAFE_AREA_PROVIDER_PROPS = {
+    "children",
+}

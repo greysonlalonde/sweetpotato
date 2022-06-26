@@ -3,11 +3,9 @@ Provides props for ui-kitten components.
 """
 ICON_REGISTRY_PROPS = {}
 
-APPLICATION_PROVIDER_PROPS = {
-    "theme",
-}
+APPLICATION_PROVIDER_PROPS = {"theme", "children"}
 
-LAYOUT_PROPS = {"style"}
+LAYOUT_PROPS = {"children", "style"}
 
 TEXT_PROPS = {"text"}
 
