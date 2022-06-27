@@ -4,8 +4,8 @@ See `UI Kitten <https://akveo.github.io/react-native-ui-kitten/docs/components/c
 """
 from abc import ABC, abstractmethod
 
-from sweetpotato.components import Component
 from sweetpotato.config import settings
+from sweetpotato.core.base import Component, Composite
 
 
 class AbstractUIKitten(ABC):
@@ -56,7 +56,7 @@ class UIKitten:
         cls._ui_kitten_component["@ui-kitten/components"] = cls.__name__
 
 
-class ApplicationProvider(Component, UIKitten):
+class ApplicationProvider(Composite, UIKitten):
     """Implementation of ui-kitten ApplicationProvider component.
 
     See https://akveo.github.io/react-native-ui-kitten/docs/components/application-provider
@@ -68,7 +68,7 @@ class ApplicationProvider(Component, UIKitten):
         super().__init__(**kwargs)
 
         eva = "{...eva}"
-        self._attrs = f"{self._attrs} {eva}" if self._attrs else eva
+        # self._attrs = f"{self._attrs} {eva}" if self._attrs else eva
 
 
 class IconRegistry(Component):
@@ -80,7 +80,7 @@ class IconRegistry(Component):
     pass
 
 
-class Layout(Component):
+class Layout(Composite):
     """Implementation of ui-kitten Layout component.
 
     See https://akveo.github.io/react-native-ui-kitten/docs/components/layout.
