@@ -2,14 +2,14 @@
 Provides props for react-navigation components.
 """
 
-NAVIGATION_CONTAINER_PROPS = {"children", "theme"}
+NAVIGATION_CONTAINER_PROPS = {"children", "ref"}
 
 NATIVE_STACK_NAVIGATOR_PROPS = {}
 
-TAB_NAVIGATOR_PROPS = {}
+TAB_PROPS = {"name"}
 
 DRAWER_NAVIGATOR_PROPS = {}
 
-SCREEN_PROPS = {"type", "screen_name", "state"}
+SCREEN_PROPS = {"children", "type", "screen_name", "state", "screen_type"}
 
 BASE_NAVIGATOR_PROPS = {}
