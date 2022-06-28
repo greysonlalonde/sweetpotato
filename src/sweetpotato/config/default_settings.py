@@ -1,5 +1,5 @@
-"""
-Default sweetpotato settings.
+"""Default sweetpotato settings.
+
 For more information on this file, see
 https://docs.sweetpotato.com/en/1.0/topics/settings/
 For the full list of settings and their values, see
@@ -14,6 +14,8 @@ import sweetpotato.functions.authentication_functions as auth_functions
 
 # Navigation configuration
 class ReactNavigation:
+    """Provides changeable configuration for React Navigation packages."""
+
     native = "@react-navigation/native"
     bottom_tabs = "@react-navigation/bottom-tabs"
     stack = "@react-navigation/native-stack"
@@ -21,6 +23,8 @@ class ReactNavigation:
 
 # UI Kitten configuration
 class UIKitten:
+    """Provides changeable configuration for UI Kitten packages."""
+
     ui_kitten_components = "@ui-kitten/components"
 
 
@@ -97,19 +101,24 @@ class Settings(metaclass=SettingsMeta):
         "StackNavigator": {
             "package": ReactNavigation.stack,
             "import": "createNativeStackNavigator",
+            "name": "StackNavigator",
         },
-        "TabNavigator": {
+        "Tab": {
             "package": ReactNavigation.bottom_tabs,
             "import": "createBottomTabNavigator",
+            "component_name": "Tab.Navigator",
         },
         "SafeAreaProvider": {
             "package": "react-native-safe-area-context",
             "import": "SafeAreaProvider",
+            "name": "SafeAreaProvider",
         },
         "NavigationContainer": {
             "package": ReactNavigation.native,
             "import": "NavigationContainer",
+            "name": "NavigationContainer",
         },
+        "Screen": {},
         **UI_KITTEN_REPLACEMENTS,
     }
 
