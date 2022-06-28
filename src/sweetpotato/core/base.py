@@ -1,10 +1,11 @@
 import re
-from typing import Union, Optional
+from typing import Union, Optional, List
+
 from sweetpotato.config import settings
 from sweetpotato.core.exceptions import AttrError
 
 
-def set_props(name: str, cls_dict: dict) -> dict:
+def _set_props(name: str, cls_dict: dict) -> dict:
     """Imports and sets attribute :attr`~sweetpotato.core.base.Component._props` for all subclasses.
 
     Args:
@@ -14,8 +15,6 @@ def set_props(name: str, cls_dict: dict) -> dict:
     Returns:
         Dictionary of props from :mod:`sweetpotato.props`.
     """
-    if name == settings.APP_COMPONENT:
-        return settings.APP_PROPS
     package = ".".join(cls_dict["__module__"].split(".")[:2])
     props = f'{"_".join(re.findall("[A-Z][^A-Z]*", name)).upper()}_PROPS'
     pack = package.split(".")
@@ -24,7 +23,7 @@ def set_props(name: str, cls_dict: dict) -> dict:
     return getattr(__import__(package, fromlist=[props]), props)
 
 
-def set_package(name: str, cls_dict: dict) -> str:
+def _set_package(name: str, cls_dict: dict) -> str:
     """Sets component React Native package.
 
     Args:
@@ -38,7 +37,31 @@ def set_package(name: str, cls_dict: dict) -> str:
     return (
         settings.IMPORTS.get(package)
         if name not in settings.REPLACE_COMPONENTS
-        else settings.REPLACE_COMPONENTS.get(name)["package"]
+        else settings.REPLACE_COMPONENTS.get(name, name).get("package", name)
+    )
+
+
+def _set_name(name: str):
+    return (
+        name
+        if name not in settings.REPLACE_COMPONENTS
+        else settings.REPLACE_COMPONENTS.get(name, name).get("name", name)
+    )
+
+
+def _set_component_name(name: str):
+    return (
+        name
+        if name not in settings.REPLACE_COMPONENTS
+        else settings.REPLACE_COMPONENTS.get(name, name).get("component_name", name)
+    )
+
+
+def _set_import(name: str):
+    return (
+        name
+        if name not in settings.REPLACE_COMPONENTS
+        else settings.REPLACE_COMPONENTS.get(name, name).get("import", name)
     )
 
 
@@ -47,10 +70,12 @@ class MetaComponent(type):
 
     def __call__(cls, *args, **kwargs) -> None:
         if cls.__name__ not in MetaComponent.__registry:
-            cls.name = cls.__name__
+            cls.name = _set_name(cls.__name__)
+            cls.component_name = _set_component_name(cls.__name__)
+            cls.import_name = _set_import(cls.__name__)
+            cls._props = _set_props(cls.name, cls.__dict__)
+            cls._package = _set_package(cls.name, cls.__dict__)
             cls.__registry.add(cls.name)
-            cls._props = set_props(cls.name, cls.__dict__)
-            cls._package = set_package(cls.name, cls.__dict__)
         if set(kwargs.keys()).difference(cls._props):
             attributes = "".join(set(kwargs.keys()).difference(cls._props))
             raise AttrError(key=attributes, name=cls.name)
@@ -58,26 +83,55 @@ class MetaComponent(type):
 
 
 class Component(metaclass=MetaComponent):
+    is_screen: bool = False
+    is_root: bool = False
     is_composite: bool = False
     package: str = "components"
 
-    def __init__(
-        self, children: Optional[Union[int, str]] = None, *args, **kwargs
-    ) -> None:
+    def __init__(self, children: Optional[Union[int, str]] = None, **kwargs) -> None:
+        self._rendition = None
+        self.attrs = kwargs
         self.children = children
-        self.parent = None
+        self.parent = settings.APP_COMPONENT
 
-    def register(self, visitor) -> list:
-        results = visitor.accept(self)
-        return results
+    def register(self, visitor) -> None:
+        """Registers a specified visitor with component.
+
+        Args:
+            visitor (Visitor): Visitor.
+
+        Returns:
+            None
+        """
+        visitor.accept(self)
+
+    @property
+    def rendition(self) -> Optional[str]:
+        return self._rendition
+
+    @rendition.setter
+    def rendition(self, rendition) -> None:
+        self._rendition = rendition
 
 
 class Composite(Component):
     is_composite: bool = True
 
-    def __init__(self, **kwargs) -> None:
-        super().__init__(
-            children=kwargs.pop("children") if kwargs.get("children") else [], **kwargs
-        )
+    def __init__(
+        self, children: Optional[Union[List, "Composite"]] = None, **kwargs
+    ) -> None:
+        super().__init__(**kwargs)
+        self.children = children if children else []
+
+    def register(self, visitor):
+        """Registers a specified visitor with component and child components.
+
+        Args:
+            visitor (Visitor): Visitor.
+
+        Returns:
+            None
+        """
         for child in self.children:
-            child.parent = self
+            child.register(visitor)
+        super().register(visitor)
