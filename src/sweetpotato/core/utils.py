@@ -1,3 +1,8 @@
+"""
+Todo:
+    * Add docstrings for all classes & methods.
+    * Add typing.
+"""
 from abc import ABC, abstractmethod
 
 from sweetpotato.config import settings
