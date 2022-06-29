@@ -4,12 +4,13 @@ Todo:
     * Add typing.
 """
 from abc import ABC, abstractmethod
+from typing import Union
 
 from sweetpotato.config import settings
-from sweetpotato.core.protocols import Component
+from sweetpotato.core.protocols import Component, Composite
 
 
-class AppProxy:
+class Storage:
     """Provides storage for app internals."""
 
     internals = {}
@@ -32,7 +33,42 @@ class Visitor(ABC):
         raise NotImplementedError
 
 
-class Renderer(Visitor):
+class ApplicationRenderer(Visitor):
+    rendered = set()
+
+    @classmethod
+    def accept(cls, obj: Composite) -> None:
+        cls.render_imports(obj)
+
+    @classmethod
+    def render_application(cls, obj: Composite):
+        ...
+
+    @classmethod
+    def render_imports(cls, obj):
+        if obj.is_root:
+            formatted = Storage.internals[obj.parent].pop("imports")
+            Storage.internals[obj.parent]["imports"] = cls.format_imports(formatted)
+
+    @classmethod
+    def format_imports(cls, imports: dict[str, str]) -> str:
+        """Formats import dictionary to React Native friendly representation.
+
+        Returns:
+            String representation of all imports.
+        """
+        import_str = ""
+        print("\n")
+        print(imports)
+        for k, v in imports.items():
+            print(k, v)
+            import_str += f'import {v} from "{k}";\n'.replace("'", "")
+            imports[k] = import_str
+            print(f"imp: {import_str}")
+        return import_str
+
+
+class ComponentRenderer(Visitor):
     """Accumulates react-native friendly string representations of components."""
 
     @classmethod
@@ -47,7 +83,7 @@ class Renderer(Visitor):
         """
 
         obj.rendition = cls.render_component(obj)
-        AppProxy.internals[obj.parent] = {"component": obj.rendition, "imports": {}}
+        Storage.internals[obj.parent] = {"component": obj.rendition, "imports": {}}
 
     @classmethod
     def render_children(cls, obj: Component) -> str:
@@ -66,7 +102,7 @@ class Renderer(Visitor):
         )
 
     @classmethod
-    def render_component(cls, obj: Component) -> str:
+    def render_component(cls, obj: Union[Component, Composite]) -> str:
         """Render React Native friendly string representation of component.
 
         Args:
@@ -93,7 +129,7 @@ class Renderer(Visitor):
         return "".join([f" {k}={'{'}{v}{'}'}" for k, v in attrs.items()])
 
 
-class Importer(Visitor):
+class ImportRenderer(Visitor):
     """Accumulates component imports per screen."""
 
     @classmethod
@@ -106,9 +142,9 @@ class Importer(Visitor):
         Returns:
             None
         """
-        if obj.parent not in AppProxy.internals:
+        if obj.parent not in Storage.internals:
             obj.imports = cls.replace_import(obj)
-            AppProxy.internals[obj.parent] = {"imports": {}}
+            Storage.internals[obj.parent] = {"imports": {}}
         cls.add_import(obj)
 
     @classmethod
@@ -131,27 +167,13 @@ class Importer(Visitor):
 
     @classmethod
     def add_import(cls, obj: Component) -> None:
-        """Adds import dictionary to AppProxy object.
+        """Adds import dictionary to Storage object.
 
         Returns:
             String representation of all imports.
         """
         obj.imports = cls.replace_import(obj)
         component, package = tuple((k, v) for k, v in obj.imports.items())[0]
-        if package not in AppProxy.internals[obj.parent]["imports"]:
-            AppProxy.internals[obj.parent]["imports"][package] = set()
-        AppProxy.internals[obj.parent]["imports"][package].add(component)
-
-    @classmethod
-    def format_imports(cls, imports: dict[str, str]) -> str:
-        """Formats import dictionary to React Native friendly representation.
-
-        Returns:
-            String representation of all imports.
-        """
-        import_str = ""
-        for k, v in imports.items():
-            left = "{"
-            right = "}"
-            import_str += f'import {left}{k}{right} from "{v}";\n'.replace("'", "")
-        return import_str
+        if package not in Storage.internals[obj.parent]["imports"]:
+            Storage.internals[obj.parent]["imports"][package] = set()
+        Storage.internals[obj.parent]["imports"][package].add(component)
