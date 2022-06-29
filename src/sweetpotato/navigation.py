@@ -13,15 +13,15 @@ class NavigationContainer(Composite):
 
 class Screen(Composite):
     """React navigation screen component.
-       Args:
-           functions: String representation of .js based functions.
-           state: Dictionary of allowed state values for component.
-       Attributes:
-           screen_name (str): Name of specific screen.
-           import_name (str): Name of .js const for screen.
-           state (dict): Dictionary of allowed state values for component.
-           functions (str): String representation of .js based functions.
-       """
+    Args:
+        functions: String representation of .js based functions.
+        state: Dictionary of allowed state values for component.
+    Attributes:
+        screen_name (str): Name of specific screen.
+        import_name (str): Name of .js const for screen.
+        state (dict): Dictionary of allowed state values for component.
+        functions (str): String representation of .js based functions.
+    """
 
     package = None
     is_screen = True
@@ -58,10 +58,9 @@ class BaseNavigator(Composite):
 
     def screen(self, screen_name: str, children: List) -> None:
         self.children.append(
-            Screen(screen_name=screen_name,
-                   screen_type=self.screen_type,
-                   children=children
-                   )
+            Screen(
+                screen_name=screen_name, screen_type=self.screen_type, children=children
+            )
         )
 
 
@@ -70,22 +69,25 @@ class StackNavigator(BaseNavigator):
 
     See https://reactnavigation.org/docs/stack-navigator
     """
+
     pass
 
 
 class TabNavigator(BaseNavigator):
     """Abstraction of React Navigation TabNavigator component.
 
-     See https://reactnavigation.org/docs/bottom-tab-navigator
-     """
+    See https://reactnavigation.org/docs/bottom-tab-navigator
+    """
+
     pass
 
 
 class Tab(BaseNavigator):
     """Abstraction of React Navigation TabNavigator component.
 
-     See https://reactnavigation.org/docs/bottom-tab-navigator
-     """
+    See https://reactnavigation.org/docs/bottom-tab-navigator
+    """
+
     pass
 
 
