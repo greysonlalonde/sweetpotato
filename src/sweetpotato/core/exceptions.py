@@ -4,6 +4,12 @@
 """
 
 
+class DependencyError(Exception):
+    """Dependency not found in system."""
+
+    pass
+
+
 class ImproperlyConfigured(Exception):
     """Sweetpotato is somehow improperly configured."""
 
