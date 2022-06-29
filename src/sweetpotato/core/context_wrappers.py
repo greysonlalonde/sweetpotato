@@ -38,6 +38,7 @@ class Wrapper(AbstractWrapper):
         if self._next_wrapper:
             return self._next_wrapper.wrap(component)
         component.is_root = True
+        component.is_screen = True
         return component
 
 
