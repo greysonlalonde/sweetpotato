@@ -12,7 +12,11 @@ from sweetpotato.core.utils import (
 class App:
     context = ContextWrapper()
     build = Build()
-    renderers = (ComponentRenderer, ImportRenderer, ApplicationRenderer,)
+    renderers = (
+        ComponentRenderer,
+        ImportRenderer,
+        ApplicationRenderer,
+    )
 
     def __init__(self, children: Optional[List] = None) -> None:
         super().__init__()
