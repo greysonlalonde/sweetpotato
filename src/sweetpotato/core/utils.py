@@ -58,13 +58,9 @@ class ApplicationRenderer(Visitor):
             String representation of all imports.
         """
         import_str = ""
-        print("\n")
-        print(imports)
         for k, v in imports.items():
-            print(k, v)
             import_str += f'import {v} from "{k}";\n'.replace("'", "")
             imports[k] = import_str
-            print(f"imp: {import_str}")
         return import_str
 
 
