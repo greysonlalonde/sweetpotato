@@ -11,6 +11,7 @@ from sweetpotato.components import SafeAreaProvider
 from sweetpotato.config import settings
 from sweetpotato.navigation import NavigationContainer
 from sweetpotato.ui_kitten import ApplicationProvider
+from sweetpotato.core.protocols import Composite
 
 
 class AbstractWrapper(ABC):
@@ -34,7 +35,7 @@ class Wrapper(AbstractWrapper):
             self._next_wrapper.set_next(wrapper)
 
     @abstractmethod
-    def wrap(self, component):
+    def wrap(self, component) -> Composite:
         if self._next_wrapper:
             return self._next_wrapper.wrap(component)
         component.is_root = True
@@ -43,26 +44,27 @@ class Wrapper(AbstractWrapper):
 
 
 class UIKittenWrapper(Wrapper):
-    def wrap(self, component):
+    def wrap(self, component: Composite) -> Composite:
         if settings.USE_UI_KITTEN:
             component = ApplicationProvider(children=[component])
         return super().wrap(component)
 
 
 class AuthenticationWrapper(Wrapper):
-    def wrap(self, component):
+    def wrap(self, component: Composite) -> Composite:
         if settings.USE_AUTHENTICATION:
             component = AuthenticationProvider(children=[component])
         return super().wrap(component)
 
 
 class NavigationWrapper(Wrapper):
-    def wrap(self, component):
+    def wrap(self, component: Composite) -> Composite:
         if settings.USE_NAVIGATION:
             component = NavigationContainer(children=[component], ref="navigationRef")
         return super().wrap(component)
 
 
 class ContextWrapper(AuthenticationWrapper, UIKittenWrapper, NavigationWrapper):
-    def wrap(self, component: List):
-        return super().wrap(SafeAreaProvider(children=component))
+    def wrap(self, component: List) -> Composite:
+        component = SafeAreaProvider(children=component)
+        return super().wrap(component)
