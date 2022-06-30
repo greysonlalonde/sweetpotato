@@ -5,7 +5,6 @@ this_directory = path.abspath(path.dirname(__file__))
 with open(path.join(this_directory, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
-
 setup(
     name="sweetpotato",
     url="https://github.com/greysonlalonde/sweetpotato",
@@ -15,7 +14,7 @@ setup(
     package_dir={"": "src"},
     include_package_data=True,
     install_requires=[],
-    version="v0.1.0-alpha",
+    version="v0.2.0-alpha",
     license="MIT",
     description="React-native development for python.",
     long_description=long_description,

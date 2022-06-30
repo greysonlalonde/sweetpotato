@@ -24,7 +24,7 @@ def _set_props(name: str, cls_dict: dict) -> dict:
 
 
 def _set_package(import_name: str, cls_dict: dict) -> str:
-    """Sets component React Native package.
+    """Sets React Native :attr`~sweetpotato.core.base.Component.package` for component.
 
     Args:
         import_name: React Native component name.
@@ -58,6 +58,14 @@ def _set_import(name: str):
 
 
 class MetaComponent(type):
+    """Base React Native component metaclass for the Component class.
+    Note:
+        The :class:`~sweetpotato.core.base.MetaComponent` metaclass sets attributes for
+        all components, including user-defined ones.
+
+    Todo:
+        * Can likely refactor to using `import_name` attr and removing `name`
+    """
     __registry = set()
 
     def __call__(cls, *args, **kwargs) -> None:

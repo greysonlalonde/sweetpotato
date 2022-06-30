@@ -22,8 +22,8 @@ copyright = "2022, Greyson R. LaLonde"
 author = "Greyson R. LaLonde"
 
 # The full version, including alpha/beta/rc tags
-release = "v0.1-alpha"
-version = "v0.1-alpha"
+release = "v0.2-alpha"
+version = "v0.2-alpha"
 
 # -- General configuration ---------------------------------------------------
 

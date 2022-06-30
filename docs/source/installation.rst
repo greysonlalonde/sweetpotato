@@ -16,11 +16,9 @@ Enable `yarn <https://yarnpkg.com/getting-started/install>`_ through corepack an
 
     (venv) $ corepack enable && npm install --global expo-cli
 
-Finally, install **sweetpotato** using pip or conda:
+Finally, install **sweetpotato** using pip:
 
 .. code-block:: console
 
    # pip:
    (venv) $ pip install sweetpotato
-   # conda:
-   (venv) $ conda install sweetpotato
