@@ -31,7 +31,8 @@ def _set_package(import_name: str, cls_dict: dict) -> str:
         cls_dict: Contains :class:`sweetpotato.core.base.Component` attributes.
 
     Returns:
-        String representation of React Native package for given :class:`sweetpotato.core.base.Component`.
+        String representation of React Native package for
+        :class:`~sweetpotato.core.base.Component` and :class:`~sweetpotato.core.base.Composite`.
     """
     package = ".".join(cls_dict["__module__"].split(".")[1:2])
     return (
@@ -41,7 +42,16 @@ def _set_package(import_name: str, cls_dict: dict) -> str:
     )
 
 
-def _set_name(name: str):
+def _set_name(name: str) -> str:
+    """Sets React Native :attr`~sweetpotato.core.base.Component.name` for component.
+
+    Args:
+        name: React Native component name.
+
+    Returns:
+        String representation of React Native name for
+        :class:`~sweetpotato.core.base.Component` and :class:`~sweetpotato.core.base.Composite`.
+    """
     return (
         name
         if name not in settings.REPLACE_COMPONENTS
@@ -49,7 +59,16 @@ def _set_name(name: str):
     )
 
 
-def _set_import(name: str):
+def _set_import(name: str) -> str:
+    """Sets React Native :attr`~sweetpotato.core.base.Component.import_name` for component.
+
+    Args:
+        name: React Native component import name.
+
+    Returns:
+        String representation of React Native import name for
+        :class:`~sweetpotato.core.base.Component` and :class:`~sweetpotato.core.base.Composite`
+    """
     return (
         name
         if name not in settings.REPLACE_COMPONENTS
@@ -82,6 +101,19 @@ class MetaComponent(type):
 
 
 class Component(metaclass=MetaComponent):
+    """Base React Native component with MetaComponent metaclass.
+
+    Keyword Args:
+        children (str, optional): Inner content for component.
+
+    Attributes:
+        children (str, optional): Inner content for component.
+        variables (set): Contains variables (if any) belonging to given component.
+        attrs (dict): String of given attributes for component.
+
+    Example:
+        ``component = Component(children="foo")``
+    """
     is_screen: bool = False
     is_root: bool = False
     is_composite: bool = False
@@ -111,6 +143,11 @@ class Component(metaclass=MetaComponent):
 
     @property
     def rendition(self) -> Optional[str]:
+        """Placeholder for component rendition, set by visitor.
+
+        Returns:
+            str: Rendition of component.
+        """
         return self._rendition
 
     @rendition.setter
@@ -127,7 +164,7 @@ class Composite(Component):
         super().__init__(**kwargs)
         self.children = children if children else []
 
-    def register(self, visitor):
+    def register(self, visitor) -> None:
         """Registers a specified visitor with component and child components.
 
         Args:
