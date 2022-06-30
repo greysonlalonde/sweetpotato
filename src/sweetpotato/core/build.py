@@ -8,13 +8,14 @@ Todo:
     * Add docstrings for all classes & methods.
     * Add typing.
 """
-import sys
-import subprocess
 import os
+import subprocess
+import sys
 from typing import Optional
 
 from sweetpotato.config import settings
 from sweetpotato.core.exceptions import DependencyError
+from sweetpotato.core.utils import Storage
 
 
 def _access_check(fn: str, mode: int) -> bool:
@@ -58,22 +59,21 @@ def _check_dependency(
 class Build:
     """"""
 
+    storage = Storage
+
     def __init__(self, dependencies: list[str] = None) -> None:
         dependencies = dependencies if dependencies else ["npm", "yarn", "expo"]
         for dependency in dependencies:
             if not _check_dependency(dependency):
                 raise DependencyError(f"Dependency package {dependency} not found.")
 
-    def write_file(self) -> None:
+    @staticmethod
+    def format_screens() -> None:
         """Writes formats all .js files
 
         Returns:
             None
         """
-        with open(
-                f"{settings.REACT_NATIVE_PATH}/App.js", "w", encoding="utf-8"
-        ) as file:
-            file.write("")
         try:
             subprocess.run(
                 f"cd {settings.REACT_NATIVE_PATH} && yarn prettier",
@@ -88,8 +88,8 @@ class Build:
                 check=True,
             )
 
-    @staticmethod
-    def run(platform: Optional[str] = None) -> None:
+    @classmethod
+    def run(cls, platform: Optional[str] = None) -> None:
         """Starts a React Native expo client through a subprocess.
 
         Keyword Args:
@@ -98,6 +98,9 @@ class Build:
         Returns:
             None
         """
+        for screen, content in cls.storage.internals.items():
+            cls.write_screen(screen, content)
+        cls.format_screens()
         if not platform:
             platform = ""
         subprocess.run(
@@ -105,3 +108,21 @@ class Build:
             shell=True,
             check=True,
         )
+
+    @classmethod
+    def write_screen(cls, screen: str, content: dict):
+        app_js = "{}\nexport default class {} extends React.Component {} render() {} return({}) {} {}"
+        component = app_js.format(
+            "\n".join(content["variables"]),
+            screen,
+            "{",
+            "{",
+            content["component"],
+            "}",
+            "}",
+        )
+
+        with open(
+                f"{settings.REACT_NATIVE_PATH}/{screen}.js", "w", encoding="utf-8"
+        ) as file:
+            file.write(f'import React from "react";{content["imports"]}\n{component}')
