@@ -43,11 +43,11 @@ your children as arguments to the :meth:`~sweetpotato.navigation.BaseNavigator.s
 
 .. code-block:: python
 
-    from sweetpotato.navigation import TabNavigator
+    from sweetpotato.navigation import create_bottom_tab_navigator
     from sweetpotato.components import View, Text
     from sweetpotato.app import App
 
-    tab = TabNavigator()
+    tab = create_bottom_tab_navigator()
 
     tab.screen(screen_name="Screen One", children=[View(children=[Text(text="Hello")])])
     tab.screen(screen_name="Screen Two", children=[View(children=[Text(text="World")])])
