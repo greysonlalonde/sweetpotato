@@ -1,6 +1,9 @@
 """Contains classes based on UI Kitten components.
 
 See `UI Kitten <https://akveo.github.io/react-native-ui-kitten/docs/components/components-overview>`_
+
+Todo:
+    * Need to update all classes to align with current design.
 """
 from abc import ABC, abstractmethod
 
