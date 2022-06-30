@@ -6,11 +6,11 @@ Todo:
 from abc import ABC, abstractmethod
 from typing import Union
 
-from sweetpotato.config import settings
+from sweetpotato.core import ThreadSafe
 from sweetpotato.core.protocols import Component, Composite
 
 
-class Storage:
+class Storage(metaclass=ThreadSafe):
     """Provides storage for app internals."""
 
     internals = {}
@@ -21,7 +21,7 @@ class Visitor(ABC):
 
     @classmethod
     @abstractmethod
-    def accept(cls, obj: Component) -> None:
+    def accept(cls, obj: Union[Component, Composite]) -> None:
         """Accepts a component and performs an action.
 
         Args:
@@ -39,13 +39,14 @@ class ApplicationRenderer(Visitor):
     @classmethod
     def accept(cls, obj: Composite) -> None:
         cls.render_imports(obj)
+        cls.render_variables(obj)
 
     @classmethod
     def render_application(cls, obj: Composite):
         ...
 
     @classmethod
-    def render_imports(cls, obj):
+    def render_imports(cls, obj: Composite):
         if obj.is_root:
             formatted = Storage.internals[obj.parent].pop("imports")
             Storage.internals[obj.parent]["imports"] = cls.format_imports(formatted)
@@ -63,12 +64,16 @@ class ApplicationRenderer(Visitor):
             imports[k] = import_str
         return import_str
 
+    @classmethod
+    def render_variables(cls, obj: Union[Component, Composite]) -> None:
+        Storage.internals[obj.parent]["variables"].append("".join(obj.variables))
+
 
 class ComponentRenderer(Visitor):
     """Accumulates react-native friendly string representations of components."""
 
     @classmethod
-    def accept(cls, obj: Component) -> None:
+    def accept(cls, obj: Union[Component, Composite]) -> None:
         """Accepts a component and adds a .js compatible rendition.
 
         Args:
@@ -79,10 +84,14 @@ class ComponentRenderer(Visitor):
         """
 
         obj.rendition = cls.render_component(obj)
-        Storage.internals[obj.parent] = {"component": obj.rendition, "imports": {}}
+        Storage.internals[obj.parent] = {
+            "component": obj.rendition,
+            "imports": {},
+            "variables": [],
+        }
 
     @classmethod
-    def render_children(cls, obj: Component) -> str:
+    def render_children(cls, obj: Union[Component, Composite]) -> str:
         """Returns component inner content in a compatible format.
 
         Args:
@@ -129,7 +138,7 @@ class ImportRenderer(Visitor):
     """Accumulates component imports per screen."""
 
     @classmethod
-    def accept(cls, obj: Component) -> None:
+    def accept(cls, obj: Union[Component, Composite]) -> None:
         """Accepts a component and records component imports.
 
         Args:
@@ -139,37 +148,20 @@ class ImportRenderer(Visitor):
             None
         """
         if obj.parent not in Storage.internals:
-            obj.imports = cls.replace_import(obj)
             Storage.internals[obj.parent] = {"imports": {}}
         cls.add_import(obj)
 
     @classmethod
-    def replace_import(cls, obj: Component) -> dict[str, str]:
-        """Replaces package name with specified package in `default_settings.Settings`.
-
-        Args:
-            obj (Component): Component type.
-
-        Returns:
-            dict: Dictionary of key values as "component name": "component package".
-        """
-        return {
-            obj.import_name: settings.IMPORTS.get(obj.package, obj.import_name)
-            if obj.name not in settings.REPLACE_COMPONENTS
-            else settings.REPLACE_COMPONENTS.get(obj.name, obj.import_name).get(
-                "package", obj.import_name
-            )
-        }
-
-    @classmethod
-    def add_import(cls, obj: Component) -> None:
+    def add_import(cls, obj: Union[Component, Composite]) -> None:
         """Adds import dictionary to Storage object.
 
         Returns:
             String representation of all imports.
         """
-        obj.imports = cls.replace_import(obj)
-        component, package = tuple((k, v) for k, v in obj.imports.items())[0]
-        if package not in Storage.internals[obj.parent]["imports"]:
-            Storage.internals[obj.parent]["imports"][package] = set()
-        Storage.internals[obj.parent]["imports"][package].add(component)
+
+        if obj.is_screen:
+            Storage.internals[obj.parent]["imports"][obj.package] = obj.import_name
+        else:
+            if obj.package not in Storage.internals[obj.parent]["imports"]:
+                Storage.internals[obj.parent]["imports"][obj.package] = set()
+            Storage.internals[obj.parent]["imports"][obj.package].add(obj.import_name)
