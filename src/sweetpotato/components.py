@@ -4,17 +4,7 @@ See the `React Native docs <https://reactnative.dev/docs/components-and-apis>`_ 
 """
 from typing import Optional
 
-from sweetpotato.config import settings
-from sweetpotato.core.base import Component
-
-
-class View(Component):
-    """React Native View component.
-
-    See https://reactnative.dev/docs/view.
-    """
-
-    pass
+from sweetpotato.core.base import Component, Composite
 
 
 class ActivityIndicator(Component):
@@ -31,27 +21,22 @@ class Text(Component):
 
     See https://reactnative.dev/docs/text.
 
-    Keyword Args:
+    Args:
         text: Inner content for Text component inplace of children.
-
-    Attributes:
-        _text (str): Inner content for Text component inplace of children.
-
-    Todo:
-        Look into consolidating text argument as a variation of child.
+        **kwargs: Arbitrary allowed props for component.
     """
 
     def __init__(self, text: Optional[str] = None, **kwargs) -> None:
-        self._text = text
-        super().__init__(**kwargs)
+        super().__init__(children=text, **kwargs)
 
-    def write_component(self) -> str:
-        """Overrides Component.write_component method to include text content.
 
-        Returns:
-            React Native friendly string representation of component.
-        """
-        return f"<{self._name} {self._attrs}>{self._text}</{self._name}>"
+class TextInput(Component):
+    """React Native TextInput component.
+
+    See https://reactnative.dev/docs/textinput.
+    """
+
+    pass
 
 
 class Button(Component):
@@ -61,15 +46,14 @@ class Button(Component):
 
     Keyword Args:
         title: Title for button.
+        **kwargs: Arbitrary allowed props for component.
 
     Example:
        ``button = Button(title="foo")``
     """
 
-    def __init__(self, **kwargs: str) -> None:
-        super().__init__(**kwargs)
-        if settings.USE_UI_KITTEN:
-            self._children = [Text(text=kwargs.pop("title", ""))]
+    def __init__(self, title: Optional[str] = None, **kwargs) -> None:
+        super().__init__(title, **kwargs)
 
 
 class Image(Component):
@@ -90,8 +74,8 @@ class FlatList(Component):
     pass
 
 
-class SafeAreaProvider(Component):
-    """React Native-safe-area-context SafeAreaProvider component.
+class SafeAreaProvider(Composite):
+    """React Native react-native-safe-area-context SafeAreaProvider component.
 
     See https://docs.expo.dev/versions/latest/sdk/safe-area-context/.
     """
@@ -114,26 +98,26 @@ class StyleSheet(Component):
     See https://reactnative.dev/docs/stylesheet.
 
     Todo:
-        Add stylesheet methods.
+        * Add stylesheet methods.
     """
 
     def create(self, styles):
         ...
 
 
-class TextInput(Component):
-    """React Native TextInput component.
+class TouchableOpacity(Composite):
+    """React Native TouchableOpacity component.
 
-    See https://reactnative.dev/docs/textinput.
+    See https://reactnative.dev/docs/touchableopacity.
     """
 
     pass
 
 
-class TouchableOpacity(Component):
-    """React Native ActivityIndicator component.
+class View(Composite):
+    """React Native View component.
 
-    See https://reactnative.dev/docs/touchableopacity.
+    See https://reactnative.dev/docs/view.
     """
 
     pass
