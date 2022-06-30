@@ -85,6 +85,7 @@ class MetaComponent(type):
     Todo:
         * Can likely refactor to using `import_name` attr and removing `name`
     """
+
     __registry = set()
 
     def __call__(cls, *args, **kwargs) -> None:
@@ -114,13 +115,14 @@ class Component(metaclass=MetaComponent):
     Example:
         ``component = Component(children="foo")``
     """
+
     is_screen: bool = False
     is_root: bool = False
     is_composite: bool = False
     package: str = "components"
 
     def __init__(
-            self, children: Optional[Union[int, str]] = None, variables=None, **kwargs
+        self, children: Optional[Union[int, str]] = None, variables=None, **kwargs
     ) -> None:
         if variables is None:
             variables = []
@@ -159,7 +161,7 @@ class Composite(Component):
     is_composite: bool = True
 
     def __init__(
-            self, children: Optional[Union[List, "Composite"]] = None, **kwargs
+        self, children: Optional[Union[List, "Composite"]] = None, **kwargs
     ) -> None:
         super().__init__(**kwargs)
         self.children = children if children else []
