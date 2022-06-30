@@ -46,14 +46,6 @@ class Settings(metaclass=ThreadSafe):
     # User defined components
     USER_DEFINED_COMPONENTS = {}
 
-    # Exports
-    DEFAULT_EXPORTS = {
-        "@eva-design/eva": "* as eva",
-        "./src/components/RootNavigation.js": "* as RootNavigation",
-        "@react-native-async-storage/async-storage": "AsyncStorage",
-        "expo-secure-store": "* as SecureStore",
-    }
-
     # API settings
     API_URL = "http://127.0.0.1:8000"
 
@@ -125,8 +117,11 @@ class Settings(metaclass=ThreadSafe):
         "secureTextEntry": "secureTextEntry",
     }
 
+    APP_IMPORTS = ""
+
     @classmethod
     def set_ui_kitten(cls):
+        cls.APP_IMPORTS += "import * as eva from '@eva-design/eva';"
         cls.REPLACE_COMPONENTS.update(
             **dict(
                 TextInput={
@@ -146,6 +141,19 @@ class Settings(metaclass=ThreadSafe):
                     "package": UIKitten.ui_kitten_components,
                 },
             )
+        )
+
+    @classmethod
+    def set_authentication(cls):
+        cls.APP_IMPORTS += (
+            "import AsyncStorage from @react-native-async-storage/async-storage"
+        )
+        cls.APP_IMPORTS += ("import * as SecureStore from expo-secure-store",)
+
+    @classmethod
+    def set_navigation(cls):
+        cls.APP_IMPORTS += (
+            "import * as RootNavigation from './src/components/RootNavigation.js'"
         )
 
     @classmethod
@@ -169,6 +177,10 @@ class Settings(metaclass=ThreadSafe):
             setattr(cls, key, value)
             if cls.USE_UI_KITTEN:
                 cls.set_ui_kitten()
+            if cls.USE_NAVIGATION:
+                cls.set_navigation()
+            if cls.USE_AUTHENTICATION:
+                cls.set_authentication()
             if key in ["RESOURCE_FOLDER", "SOURCE_FOLDER"]:
                 cls.set_react_native()
             if key == "API_URL":
