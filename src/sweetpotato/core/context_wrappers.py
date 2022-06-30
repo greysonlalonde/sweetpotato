@@ -9,9 +9,9 @@ from typing import List
 from sweetpotato.authentication import AuthenticationProvider
 from sweetpotato.components import SafeAreaProvider
 from sweetpotato.config import settings
+from sweetpotato.core.protocols import Composite
 from sweetpotato.navigation import NavigationContainer
 from sweetpotato.ui_kitten import ApplicationProvider
-from sweetpotato.core.protocols import Composite
 
 
 class AbstractWrapper(ABC):
@@ -38,12 +38,17 @@ class Wrapper(AbstractWrapper):
     def wrap(self, component) -> Composite:
         if self._next_wrapper:
             return self._next_wrapper.wrap(component)
-        component.is_root = True
-        component.is_screen = True
         return component
 
 
 class UIKittenWrapper(Wrapper):
+    """Adds UI Kitten design to app.
+
+
+    Todo:
+        * Add docstrings
+    """
+
     def wrap(self, component: Composite) -> Composite:
         if settings.USE_UI_KITTEN:
             component = ApplicationProvider(children=[component])
@@ -51,6 +56,13 @@ class UIKittenWrapper(Wrapper):
 
 
 class AuthenticationWrapper(Wrapper):
+    """Adds authentication plugins to app.
+
+
+    Todo:
+        * Add docstrings
+    """
+
     def wrap(self, component: Composite) -> Composite:
         if settings.USE_AUTHENTICATION:
             component = AuthenticationProvider(children=[component])
@@ -58,13 +70,30 @@ class AuthenticationWrapper(Wrapper):
 
 
 class NavigationWrapper(Wrapper):
+    """Adds NavigationContainer component to app and gives navigation capability.
+
+
+    Todo:
+        * Add docstrings
+    """
+
     def wrap(self, component: Composite) -> Composite:
         if settings.USE_NAVIGATION:
-            component = NavigationContainer(children=[component], ref="navigationRef")
+            component = NavigationContainer(children=[component])
         return super().wrap(component)
 
 
 class ContextWrapper(AuthenticationWrapper, UIKittenWrapper, NavigationWrapper):
+    """Checks for and adds navigation, authentication, and ui-kitten contexts.
+
+
+    Todo:
+        * Add docstrings
+    """
+
     def wrap(self, component: List) -> Composite:
-        component = SafeAreaProvider(children=component)
-        return super().wrap(component)
+        component = super(ContextWrapper, self).wrap(
+            SafeAreaProvider(children=component)
+        )
+        component.is_root = True
+        return component
