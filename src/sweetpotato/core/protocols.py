@@ -14,6 +14,7 @@ class Component(Protocol):
     name: str
     import_name: str
     is_composite: bool
+    variables: list
     package: dict
     children: Optional[Union[int, str]]
 
