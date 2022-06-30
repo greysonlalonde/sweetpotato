@@ -10,6 +10,6 @@ TAB_NAVIGATOR_PROPS = {"name"}
 
 DRAWER_NAVIGATOR_PROPS = {}
 
-SCREEN_PROPS = {"children", "type", "screen_name", "state", "screen_type"}
+SCREEN_PROPS = {"children", "functions", "state", "screen_name", "state", "screen_type"}
 
 BASE_NAVIGATOR_PROPS = {}
