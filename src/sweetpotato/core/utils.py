@@ -61,7 +61,7 @@ class ApplicationRenderer(Visitor):
         import_str = ""
         for k, v in imports.items():
             import_str += f'import {v} from "{k}";\n'.replace("'", "")
-            imports[k] = import_str
+
         return import_str
 
     @classmethod
