@@ -1,6 +1,10 @@
 """Abstractions of React Native core components.
 
 See the `React Native docs <https://reactnative.dev/docs/components-and-apis>`_ for more.
+
+Todo:
+    * Add Stylesheet class methods.
+    * Add examples to all classes.
 """
 from typing import Optional
 
@@ -50,6 +54,9 @@ class Button(Component):
 
     Example:
        ``button = Button(title="foo")``
+
+    Todo:
+        * Need to refactor as composite. Buttons can have children, i.e. text.
     """
 
     def __init__(self, title: Optional[str] = None, **kwargs) -> None:
@@ -60,6 +67,9 @@ class Image(Component):
     """React Native Image component.
 
     See https://reactnative.dev/docs/image.
+
+    Example:
+       ``image = Image(source={"uri": image_source})``
     """
 
     pass
@@ -99,9 +109,10 @@ class StyleSheet(Component):
 
     Todo:
         * Add stylesheet methods.
+        * Add examples.
     """
 
-    def create(self, styles):
+    def create(self, styles: dict):
         ...
 
 
