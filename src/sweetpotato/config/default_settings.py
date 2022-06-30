@@ -11,8 +11,10 @@ from threading import Lock
 import sweetpotato.defaults as defaults
 import sweetpotato.functions.authentication_functions as auth_functions
 
-
 # Navigation configuration
+from sweetpotato.core import ThreadSafe
+
+
 class ReactNavigation:
     """Provides changeable configuration for React Navigation packages."""
 
@@ -28,20 +30,7 @@ class UIKitten:
     ui_kitten_components = "@ui-kitten/components"
 
 
-class SettingsMeta(type):
-    """Metaclass for making Settings class a thread-safe singleton."""
-
-    _instances = {}
-    _lock: Lock = Lock()
-
-    def __call__(cls, *args, **kwargs):
-        with cls._lock:
-            if cls not in cls._instances:
-                cls._instances[cls] = super().__call__(*args, **kwargs)
-        return cls._instances[cls]
-
-
-class Settings(metaclass=SettingsMeta):
+class Settings(metaclass=ThreadSafe):
     # App configuration
     APP_COMPONENT = defaults.APP_DEFAULT
     APP_PROPS = defaults.APP_PROPS_DEFAULT
@@ -106,7 +95,10 @@ class Settings(metaclass=SettingsMeta):
         "Tab": {
             "package": ReactNavigation.bottom_tabs,
             "import": "createBottomTabNavigator",
-            "component_name": "Tab.Navigator",
+            "name": "TabNavigator",
+        },
+        "createBottomTabNavigator": {
+            "package": ReactNavigation.bottom_tabs,
         },
         "SafeAreaProvider": {
             "package": "react-native-safe-area-context",
@@ -118,8 +110,9 @@ class Settings(metaclass=SettingsMeta):
             "import": "NavigationContainer",
             "name": "NavigationContainer",
         },
-        "Screen": {},
-        **UI_KITTEN_REPLACEMENTS,
+        "AuthenticationProvider": {
+            "package": "./AuthenticationProvider",
+        },
     }
 
     REPLACE_ATTRS = {
@@ -135,21 +128,25 @@ class Settings(metaclass=SettingsMeta):
 
     @classmethod
     def set_ui_kitten(cls):
-        cls.UI_KITTEN_REPLACEMENTS.update(
-            {
-                "TextInput": {
-                    "import": "Input",
+        cls.REPLACE_COMPONENTS.update(
+            **dict(
+                TextInput={
                     "package": UIKitten.ui_kitten_components,
+                    "import": "Input",
                 },
-                "Text": {
+                Text={
                     "import": "Text",
                     "package": UIKitten.ui_kitten_components,
                 },
-                "Button": {
+                Button={
                     "import": "Button",
                     "package": UIKitten.ui_kitten_components,
                 },
-            }
+                ApplicationProvider={
+                    "import": "ApplicationProvider",
+                    "package": UIKitten.ui_kitten_components,
+                },
+            )
         )
 
     @classmethod
