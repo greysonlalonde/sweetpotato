@@ -1,10 +1,6 @@
-from typing import List
+from typing import List, Optional
 
-from sweetpotato.core.base import Component, Composite
-
-
-class NavigationComponent(Component):
-    pass
+from sweetpotato.core.base import Composite
 
 
 class NavigationContainer(Composite):
@@ -25,20 +21,37 @@ class Screen(Composite):
 
     is_screen = True
 
-    def __init__(self, screen_name: str, screen_type, **kwargs) -> None:
+    def __init__(
+            self,
+            screen_name: str,
+            screen_type: str,
+            functions: Optional[str] = None,
+            state: Optional[str] = None,
+            **kwargs,
+    ) -> None:
         kwargs.update(
             {
                 "name": f"'{screen_name}'",
                 "component": "".join([word.title() for word in screen_name.split(" ")]),
             }
         )
+        super().__init__(**kwargs)
         self.name = f"{screen_type}.Screen"
         self.import_name = kwargs["component"]
-        self.package = f"./{kwargs['component']}.js"
-        super().__init__(**kwargs)
+        self.package = f"./src/{kwargs['component']}.js"
+        self.functions = functions
+        self.state = state
         self.set_parent(self.children)
 
-    def set_parent(self, children):
+    def set_parent(self, children: list):
+        """Sets top level component as root and sets each parent to self.
+
+        Args:
+            children (list): List of components.
+
+        Returns:
+            None
+        """
         self.children[0].is_root = True
         for child in children:
             if child.is_composite:
@@ -47,23 +60,56 @@ class Screen(Composite):
 
 
 class BaseNavigator(Composite):
+    """Abstraction of React Navigation Base Navigation component.
+
+    Args:
+        kwargs: Any of ...
+
+    Attributes:
+        name (str): Name/type of navigator.
+        _screens (dict): Dictionary of name: :class:`~sweetpotato.navigation.Screen`.
+        _screen_number (int): Counter to determine screen number.
+        _variables (set): Set of .js components specific to navigator type.
+
+    Todo:
+        * Add specific props from React Navigation.
+    """
+
     def __init__(self, name: str = None, **kwargs) -> None:
+        super().__init__(**kwargs)
         if name:
             component_name = self.name.split(".")
             component_name[0] = name
-            self.name = ".".join(component_name)
-
-        kwargs.update(**dict(variables=[f"const {self.name} = {self.import_name}()"]))
-        super().__init__(**kwargs)
+            self.name = (".".join(component_name)).title()
         self.variables = [f"const {self.name} = {self.import_name}()"]
-
         self.screen_type = self.name.split(".")[0]
         self.name = f"{self.name}.Navigator"
 
-    def screen(self, screen_name: str, children: List) -> None:
+    def screen(
+            self,
+            screen_name: str,
+            children: list,
+            functions: Optional[str] = None,
+            state: Optional[dict] = None,
+    ) -> None:
+        """Instantiates and adds screen to navigation component and increments screen count.
+
+        Args:
+            screen_name: Name of screen component.
+            children: List of child components.
+            functions: String representation of .js functions for component.
+            state: Dictionary of applicable state values for component.
+
+        Returns:
+            None
+        """
         self.children.append(
             Screen(
-                screen_name=screen_name, screen_type=self.screen_type, children=children
+                screen_name=screen_name,
+                screen_type=self.screen_type,
+                children=children,
+                functions=functions,
+                state=state,
             )
         )
 
@@ -95,5 +141,13 @@ class Tab(BaseNavigator):
     pass
 
 
-def create_bottom_tab_navigator(name: str = None) -> Tab:
+def create_bottom_tab_navigator(name: Optional[str] = None) -> Tab:
+    """Function representing the createBottomTabNavigator function in react-navigation.
+
+    Args:
+        name (str, optional): name of navigator.
+
+    Returns:
+        Tab navigator.
+    """
     return Tab(name=name)
