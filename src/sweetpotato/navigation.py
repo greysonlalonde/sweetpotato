@@ -23,7 +23,6 @@ class Screen(Composite):
         functions (str): String representation of .js based functions.
     """
 
-    package = None
     is_screen = True
 
     def __init__(self, screen_name: str, screen_type, **kwargs) -> None:
@@ -35,6 +34,7 @@ class Screen(Composite):
         )
         self.name = f"{screen_type}.Screen"
         self.import_name = kwargs["component"]
+        self.package = f"./{kwargs['component']}.js"
         super().__init__(**kwargs)
         self.set_parent(self.children)
 
@@ -48,11 +48,15 @@ class Screen(Composite):
 
 class BaseNavigator(Composite):
     def __init__(self, name: str = None, **kwargs) -> None:
-        super().__init__(**kwargs)
         if name:
             component_name = self.name.split(".")
             component_name[0] = name
             self.name = ".".join(component_name)
+
+        kwargs.update(**dict(variables=[f"const {self.name} = {self.import_name}()"]))
+        super().__init__(**kwargs)
+        self.variables = [f"const {self.name} = {self.import_name}()"]
+
         self.screen_type = self.name.split(".")[0]
         self.name = f"{self.name}.Navigator"
 
