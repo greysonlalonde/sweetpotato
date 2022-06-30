@@ -6,7 +6,6 @@ For the full list of settings and their values, see
 https://docs.sweetpotato.com/en/1.0/ref/settings/
 """
 from pathlib import Path
-from threading import Lock
 
 import sweetpotato.defaults as defaults
 import sweetpotato.functions.authentication_functions as auth_functions
