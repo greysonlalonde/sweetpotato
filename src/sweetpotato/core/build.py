@@ -111,18 +111,26 @@ class Build:
 
     @classmethod
     def write_screen(cls, screen: str, content: dict):
-        app_js = "{}\nexport default class {} extends React.Component {} render() {} return({}) {} {}"
-        component = app_js.format(
-            "\n".join(content["variables"]),
-            screen,
-            "{",
-            "{",
-            content["component"],
-            "}",
-            "}",
-        )
+        content.update(dict(state=""))
+        if settings.APP_COMPONENT == screen:
+            content["imports"] = f"{settings.APP_IMPORTS}\n{content['imports']}"
+            if settings.USE_NAVIGATION:
+                content[
+                    "imports"
+                ] = f"import 'react-native-gesture-handler';\n{content['imports']}"
+                content["state"] += "navigation: RootNavigation.navigationRef"
 
+        component = (
+            settings.APP_REPR.replace("<IMPORTS>", content["imports"])
+                .replace("<VARIABLES>", "\n".join(content["variables"]))
+                .replace("<NAME>", screen)
+                .replace("<STATE>", content["state"])
+                .replace("<FUNCTIONS>", "")
+                .replace("<APP>", content["component"])
+        )
+        if settings.APP_COMPONENT != screen:
+            screen = f"src/{screen}"
         with open(
                 f"{settings.REACT_NATIVE_PATH}/{screen}.js", "w", encoding="utf-8"
         ) as file:
-            file.write(f'import React from "react";{content["imports"]}\n{component}')
+            file.write(component)
