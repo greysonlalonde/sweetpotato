@@ -1,116 +1,72 @@
-"""Contains classes based on React Navigation components.
+from typing import List, Optional
 
-See https://reactnavigation.org
-"""
-import json
-import re
-from typing import Optional
-
-from sweetpotato.components import Component
-from sweetpotato.components import SafeAreaProvider
-from sweetpotato.config import settings
-from sweetpotato.core.exceptions import NoChildrenError
-from sweetpotato.ui_kitten import ApplicationProvider
+from sweetpotato.core.base import Composite
 
 
-class Screen(Component):
+class NavigationContainer(Composite):
+    pass
+
+
+class Screen(Composite):
     """React navigation screen component.
-
     Args:
         functions: String representation of .js based functions.
         state: Dictionary of allowed state values for component.
-
     Attributes:
-        _type (str): Screen type.
-        _screen_name (str): Name of specific screen.
-        _const_name (str): Name of .js const for screen.
-        _state (dict): Dictionary of allowed state values for component.
-        _functions (str): String representation of .js based functions.
-
-    Todo:
-        * Evaluate changing from Component inheritance to a BaseScreen class
-          and use as an interface to the underlying components.
+        screen_name (str): Name of specific screen.
+        import_name (str): Name of .js const for screen.
+        state (dict): Dictionary of allowed state values for component.
+        functions (str): String representation of .js based functions.
     """
 
+    is_screen = True
+
     def __init__(
-        self, functions: Optional[str], state: Optional[dict] = None, **kwargs
+            self,
+            screen_name: str,
+            screen_type: str,
+            functions: Optional[str] = None,
+            state: Optional[str] = None,
+            **kwargs,
     ) -> None:
+        kwargs.update(
+            {
+                "name": f"'{screen_name}'",
+                "component": "".join([word.title() for word in screen_name.split(" ")]),
+            }
+        )
         super().__init__(**kwargs)
-        if state is None:
-            state = {}
-        if functions is None:
-            functions = ""
-        self._type = kwargs.get("type")
-        self._screen_name = kwargs.get("screen_name")
-        self._const_name = "".join(
-            [word.title() for word in self._screen_name.split(" ")]
-        )
-        self._state = state
-        self._functions = functions
+        self.name = f"{screen_type}.Screen"
+        self.import_name = kwargs["component"]
+        self.package = f"./src/{kwargs['component']}.js"
+        self.functions = functions
+        self.state = state
+        self.set_parent(self.children)
 
-    def write_import(self) -> str:
-        """Returns name of .js const for screen as the file import.
+    def set_parent(self, children: list):
+        """Sets top level component as root and sets each parent to self.
+
+        Args:
+            children (list): List of components.
 
         Returns:
-            Screen name.
+            None
         """
-        return self._const_name
-
-    def write_state(self) -> str:
-        """Writes component state in JSON format.
-
-        Returns:
-            React Native friendly string representation of state.
-        """
-        state = "".join([f"{k}: {json.dumps(v)},\n" for k, v in self._state.items()])
-        return f'this.state={"{"}{state}{"}"}'
-
-    def write_component(self) -> str:
-        """Render React Native friendly string representation of component.
-
-        Note:
-            Need to look at removing this and keeping parent method or splitting to
-            a different inheritance.
-
-        Returns:
-            React Native friendly string representation.
-
-        Todo:
-            * Need to refactor this into smaller helper methods.
-        """
-        screen_name = "{'" + self._screen_name + "'}"
-        screen_name_spaced = "{" + self._const_name + "}"
-        imports = [child.write_import() for child in self._children]
-        child_components = "".join(
-            [child.write_component() for child in self._children]
-        )
-        constructor = "{constructor(props){super(props);<STATE>}"
-        constructor = constructor.replace("<STATE>", self.write_state())
-        const = f"{constructor}{self._functions}\nrender() {'{'}return(\n{child_components}\n)\n{'}}'}"
-        packages = ""
-        for package in imports:
-            packages += "\n".join(
-                [f'import {v} from "{k}";'.replace("'", "") for k, v in package.items()]
-            )
-
-        with open(
-            f"{settings.REACT_NATIVE_PATH}/src/{self._const_name}.js", "w"
-        ) as file:
-            file.write(
-                f"import React from 'react';\n{packages}\nexport class {self._const_name} extends "
-                f"React.Component {const};\n "
-            )
-        return f"<{self._type}.{self._name} name={screen_name} component={screen_name_spaced}/>"
+        self.children[0].is_root = True
+        for child in children:
+            if child.is_composite:
+                self.set_parent(child.children)
+            child.parent = self.import_name
 
 
-class BaseNavigator(Component):
+class BaseNavigator(Composite):
     """Abstraction of React Navigation Base Navigation component.
 
     Args:
         kwargs: Any of ...
 
     Attributes:
-        _name (str): Name/type of navigator.
+        name (str): Name/type of navigator.
         _screens (dict): Dictionary of name: :class:`~sweetpotato.navigation.Screen`.
         _screen_number (int): Counter to determine screen number.
         _variables (set): Set of .js components specific to navigator type.
@@ -119,51 +75,23 @@ class BaseNavigator(Component):
         * Add specific props from React Navigation.
     """
 
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, name: str = None, **kwargs) -> None:
         super().__init__(**kwargs)
-        self._name = ".".join(re.findall("[A-Z][^A-Z]*", self.__class__.__name__))
-        self._screens = dict()
-        self._screen_number = 0
-        self._variables.add(f"const {self._type} = {self._react_component}();")
-
-    def write_component(self) -> str:
-        """Render React Native string representation of component.
-
-        Note:
-            Need to look at removing this and keeping parent method or splitting to
-            a different inheritance.
-
-        Returns:
-            String representation of component.
-        """
-        comp_str = ""
-        if not isinstance(self._screens, type(None)):
-            comp_str += "\n".join(
-                [component.write_component() for component in self._screens.values()]
-            )
-            return f"\n<{self._name} {self._attrs}>\n{comp_str}\n</{self._name}>"
-        return f"\n<{self._type} {self._attrs}></{self._type}>"
-
-    def write_import(self) -> dict:
-        """Write imports.
-
-        Returns:
-            Imports for children and self.
-        """
-        imports = {
-            f"./{settings.SOURCE_FOLDER}/{child.write_import()}.js": child.write_import()
-            for child in self._screens.values()
-        }
-        imports[self._package] = self._react_component
-        return imports
+        if name:
+            component_name = self.name.split(".")
+            component_name[0] = name
+            self.name = (".".join(component_name)).title()
+        self.variables = [f"const {self.name} = {self.import_name}()"]
+        self.screen_type = self.name.split(".")[0]
+        self.name = f"{self.name}.Navigator"
 
     def screen(
-        self,
-        screen_name: str,
-        children: list,
-        functions: Optional[str] = None,
-        state: Optional[dict] = None,
-    ):
+            self,
+            screen_name: str,
+            children: list,
+            functions: Optional[str] = None,
+            state: Optional[dict] = None,
+    ) -> None:
         """Instantiates and adds screen to navigation component and increments screen count.
 
         Args:
@@ -175,70 +103,15 @@ class BaseNavigator(Component):
         Returns:
             None
         """
-        screen = Screen(
-            type=self._type,
-            state=state,
-            screen_name=screen_name,
-            functions=functions,
-            children=children,
-        )
-        self._screen_number += 1
-        self._screens[self._screen_number] = screen
-
-
-class NavigationContainer(Component):
-    """
-    React-navigation NavigationContainer component.
-
-    Keyword Args:
-        theme: Optional theme for UI Kitten if turned on.
-        kwargs: Any of ...
-
-    Attributes:
-        _theme (str): Optional theme for UI Kitten if turned on.
-        _attrs (str): String representation of key=value pair for RootNavigation.
-
-    Todo:
-        * Refactor _attrs method here.
-    """
-
-    def __init__(self, theme: Optional[dict] = None, **kwargs) -> None:
-        self._theme = theme
-        super().__init__(**kwargs)
-        self._attrs += "ref={this.state.navigation}"
-
-    def write_component(self) -> str:
-        """Render react-native friendly string representation of component.
-
-        Note:
-            Need to look at removing this and keeping parent method or splitting to
-            a different inheritance.
-
-        Returns:
-            React Native friendly string representation of state.
-
-        Raises:
-            :exc:`sweetpotato.core.exceptions.NoChildrenError`
-        """
-
-        if self._children:
-            app = SafeAreaProvider(children=self._children)
-            if settings.USE_UI_KITTEN:
-                app = ApplicationProvider(children=[app], theme=self._theme)
-            return (
-                f"<{self._name} {self._attrs}>{app.write_component()}\n</{self._name}>"
+        self.children.append(
+            Screen(
+                screen_name=screen_name,
+                screen_type=self.screen_type,
+                children=children,
+                functions=functions,
+                state=state,
             )
-
-        raise NoChildrenError("Navigator component needs children")
-
-
-class DrawerNavigator(BaseNavigator):
-    """Abstraction of React Navigation Drawer component.
-
-    See https://reactnavigation.org/docs/drawer-navigator
-    """
-
-    pass
+        )
 
 
 class StackNavigator(BaseNavigator):
@@ -257,3 +130,24 @@ class TabNavigator(BaseNavigator):
     """
 
     pass
+
+
+class Tab(BaseNavigator):
+    """Abstraction of React Navigation TabNavigator component.
+
+    See https://reactnavigation.org/docs/bottom-tab-navigator
+    """
+
+    pass
+
+
+def create_bottom_tab_navigator(name: Optional[str] = None) -> Tab:
+    """Function representing the createBottomTabNavigator function in react-navigation.
+
+    Args:
+        name (str, optional): name of navigator.
+
+    Returns:
+        Tab navigator.
+    """
+    return Tab(name=name)

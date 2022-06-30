@@ -15,18 +15,16 @@ APP_DEFAULT = "App"
 APP_PROPS_DEFAULT = {"state", "theme"}
 
 APP_REPR_DEFAULT = """
-import 'react-native-gesture-handler';
 import React from 'react';
 <IMPORTS>
 
 <VARIABLES>
 
-export default class App extends React.Component {
+export default class <NAME> extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             <STATE>    
-            navigation: RootNavigation.navigationRef
         }
     }    
     

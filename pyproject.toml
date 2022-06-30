@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sweetpotato"
+version = "v0.2.0-alpha"
+authors = [
+    { name = "Greyson R. LaLonde", email = "greyson.r.lalonde@gmail.com" },
+    { name = "Corey Mutnik", email = "cmutnik@gmail.com" }
+]
+description = "Sweetpotato provides an intuitive wrapper around React Native."
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Development Status :: 2 - Pre-Alpha",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/greysonlalonde/sweetpotato"
+"Bug Tracker" = "https://github.com/greysonlalonde/sweetpotato/issues"
+
+
