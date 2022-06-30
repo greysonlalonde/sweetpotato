@@ -23,8 +23,6 @@ class App:
         self.context.register(visitor=ComponentRenderer)
         self.context.register(visitor=ImportRenderer)
         self.context.register(visitor=ApplicationRenderer)
-        print(Storage.internals)
-        print(settings.REPLACE_COMPONENTS)
 
     def run(self, platform: Optional[str] = None) -> None:
         """Starts a React Native expo client through a subprocess.
