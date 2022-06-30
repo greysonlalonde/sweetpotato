@@ -23,11 +23,11 @@ def _set_props(name: str, cls_dict: dict) -> dict:
     return getattr(__import__(package, fromlist=[props]), props)
 
 
-def _set_package(name: str, cls_dict: dict) -> str:
+def _set_package(import_name: str, cls_dict: dict) -> str:
     """Sets component React Native package.
 
     Args:
-        name: React Native component name.
+        import_name: React Native component name.
         cls_dict: Contains :class:`sweetpotato.core.base.Component` attributes.
 
     Returns:
@@ -36,8 +36,8 @@ def _set_package(name: str, cls_dict: dict) -> str:
     package = ".".join(cls_dict["__module__"].split(".")[1:2])
     return (
         settings.IMPORTS.get(package)
-        if name not in settings.REPLACE_COMPONENTS
-        else settings.REPLACE_COMPONENTS.get(name, name).get("package", name)
+        if import_name not in settings.REPLACE_COMPONENTS
+        else settings.REPLACE_COMPONENTS.get(import_name).get("package", import_name)
     )
 
 
@@ -46,14 +46,6 @@ def _set_name(name: str):
         name
         if name not in settings.REPLACE_COMPONENTS
         else settings.REPLACE_COMPONENTS.get(name, name).get("name", name)
-    )
-
-
-def _set_component_name(name: str):
-    return (
-        name
-        if name not in settings.REPLACE_COMPONENTS
-        else settings.REPLACE_COMPONENTS.get(name, name).get("component_name", name)
     )
 
 
@@ -71,10 +63,9 @@ class MetaComponent(type):
     def __call__(cls, *args, **kwargs) -> None:
         if cls.__name__ not in MetaComponent.__registry:
             cls.name = _set_name(cls.__name__)
-            cls.component_name = _set_component_name(cls.__name__)
             cls.import_name = _set_import(cls.__name__)
+            cls.package = _set_package(cls.import_name, cls.__dict__)
             cls._props = _set_props(cls.name, cls.__dict__)
-            cls._package = _set_package(cls.name, cls.__dict__)
             cls.__registry.add(cls.name)
         if set(kwargs.keys()).difference(cls._props):
             attributes = "".join(set(kwargs.keys()).difference(cls._props))
@@ -88,8 +79,13 @@ class Component(metaclass=MetaComponent):
     is_composite: bool = False
     package: str = "components"
 
-    def __init__(self, children: Optional[Union[int, str]] = None, **kwargs) -> None:
+    def __init__(
+            self, children: Optional[Union[int, str]] = None, variables=None, **kwargs
+    ) -> None:
+        if variables is None:
+            variables = []
         self._rendition = None
+        self.variables = variables
         self.attrs = kwargs
         self.children = children
         self.parent = settings.APP_COMPONENT
@@ -118,7 +114,7 @@ class Composite(Component):
     is_composite: bool = True
 
     def __init__(
-        self, children: Optional[Union[List, "Composite"]] = None, **kwargs
+            self, children: Optional[Union[List, "Composite"]] = None, **kwargs
     ) -> None:
         super().__init__(**kwargs)
         self.children = children if children else []
