@@ -32,7 +32,7 @@ export default class <NAME> extends React.Component {
 
     render() {
         return (
-                <APP>
+                <COMPONENT>
         );
     }
 }"""
