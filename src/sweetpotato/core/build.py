@@ -18,12 +18,13 @@ from sweetpotato.core.exceptions import DependencyError
 from sweetpotato.core.utils import Storage
 
 
+
 def _access_check(file: str, mode: int) -> bool:
     return os.path.exists(file) and os.access(file, mode) and not os.path.isdir(file)
 
 
 def _check_dependency(
-        cmd: str, mode: int = os.F_OK | os.X_OK, path: Optional[str] = None
+    cmd: str, mode: int = os.F_OK | os.X_OK, path: Optional[str] = None
 ) -> Optional[str]:
     if os.path.dirname(cmd):
         if _access_check(cmd, mode):
@@ -71,6 +72,7 @@ class Build:
             if not _check_dependency(dependency):
                 raise DependencyError(f"Dependency package {dependency} not found.")
 
+
     @classmethod
     def run(cls, platform: Optional[str] = None) -> None:
         """Starts a React Native expo client through a subprocess.
@@ -113,6 +115,7 @@ class Build:
                 shell=True,
                 check=True,
             )
+
         except subprocess.CalledProcessError as error:
             sys.stdout.write(f"{error}\nTrying yarn install...\n")
             subprocess.run(
@@ -120,6 +123,7 @@ class Build:
                 shell=True,
                 check=True,
             )
+
 
     @staticmethod
     def _replace_values(content: dict, screen: str) -> str:
@@ -134,6 +138,30 @@ class Build:
             placeholder values set.
         """
         component = settings.APP_REPR.replace("<NAME>", screen).replace("<FUNCTIONS>", "")
+
+    @classmethod
+    def run(cls, platform: Optional[str] = None) -> None:
+        """Starts a React Native expo client through a subprocess.
+
+        Keyword Args:
+            platform (:obj:`str`, optional): Platform for expo to run on.
+
+        Returns:
+            None
+        """
+        for screen, content in cls.storage.internals.items():
+            cls.write_screen(screen, content)
+        cls.format_screens()
+        if not platform:
+            platform = ""
+        subprocess.run(
+            f"cd {settings.REACT_NATIVE_PATH} && expo start {platform}",
+            shell=True,
+            check=True,
+        )
+
+    @classmethod
+    def write_screen(cls, screen: str, content: dict):
         content.update(dict(state=""))
         if settings.APP_COMPONENT == screen:
             content["imports"] = f"{settings.APP_IMPORTS}\n{content['imports']}"

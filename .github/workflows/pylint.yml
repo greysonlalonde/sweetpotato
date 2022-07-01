@@ -23,4 +23,4 @@ jobs:
           pip install pylint
       - name: Analyze with pylint
         run: |
-          cd sweetpotato && pylint --fail-under=9 app.py components.py navigation.py core authentication.py
+          cd src/sweetpotato && pylint --fail-under=9 app.py components.py navigation.py core authentication.py
