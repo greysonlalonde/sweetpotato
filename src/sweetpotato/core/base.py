@@ -123,11 +123,10 @@ class Component(metaclass=MetaComponent):
     package: str = "components"
 
     def __init__(
-        self, children: Optional[Union[int, str]] = None, variables=None, **kwargs
+            self, children: Optional[Union[int, str]] = None, variables=None, **kwargs
     ) -> None:
         if variables is None:
             variables = []
-        self._rendition = None
         self.variables = variables
         self.attrs = self.render_attrs(kwargs)
         self.children = children
@@ -143,19 +142,6 @@ class Component(metaclass=MetaComponent):
             None
         """
         visitor.accept(self)
-
-    @property
-    def rendition(self) -> Optional[str]:
-        """Placeholder for component rendition, set by visitor.
-
-        Returns:
-            str: Rendition of component.
-        """
-        return self._rendition
-
-    @rendition.setter
-    def rendition(self, rendition) -> None:
-        self._rendition = rendition
 
     @staticmethod
     def render_attrs(attrs: dict[str, str]) -> str:
@@ -178,7 +164,7 @@ class Composite(Component):
     is_composite: bool = True
 
     def __init__(
-        self, children: Optional[Union[List, "Composite"]] = None, **kwargs
+            self, children: Optional[Union[List, "Composite"]] = None, **kwargs
     ) -> None:
         super().__init__(**kwargs)
         self.children = children if children else []

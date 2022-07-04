@@ -88,7 +88,6 @@ class ComponentRenderer(Visitor):
             None
         """
 
-        # obj.rendition = cls.render_component(obj)
         Storage.internals[obj.parent] = {
             "component": str(obj),
             "imports": {},
