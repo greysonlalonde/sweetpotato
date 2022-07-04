@@ -14,3 +14,4 @@ COMPONENT_PROPS = {
     "onLayout",
     "style",
 }
+COMPOSITE_PROPS = {}

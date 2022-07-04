@@ -39,7 +39,7 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
-    "sphinx_rtd_dark_mode",
+    # "sphinx_rtd_dark_mode",
 ]
 
 # napoleon
@@ -64,7 +64,8 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
+# html_theme = "sphinx_rtd_theme"
+html_theme = "sphinx_book_theme"
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
@@ -77,9 +78,11 @@ autodoc_typehints = "description"
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 
+# default_light_mode = True
 html_theme_options = {
+    "repository_url": "https://github.com/greysonlalonde/sweetpotato",
+    "use_repository_button": True,
     "logo_only": True,
 }
-default_light_mode = True
-
+html_title = "Sweetpotato"
 html_logo = "_static/sweetpotato.png"

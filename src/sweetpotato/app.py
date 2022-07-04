@@ -1,25 +1,29 @@
 from typing import Optional, List
 
-from sweetpotato.config import settings
 from sweetpotato.core.build import Build
 from sweetpotato.core.context_wrappers import ContextWrapper
 from sweetpotato.core.utils import (
     ComponentRenderer,
     ApplicationRenderer,
     ImportRenderer,
-    Storage,
 )
 
 
 class App:
+    """Provides methods for interacting with underlying :class:`sweetpotato.core.build.Build` class.
+
+    Args:
+        children (:obj:`list`): List of components.
+    """
+
     context = ContextWrapper()
     build = Build()
 
-    def __init__(self, children: Optional[List] = None) -> None:
+    def __init__(self, children: Optional[List] = None, **kwargs) -> None:
         super().__init__()
         if children is None:
             children = []
-        self.context = self.context.wrap(children)
+        self.context = self.context.wrap(children, **kwargs)
         self.context.register(visitor=ComponentRenderer)
         self.context.register(visitor=ImportRenderer)
         self.context.register(visitor=ApplicationRenderer)

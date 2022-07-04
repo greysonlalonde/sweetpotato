@@ -1,3 +1,3 @@
-LOGIN_PROPS = {}
+LOGIN_PROPS = {"children"}
 
 AUTHENTICATION_PROVIDER_PROPS = {"children"}

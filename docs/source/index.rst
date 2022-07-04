@@ -9,7 +9,7 @@ Check out the :doc:`installation` section, and then head over to :doc:`usage` fo
 
 .. note::
 
-   This project is under active development.
+   This project is in early stages and under active development.
 
 
 Contents

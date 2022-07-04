@@ -16,7 +16,7 @@ class Component(Protocol):
     is_composite: bool
     variables: list
     package: dict
-    children: Optional[Union[int, str]]
+    children: Optional[Union[str]]
 
     def register(self, visitor) -> list:
         ...

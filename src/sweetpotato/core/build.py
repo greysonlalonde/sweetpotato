@@ -18,7 +18,6 @@ from sweetpotato.core.exceptions import DependencyError
 from sweetpotato.core.utils import Storage
 
 
-
 def _access_check(file: str, mode: int) -> bool:
     return os.path.exists(file) and os.access(file, mode) and not os.path.isdir(file)
 
@@ -58,7 +57,7 @@ def _check_dependency(
 
 
 class Build:
-    """Contains actions for expo flow, dependency detection,app testing and publishing.
+    """Contains actions for expo flow, dependency detection, app testing and publishing.
 
     Args:
         dependencies (:obj:`list`, optional): User defined dependencies to replace inbuilt ones.
@@ -71,7 +70,6 @@ class Build:
         for dependency in dependencies:
             if not _check_dependency(dependency):
                 raise DependencyError(f"Dependency package {dependency} not found.")
-
 
     @classmethod
     def run(cls, platform: Optional[str] = None) -> None:
@@ -88,11 +86,11 @@ class Build:
         cls._format_screens()
         if not platform:
             platform = ""
-        subprocess.run(
-            f"cd {settings.REACT_NATIVE_PATH} && expo start {platform}",
-            shell=True,
-            check=True,
-        )
+        # subprocess.run(
+        #     f"cd {settings.REACT_NATIVE_PATH} && expo start {platform}",
+        #     shell=True,
+        #     check=True,
+        # )
 
     def publish(self, platform: str) -> None:
         """Publishes app to specified platform / application store.
@@ -124,7 +122,6 @@ class Build:
                 check=True,
             )
 
-
     @staticmethod
     def _replace_values(content: dict, screen: str) -> str:
         """Sets placeholder values in the string representation of the app component.
@@ -137,43 +134,21 @@ class Build:
             component (str): String representation of app component with
             placeholder values set.
         """
-        component = settings.APP_REPR.replace("<NAME>", screen).replace("<FUNCTIONS>", "")
-
-    @classmethod
-    def run(cls, platform: Optional[str] = None) -> None:
-        """Starts a React Native expo client through a subprocess.
-
-        Keyword Args:
-            platform (:obj:`str`, optional): Platform for expo to run on.
-
-        Returns:
-            None
-        """
-        for screen, content in cls.storage.internals.items():
-            cls.write_screen(screen, content)
-        cls.format_screens()
-        if not platform:
-            platform = ""
-        subprocess.run(
-            f"cd {settings.REACT_NATIVE_PATH} && expo start {platform}",
-            shell=True,
-            check=True,
-        )
-
-    @classmethod
-    def write_screen(cls, screen: str, content: dict):
+        component = settings.APP_REPR.replace("<NAME>", screen)
         content.update(dict(state=""))
         if settings.APP_COMPONENT == screen:
-            content["imports"] = f"{settings.APP_IMPORTS}\n{content['imports']}"
+            content[
+                "imports"
+            ] = f"{''.join(settings.APP_IMPORTS)}\n{''.join(content['imports'])}"
             if settings.USE_NAVIGATION:
                 content[
                     "imports"
-                ] = f"import 'react-native-gesture-handler';\n{content['imports']}"
+                ] = f"import 'react-native-gesture-handler';\n{''.join(content['imports'])}"
                 content["state"] += "navigation: RootNavigation.navigationRef"
 
         for key in content:
-            if key == "variables":
-                content["variables"] = "\n".join(content["variables"])
+            if key in ["variables", "functions"]:
+                content[key] = "\n".join(content[key])
             component = component.replace(f"<{key.upper()}>", content[key])
         return component
 
@@ -189,6 +164,6 @@ class Build:
         if settings.APP_COMPONENT != screen:
             screen = f"src/{screen}"
         with open(
-                f"{settings.REACT_NATIVE_PATH}/{screen}.js", "w", encoding="utf-8"
+            f"{settings.REACT_NATIVE_PATH}/{screen}.js", "w", encoding="utf-8"
         ) as file:
             file.write(component)

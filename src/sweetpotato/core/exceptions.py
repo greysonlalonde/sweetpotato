@@ -60,7 +60,7 @@ class AttrError(Exception):
         Returns:
             String representation of exception message.
         """
-        return f"attribute '{self._key}' not in {self._name} component props"
+        return f"attribute(s) '{self._key}' not in {self._name} component props"
 
 
 class StyleError(Exception):

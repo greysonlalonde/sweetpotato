@@ -9,11 +9,10 @@ from pathlib import Path
 
 import sweetpotato.defaults as defaults
 import sweetpotato.functions.authentication_functions as auth_functions
-
-# Navigation configuration
 from sweetpotato.core import ThreadSafe
 
 
+# Navigation configuration
 class ReactNavigation:
     """Provides changeable configuration for React Navigation packages."""
 
@@ -76,9 +75,10 @@ class Settings(metaclass=ThreadSafe):
         "components": "react-native",
         "ui_kitten": UIKitten.ui_kitten_components,
         "navigation": ReactNavigation.native,
+        "authentication": "Authentication",
     }
     REPLACE_COMPONENTS = {
-        "StackNavigator": {
+        "Stack": {
             "package": ReactNavigation.stack,
             "import": "createNativeStackNavigator",
             "name": "StackNavigator",
@@ -87,6 +87,9 @@ class Settings(metaclass=ThreadSafe):
             "package": ReactNavigation.bottom_tabs,
             "import": "createBottomTabNavigator",
             "name": "TabNavigator",
+        },
+        "createNativeStackNavigator": {
+            "package": ReactNavigation.stack,
         },
         "createBottomTabNavigator": {
             "package": ReactNavigation.bottom_tabs,
@@ -103,7 +106,15 @@ class Settings(metaclass=ThreadSafe):
         },
         "AuthenticationProvider": {
             "package": "./AuthenticationProvider",
+            "name": "AuthenticationProvider",
+            "import": "AuthenticationProvider",
         },
+        "Authenticated": {
+            "package": "./Authenticated",
+            "name": "Authenticated",
+            "import": "Authenticated",
+        },
+        "Login": {"package": "./Login", "name": "Login", "import": "Login"},
     }
 
     REPLACE_ATTRS = {
@@ -117,16 +128,17 @@ class Settings(metaclass=ThreadSafe):
         "secureTextEntry": "secureTextEntry",
     }
 
-    APP_IMPORTS = ""
+    APP_IMPORTS = set()
 
     @classmethod
     def set_ui_kitten(cls):
-        cls.APP_IMPORTS += "import * as eva from '@eva-design/eva';"
+        cls.APP_IMPORTS.add("\nimport * as eva from '@eva-design/eva';")
+        cls.APP_IMPORTS.add("\nimport {EvaIconsPack} from '@ui-kitten/eva-icons';")
         cls.REPLACE_COMPONENTS.update(
             **dict(
                 TextInput={
-                    "package": UIKitten.ui_kitten_components,
                     "import": "Input",
+                    "package": UIKitten.ui_kitten_components,
                 },
                 Text={
                     "import": "Text",
@@ -145,15 +157,15 @@ class Settings(metaclass=ThreadSafe):
 
     @classmethod
     def set_authentication(cls):
-        cls.APP_IMPORTS += (
-            "import AsyncStorage from @react-native-async-storage/async-storage"
+        cls.APP_IMPORTS.add(
+            "\nimport AsyncStorage from '@react-native-async-storage/async-storage';"
         )
-        cls.APP_IMPORTS += ("import * as SecureStore from expo-secure-store",)
+        cls.APP_IMPORTS.add("\nimport * as SecureStore from 'expo-secure-store';")
 
     @classmethod
     def set_navigation(cls):
-        cls.APP_IMPORTS += (
-            "import * as RootNavigation from './src/components/RootNavigation.js'"
+        cls.APP_IMPORTS.add(
+            "\nimport * as RootNavigation from './src/components/RootNavigation.js';"
         )
 
     @classmethod
@@ -175,13 +187,13 @@ class Settings(metaclass=ThreadSafe):
     def __setattr__(cls, key, value):
         if cls.__dict__.get(key, "") != value:
             setattr(cls, key, value)
-            if cls.USE_UI_KITTEN:
-                cls.set_ui_kitten()
-            if cls.USE_NAVIGATION:
-                cls.set_navigation()
-            if cls.USE_AUTHENTICATION:
-                cls.set_authentication()
-            if key in ["RESOURCE_FOLDER", "SOURCE_FOLDER"]:
-                cls.set_react_native()
-            if key == "API_URL":
-                cls.set_api()
+        if cls.USE_UI_KITTEN:
+            cls.set_ui_kitten()
+        if cls.USE_NAVIGATION:
+            cls.set_navigation()
+        if cls.USE_AUTHENTICATION:
+            cls.set_authentication()
+        if key in ["RESOURCE_FOLDER", "SOURCE_FOLDER"]:
+            cls.set_react_native()
+        if key == "API_URL":
+            cls.set_api()

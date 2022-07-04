@@ -7,6 +7,7 @@ BUTTON_PROPS = {
     "touchSoundDisabled",
     "title",
     "onPress",
+    "children",
 }
 
 IMAGE_PROPS = {
@@ -142,6 +143,7 @@ SCROLL_VIEW_PROPS = {
 FLAT_LIST_PROPS = {}
 
 TEXT_PROPS = {
+    "children",
     "accessibilityHint",
     "accessibilityLabel",
     "accessibilityRole",
@@ -293,7 +295,10 @@ TEXT_INPUT_PROPS = {
     # "onBlur",
     # "inputAccessoryViewID",
     # "onChangeText",
+    "secureTextEntry",
 }
+
+INPUT_PROPS = {"onChangeText", "placeholder", "value", "secureTextEntry"}
 
 VIEW_PROPS = {
     "accessibilityActions",

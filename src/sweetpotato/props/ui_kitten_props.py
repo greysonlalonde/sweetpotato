@@ -1,7 +1,6 @@
+"""Provides props for ui-kitten components.
 """
-Provides props for ui-kitten components.
-"""
-ICON_REGISTRY_PROPS = {}
+ICON_REGISTRY_PROPS = {"icons"}
 
 APPLICATION_PROVIDER_PROPS = {"theme", "children"}
 

@@ -13,9 +13,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -29,9 +27,7 @@
       "favicon": "./assets/favicon.png",
       "build": {
         "babel": {
-          "include": [
-            "@ui-kitten/components"
-          ]
+          "include": ["@ui-kitten/components"]
         }
       }
     }

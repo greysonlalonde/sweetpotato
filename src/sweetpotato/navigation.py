@@ -1,14 +1,16 @@
 from typing import List, Optional
 
-from sweetpotato.core.base import Composite
+from sweetpotato.core.base import Composite, Component
 
 
 class NavigationContainer(Composite):
+    """React Navigation NavigationContainer component."""
+
     pass
 
 
 class Screen(Composite):
-    """React navigation screen component.
+    """React Navigation Screen component.
     Args:
         functions: String representation of .js based functions.
         state: Dictionary of allowed state values for component.
@@ -22,23 +24,22 @@ class Screen(Composite):
     is_screen = True
 
     def __init__(
-            self,
-            screen_name: str,
-            screen_type: str,
-            functions: Optional[str] = None,
-            state: Optional[str] = None,
-            **kwargs,
+        self,
+        screen_name: str,
+        screen_type: str,
+        functions: Optional[list[str]] = None,
+        state: Optional[str] = None,
+        **kwargs,
     ) -> None:
         kwargs.update(
             {
                 "name": f"'{screen_name}'",
-                "component": "".join([word.title() for word in screen_name.split(" ")]),
             }
         )
         super().__init__(**kwargs)
         self.name = f"{screen_type}.Screen"
-        self.import_name = kwargs["component"]
-        self.package = f"./src/{kwargs['component']}.js"
+        self.import_name = "".join([word.title() for word in screen_name.split(" ")])
+        self.package = f"./src/{self.import_name}.js"
         self.functions = functions
         self.state = state
         self.set_parent(self.children)
@@ -57,6 +58,9 @@ class Screen(Composite):
             if child.is_composite:
                 self.set_parent(child.children)
             child.parent = self.import_name
+
+    def __repr__(self):
+        return f"<{self.name}{self.attrs}>{'{'}() => <{self.import_name}/> {'}'}</{self.name}>"
 
 
 class BaseNavigator(Composite):
@@ -86,12 +90,11 @@ class BaseNavigator(Composite):
         self.name = f"{self.name}.Navigator"
 
     def screen(
-            self,
-            screen_name: str,
-            children: list,
-            functions: Optional[str] = None,
-            state: Optional[dict] = None,
-
+        self,
+        screen_name: str,
+        children: list,
+        functions: Optional[list[str]] = None,
+        state: Optional[dict] = None,
     ) -> None:
         """Instantiates and adds screen to navigation component and increments screen count.
 
@@ -115,19 +118,10 @@ class BaseNavigator(Composite):
         )
 
 
-class StackNavigator(BaseNavigator):
+class Stack(BaseNavigator):
     """Abstraction of React Navigation StackNavigator component.
 
     See https://reactnavigation.org/docs/stack-navigator
-    """
-
-    pass
-
-
-class TabNavigator(BaseNavigator):
-    """Abstraction of React Navigation TabNavigator component.
-
-    See https://reactnavigation.org/docs/bottom-tab-navigator
     """
 
     pass
@@ -152,3 +146,15 @@ def create_bottom_tab_navigator(name: Optional[str] = None) -> Tab:
         Tab navigator.
     """
     return Tab(name=name)
+
+
+def create_native_stack_navigator(name: Optional[str] = None) -> Stack:
+    """Function representing the createNativeStackNavigator function in react-navigation.
+
+    Args:
+        name (str, optional): name of navigator.
+
+    Returns:
+        Tab navigator.
+    """
+    return Stack(name=name)

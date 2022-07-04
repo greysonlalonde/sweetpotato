@@ -1,38 +1,35 @@
-import "react-native-gesture-handler";
-import React from "react";
-import { ScreenOne } from "./src/ScreenOne.js";
-import { ScreenTwo } from "./src/ScreenTwo.js";
-import { ScreenThree } from "./src/ScreenThree.js";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import * as RootNavigation from "./src/components/RootNavigation";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as SecureStore from "expo-secure-store";
 
-const Tab = createBottomTabNavigator();
+import React from 'react';
+import 'react-native-gesture-handler';
+import * as eva from '@eva-design/eva';import * as eva from '@eva-design/eva';import AsyncStorage from @react-native-async-storage/async-storageimport * as SecureStore from expo-secure-storeimport * as eva from '@eva-design/eva';import * as RootNavigation from './src/components/RootNavigation.js'import AsyncStorage from @react-native-async-storage/async-storageimport * as SecureStore from expo-secure-store
+import {AuthenticationProvider} from "./AuthenticationProvider";
+import {SafeAreaProvider} from "react-native-safe-area-context";
+import {ApplicationProvider} from "@ui-kitten/components";
+import {NavigationContainer} from "@react-navigation/native";
+
+
+
+
+
+
 
 export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isAuthenticated: false,
+    constructor(props) {
+        super(props);
+        this.state = {
+            navigation: RootNavigation.navigationRef    
+        }
+    }    
+    
+    
 
-      navigation: RootNavigation.navigationRef,
-    };
-  }
-
-  render() {
-    return (
-      <NavigationContainer ref={this.state.navigation}>
-        <SafeAreaProvider>
-          <Tab.Navigator>
-            <Tab.Screen name={"Screen One"} component={ScreenOne} />
-            <Tab.Screen name={"Screen Two"} component={ScreenTwo} />
-            <Tab.Screen name={"Screen Three"} component={ScreenThree} />
-          </Tab.Navigator>
-        </SafeAreaProvider>
-      </NavigationContainer>
-    );
-  }
+    render() {
+        return (
+                
+<NavigationContainer ref={RootNavigation.navigationRef}>
+<ApplicationProvider theme={eva.dark}>
+<SafeAreaProvider>
+<AuthenticationProvider>[<sweetpotato.navigation.Tab object at 0x10302bd00>]</AuthenticationProvider></SafeAreaProvider></ApplicationProvider></NavigationContainer>
+        );
+    }
 }

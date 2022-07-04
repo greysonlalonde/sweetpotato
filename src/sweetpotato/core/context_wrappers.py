@@ -4,7 +4,6 @@ Todo:
     * Add typing.
 """
 from abc import abstractmethod, ABC
-from typing import List
 
 from sweetpotato.authentication import AuthenticationProvider
 from sweetpotato.components import SafeAreaProvider
@@ -14,45 +13,29 @@ from sweetpotato.navigation import NavigationContainer
 from sweetpotato.ui_kitten import ApplicationProvider
 
 
-class AbstractWrapper(ABC):
+class Wrapper(ABC):
     @abstractmethod
-    def set_next(self, wrapper) -> None:
-        raise NotImplementedError
-
-    @abstractmethod
-    def wrap(self, component) -> None:
-        raise NotImplementedError
-
-
-class Wrapper(AbstractWrapper):
-    _next_wrapper: "Wrapper" = None
-
-    def set_next(self, wrapper: "Wrapper") -> None:
-
-        if not self._next_wrapper:
-            self._next_wrapper = wrapper
-        else:
-            self._next_wrapper.set_next(wrapper)
-
-    @abstractmethod
-    def wrap(self, component) -> Composite:
-        if self._next_wrapper:
-            return self._next_wrapper.wrap(component)
+    def wrap(self, component, **kwargs) -> Composite:
         return component
 
 
 class UIKittenWrapper(Wrapper):
-    """Adds UI Kitten design to app.
+    """Adds UI Kitten support to app.
 
 
     Todo:
-        * Add docstrings
+        * Replace general exception with custom exception.
     """
 
-    def wrap(self, component: Composite) -> Composite:
+    def wrap(self, component: Composite, **kwargs) -> Composite:
         if settings.USE_UI_KITTEN:
-            component = ApplicationProvider(children=[component])
-        return super().wrap(component)
+            theme = kwargs.pop("theme", None)
+            if not theme:
+                raise Exception("UI Kitten must be provided a theme.")
+            component = ApplicationProvider(
+                children=[component], theme=f"{'{'}...eva.{theme}{'}'}"
+            )
+        return super().wrap(component, **kwargs)
 
 
 class AuthenticationWrapper(Wrapper):
@@ -63,10 +46,10 @@ class AuthenticationWrapper(Wrapper):
         * Add docstrings
     """
 
-    def wrap(self, component: Composite) -> Composite:
+    def wrap(self, component: Composite, **kwargs) -> Composite:
         if settings.USE_AUTHENTICATION:
             component = AuthenticationProvider(children=[component])
-        return super().wrap(component)
+        return super().wrap(component, **kwargs)
 
 
 class NavigationWrapper(Wrapper):
@@ -77,13 +60,30 @@ class NavigationWrapper(Wrapper):
         * Add docstrings
     """
 
-    def wrap(self, component: Composite) -> Composite:
+    def wrap(self, component: Composite, **kwargs) -> Composite:
         if settings.USE_NAVIGATION:
-            component = NavigationContainer(children=[component])
-        return super().wrap(component)
+            component = NavigationContainer(
+                children=[component], ref="RootNavigation.navigationRef"
+            )
+        return super().wrap(component, **kwargs)
 
 
-class ContextWrapper(AuthenticationWrapper, UIKittenWrapper, NavigationWrapper):
+class SafeAreaWrapper(Wrapper):
+    """Adds react-native-safe-area-context SafeAreaProvider component to app.
+
+
+    Todo:
+        * Add docstrings
+    """
+
+    def wrap(self, component, **kwargs) -> Composite:
+        component = SafeAreaProvider(children=[component])
+        return super().wrap(component, **kwargs)
+
+
+class ContextWrapper(
+    AuthenticationWrapper, SafeAreaWrapper, UIKittenWrapper, NavigationWrapper
+):
     """Checks for and adds navigation, authentication, and ui-kitten contexts.
 
 
@@ -91,9 +91,7 @@ class ContextWrapper(AuthenticationWrapper, UIKittenWrapper, NavigationWrapper):
         * Add docstrings
     """
 
-    def wrap(self, component: List) -> Composite:
-        component = super(ContextWrapper, self).wrap(
-            SafeAreaProvider(children=component)
-        )
+    def wrap(self, component: list, **kwargs) -> Composite:
+        component = super().wrap(component[0], **kwargs)
         component.is_root = True
         return component

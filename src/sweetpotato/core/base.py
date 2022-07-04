@@ -69,10 +69,11 @@ def _set_import(name: str) -> str:
         String representation of React Native import name for
         :class:`~sweetpotato.core.base.Component` and :class:`~sweetpotato.core.base.Composite`
     """
+
     return (
         name
         if name not in settings.REPLACE_COMPONENTS
-        else settings.REPLACE_COMPONENTS.get(name, name).get("import", name)
+        else settings.REPLACE_COMPONENTS.get(name).get("import")
     )
 
 
@@ -93,10 +94,10 @@ class MetaComponent(type):
             cls.name = _set_name(cls.__name__)
             cls.import_name = _set_import(cls.__name__)
             cls.package = _set_package(cls.import_name, cls.__dict__)
-            cls._props = _set_props(cls.name, cls.__dict__)
-            cls.__registry.add(cls.name)
-        if set(kwargs.keys()).difference(cls._props):
-            attributes = "".join(set(kwargs.keys()).difference(cls._props))
+            cls.props = _set_props(cls.import_name, cls.__dict__)
+            cls.__registry.add(cls.__name__)
+        if set(kwargs.keys()).difference(cls.props):
+            attributes = ", ".join(set(kwargs.keys()).difference(cls.props))
             raise AttrError(key=attributes, name=cls.name)
         return super().__call__(*args, **kwargs)
 
@@ -128,7 +129,7 @@ class Component(metaclass=MetaComponent):
             variables = []
         self._rendition = None
         self.variables = variables
-        self.attrs = kwargs
+        self.attrs = self.render_attrs(kwargs)
         self.children = children
         self.parent = settings.APP_COMPONENT
 
@@ -136,7 +137,7 @@ class Component(metaclass=MetaComponent):
         """Registers a specified visitor with component.
 
         Args:
-            visitor (Visitor): Visitor.
+            visitor (`Visitor`): Visitor.
 
         Returns:
             None
@@ -155,6 +156,22 @@ class Component(metaclass=MetaComponent):
     @rendition.setter
     def rendition(self, rendition) -> None:
         self._rendition = rendition
+
+    @staticmethod
+    def render_attrs(attrs: dict[str, str]) -> str:
+        """Formats attribute to React Native friendly representation.
+
+        Args:
+            attrs (dict): Dictionary of allowed attributes specified in component props.
+        Returns:
+            str: String representation of dictionary.
+        """
+        return "".join([f" {k}={'{'}{v}{'}'}" for k, v in attrs.items()])
+
+    def __repr__(self):
+        if self.children:
+            return f"<{self.name}{self.attrs}>{self.children}</{self.name}>"
+        return f"<{self.name}{self.attrs}/>"
 
 
 class Composite(Component):
@@ -178,3 +195,6 @@ class Composite(Component):
         for child in self.children:
             child.register(visitor)
         super().register(visitor)
+
+    def __repr__(self):
+        return f"<{self.name}{self.attrs}>{''.join(map(repr, self.children))}</{self.name}>"

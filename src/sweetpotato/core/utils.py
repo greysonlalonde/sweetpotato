@@ -40,10 +40,7 @@ class ApplicationRenderer(Visitor):
     def accept(cls, obj: Composite) -> None:
         cls.render_imports(obj)
         cls.render_variables(obj)
-
-    @classmethod
-    def render_application(cls, obj: Composite):
-        ...
+        cls.render_functions(obj)
 
     @classmethod
     def render_imports(cls, obj: Composite):
@@ -60,13 +57,22 @@ class ApplicationRenderer(Visitor):
         """
         import_str = ""
         for k, v in imports.items():
+            print(k, v)
             import_str += f'import {v} from "{k}";\n'.replace("'", "")
 
         return import_str
 
     @classmethod
     def render_variables(cls, obj: Union[Component, Composite]) -> None:
-        Storage.internals[obj.parent]["variables"].append("".join(obj.variables))
+        variables = "".join([f"\n{var};" for var in obj.variables])
+        Storage.internals[obj.parent]["variables"].append(variables)
+
+    @classmethod
+    def render_functions(cls, obj: Union[Component, Composite]) -> None:
+        # if obj.is_screen:
+        #     functions = "".join([f"\n{function};" for function in obj.functions])
+        #     Storage.internals[obj.import_name]["functions"].append(functions)
+        ...
 
 
 class ComponentRenderer(Visitor):
@@ -83,55 +89,13 @@ class ComponentRenderer(Visitor):
             None
         """
 
-        obj.rendition = cls.render_component(obj)
+        # obj.rendition = cls.render_component(obj)
         Storage.internals[obj.parent] = {
-            "component": obj.rendition,
+            "component": str(obj),
             "imports": {},
             "variables": [],
+            "functions": [],
         }
-
-    @classmethod
-    def render_children(cls, obj: Union[Component, Composite]) -> str:
-        """Returns component inner content in a compatible format.
-
-        Args:
-            obj (Component): Component type.
-
-        Returns:
-            str: Component children in a string format.
-        """
-        return (
-            "".join(map(lambda child: child.rendition, obj.children))
-            if obj.is_composite
-            else obj.children
-        )
-
-    @classmethod
-    def render_component(cls, obj: Union[Component, Composite]) -> str:
-        """Render React Native friendly string representation of component.
-
-        Args:
-            obj (Component): Component or Composite object.
-
-        Returns:
-            str: React Native friendly string representation.
-        """
-        attrs = cls.render_attrs(obj.attrs)
-        if obj.children and not obj.is_screen:
-            return f"\n<{obj.name}{attrs}>{cls.render_children(obj)}</{obj.name}>"
-        return f"\n<{obj.name} {attrs}/>\n"
-
-    @classmethod
-    def render_attrs(cls, attrs: dict[str, str]) -> str:
-        """Formats attribute to React Native friendly representation.
-
-        Args:
-            attrs (dict): Dictionary of allowed attributes specified in component props.
-
-        Returns:
-            str: String representation of dictionary.
-        """
-        return "".join([f" {k}={'{'}{v}{'}'}" for k, v in attrs.items()])
 
 
 class ImportRenderer(Visitor):
@@ -142,7 +106,7 @@ class ImportRenderer(Visitor):
         """Accepts a component and records component imports.
 
         Args:
-            obj (Component): Component object.
+            obj (`Component`): Component object.
 
         Returns:
             None

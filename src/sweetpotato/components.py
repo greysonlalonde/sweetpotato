@@ -8,6 +8,7 @@ Todo:
 """
 from typing import Optional
 
+from sweetpotato.config import settings
 from sweetpotato.core.base import Component, Composite
 
 
@@ -43,7 +44,7 @@ class TextInput(Component):
     pass
 
 
-class Button(Component):
+class Button(Composite):
     """React Native Button component.
 
     See https://reactnative.dev/docs/button.
@@ -59,8 +60,15 @@ class Button(Component):
         * Need to refactor as composite. Buttons can have children, i.e. text.
     """
 
-    def __init__(self, title: Optional[str] = None, **kwargs) -> None:
-        super().__init__(title, **kwargs)
+    def __init__(self, **kwargs) -> None:
+        title = (
+            [Text(text=kwargs.pop("title"))]
+            if settings.USE_UI_KITTEN
+            else kwargs.update({"title": f"'{kwargs.pop('title', '')}'"})
+        )
+        if settings.USE_UI_KITTEN:
+            kwargs.update({"children": title})
+        super().__init__(**kwargs)
 
 
 class Image(Component):
