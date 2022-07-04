@@ -57,7 +57,6 @@ class ApplicationRenderer(Visitor):
         """
         import_str = ""
         for k, v in imports.items():
-            print(k, v)
             import_str += f'import {v} from "{k}";\n'.replace("'", "")
 
         return import_str
