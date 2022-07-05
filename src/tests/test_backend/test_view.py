@@ -9,8 +9,8 @@ class TestView(unittest.TestCase):
         Test that View class props are equal to components_props.py variable.
         """
         view = View()
-        self.assertTrue(view._props)
-        self.assertEqual(view._props, VIEW_PROPS)
+        self.assertTrue(view.props)
+        self.assertEqual(view.props, VIEW_PROPS)
 
     def test_has_methods(self):
         """

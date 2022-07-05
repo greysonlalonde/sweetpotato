@@ -9,8 +9,8 @@ class TestImage(unittest.TestCase):
         Test that Image class props are equal to components_props.py variable.
         """
         image = Image()
-        self.assertTrue(image._props)
-        self.assertEqual(image._props, IMAGE_PROPS)
+        self.assertTrue(image.props)
+        self.assertEqual(image.props, IMAGE_PROPS)
 
     def test_has_methods(self):
         """

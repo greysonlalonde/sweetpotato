@@ -3,7 +3,7 @@ Todo:
     * Add docstrings for all classes & methods.
     * Add typing.
 """
-from typing import Protocol, Optional, List, Union
+from typing import Protocol, Optional, Union
 
 
 class Component(Protocol):
@@ -24,7 +24,7 @@ class Composite(Component, Protocol):
     parent: Optional[str]
     is_screen: bool
     is_root: bool
-    children: Optional[List[Union[Component, "Composite"]]]
+    children: Optional[list[Union[Component, "Composite"]]]
 
 
 class Visitor(Protocol):

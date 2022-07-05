@@ -9,8 +9,8 @@ class TestTextInput(unittest.TestCase):
         Test that TextInput class props are equal to components_props.py variable.
         """
         text_input = TextInput()
-        self.assertTrue(text_input._props)
-        self.assertEqual(text_input._props, TEXT_INPUT_PROPS)
+        self.assertTrue(text_input.props)
+        self.assertEqual(text_input.props, TEXT_INPUT_PROPS)
 
     def test_has_methods(self):
         """
