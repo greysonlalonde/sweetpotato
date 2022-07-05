@@ -1,11 +1,12 @@
 """Contains classes based on React Navigation components.
 
+
 See `React Navigation <https://reactnavigation.org/docs/getting-started/#>`_
 """
 
 from typing import Optional
 
-from sweetpotato.core.base import Composite, Component
+from sweetpotato.core.base import Composite
 
 
 class NavigationContainer(Composite):
