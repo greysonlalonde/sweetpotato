@@ -34,8 +34,8 @@ class Visitor(ABC):
 
 
 class ApplicationRenderer(Visitor):
-    """Accepts a top level component and performs all rendering.
-    """
+    """Accepts a top level component and performs all rendering."""
+
     rendered = set()
 
     @classmethod
@@ -107,7 +107,6 @@ class ApplicationRenderer(Visitor):
             None
         """
         if obj.is_screen:
-            print(obj.state, obj.parent)
             state = ",".join([f"\n{key}: {value}" for key, value in obj.state.items()])
             Storage.internals[obj.parent]["state"] = state
 

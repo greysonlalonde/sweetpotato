@@ -3,7 +3,6 @@
 See `React Navigation <https://reactnavigation.org/docs/getting-started/#>`_
 """
 
-from pprint import pprint
 from typing import Optional
 
 from sweetpotato.core.base import Composite
@@ -13,42 +12,6 @@ class NavigationContainer(Composite):
     """React Navigation NavigationContainer component."""
 
     pass
-
-
-graph_dict = {}
-
-
-class Graph(dict):
-    def add_children(self, obj):
-        if obj.parent not in graph_dict:
-            graph_dict[obj.parent] = []
-        if obj.import_name not in graph_dict:
-            graph_dict[obj.parent].append(
-                {
-                    obj.import_name: {
-                        "children": obj.children,
-                        "imports": list(
-                            *map(lambda x: self.get_imports(obj, x), obj.children)
-                        ),
-                        "state": obj.state,
-                    }
-                }
-            )
-
-    def get_imports(self, obj, child):
-        print(list(map(lambda x: x.import_name, [obj, child] + child.children)))
-        imports = []
-        # imports = []
-        # if child.is_composite:
-        #     for sub_child in child.children:
-        #         if sub_child.is_composite:
-        #             self.get_imports(sub_child)
-        # print(f"child {child}")
-        # imports.append(child.import_name)
-        return map(lambda x: x.import_name, [child] + child.children)
-
-
-dom = Graph()
 
 
 class Screen(Composite):
@@ -91,9 +54,6 @@ class Screen(Composite):
         self.functions = functions
         self.state = state
         self.set_parent(self.children)
-        if self.is_screen:
-            dom.add_children(self)
-        pprint(graph_dict)
 
     def set_parent(self, children: list):
         """Sets top level component as root and sets each parent to self.

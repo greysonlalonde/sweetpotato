@@ -11,8 +11,8 @@ from sweetpotato.core import ThreadSafe
 
 
 class ReactNavigation:
-    """Provides changeable configuration for React Navigation packages.
-    """
+    """Provides changeable configuration for React Navigation packages."""
+
     # Navigation configuration
     native: str = "@react-navigation/native"
     bottom_tabs: str = "@react-navigation/bottom-tabs"
@@ -20,15 +20,15 @@ class ReactNavigation:
 
 
 class UIKitten:
-    """Provides changeable configuration for UI Kitten packages.
-    """
+    """Provides changeable configuration for UI Kitten packages."""
+
     # UI Kitten configuration
     ui_kitten_components: str = "@ui-kitten/components"
 
 
 class Settings(metaclass=ThreadSafe):
-    """Provides and allows user to override default configuration.
-    """
+    """Provides and allows user to override default configuration."""
+
     # App configuration
     APP_COMPONENT: str = defaults.APP_DEFAULT
     APP_REPR: str = defaults.APP_REPR_DEFAULT
@@ -59,7 +59,10 @@ class Settings(metaclass=ThreadSafe):
     RETRIEVE_SESSION: str = auth_functions.RETRIEVE_SESSION
     REMOVE_SESSION: str = auth_functions.REMOVE_SESSION
     TIMEOUT: str = auth_functions.TIMEOUT
-    AUTH_FUNCTIONS: dict = {APP_COMPONENT: LOGIN_FUNCTION, LOGIN_COMPONENT: SET_CREDENTIALS}
+    AUTH_FUNCTIONS: dict = {
+        APP_COMPONENT: LOGIN_FUNCTION,
+        LOGIN_COMPONENT: SET_CREDENTIALS,
+    }
 
     # Navigation settings
     USE_NAVIGATION: bool = False
@@ -67,7 +70,9 @@ class Settings(metaclass=ThreadSafe):
     # React Native settings
     RESOURCE_FOLDER: str = "frontend"
     SOURCE_FOLDER: str = "src"
-    REACT_NATIVE_PATH: str = f"{Path(__file__).resolve().parent.parent}/{RESOURCE_FOLDER}"
+    REACT_NATIVE_PATH: str = (
+        f"{Path(__file__).resolve().parent.parent}/{RESOURCE_FOLDER}"
+    )
 
     # Imports and replacements
     IMPORTS: dict = {

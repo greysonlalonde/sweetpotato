@@ -9,6 +9,7 @@ from typing import Protocol, Optional, Union
 
 class Screen(Protocol):
     """Protocol for Screen class."""
+
     is_screen: bool
     state: dict
     functions: list
@@ -18,6 +19,7 @@ class Screen(Protocol):
 
 class Component(Protocol):
     """Protocol for Component class."""
+
     parent: str
     attrs: Optional[dict[str, str]]
     name: str
@@ -41,6 +43,7 @@ class Component(Protocol):
 
 class Composite(Component, Protocol):
     """Protocol for Composite class."""
+
     parent: Optional[str]
     is_screen: bool
     is_root: bool

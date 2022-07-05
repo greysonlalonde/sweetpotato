@@ -6,11 +6,12 @@
 [![Documentation Status](https://readthedocs.org/projects/sweetpotato/badge/?version=latest)](https://sweetpotato.readthedocs.io/en/latest/?badge=latest)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-### *This project is still in early stages of development.*
+### *This project is still in early stages of development and is not stable.*
 
-Sweetpotato provides an intuitive wrapper around React Native, making cross-platform development accessible from Python.
+Sweetpotato provides an intuitive wrapper around React Native, making cross-platform development (iOS, Android, Web)
+accessible from Python.
 
-- Supported packages:
+- Supported packages include but are not limited to:
     - [react-native](https://reactnative.dev)
     - [expo](https://expo.dev)
     - [react-navigation](https://reactnavigation.org)

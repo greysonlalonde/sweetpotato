@@ -14,8 +14,7 @@ from sweetpotato.ui_kitten import ApplicationProvider
 
 
 class Wrapper(ABC):
-    """Wrapping interface for components.
-    """
+    """Wrapping interface for components."""
 
     @abstractmethod
     def wrap(self, component, **kwargs) -> Composite:
