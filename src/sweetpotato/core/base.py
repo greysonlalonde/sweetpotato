@@ -3,78 +3,7 @@ from typing import Union, Optional
 
 from sweetpotato.config import settings
 from sweetpotato.core.exceptions import AttrError
-
-
-def _set_props(name: str, cls_dict: dict) -> dict:
-    """Imports and sets attribute :attr`~sweetpotato.core.base.Component._props` for all subclasses.
-
-    Args:
-        name: React Native component name.
-        cls_dict: Contains :class:`~sweetpotato.core.base.Component` attributes.
-
-    Returns:
-        Dictionary of props from :mod:`sweetpotato.props`.
-    """
-    package = ".".join(cls_dict["__module__"].split(".")[:2])
-    props = f'{"_".join(re.findall("[A-Z][^A-Z]*", name)).upper()}_PROPS'
-    pack = package.split(".")
-    pack.insert(1, "props")
-    package = f'{".".join(pack[:2])}.{pack[-1]}_props'
-    return getattr(__import__(package, fromlist=[props]), props)
-
-
-def _set_package(import_name: str, cls_dict: dict) -> str:
-    """Sets React Native :attr`~sweetpotato.core.base.Component.package` for component.
-
-    Args:
-        import_name: React Native component name.
-        cls_dict: Contains :class:`sweetpotato.core.base.Component` attributes.
-
-    Returns:
-        String representation of React Native package for
-        :class:`~sweetpotato.core.base.Component` and :class:`~sweetpotato.core.base.Composite`.
-    """
-    package = ".".join(cls_dict["__module__"].split(".")[1:2])
-    return (
-        settings.IMPORTS.get(package)
-        if import_name not in settings.REPLACE_COMPONENTS
-        else settings.REPLACE_COMPONENTS.get(import_name).get("package", import_name)
-    )
-
-
-def _set_name(name: str) -> str:
-    """Sets React Native :attr`~sweetpotato.core.base.Component.name` for component.
-
-    Args:
-        name: React Native component name.
-
-    Returns:
-        String representation of React Native name for
-        :class:`~sweetpotato.core.base.Component` and :class:`~sweetpotato.core.base.Composite`.
-    """
-    return (
-        name
-        if name not in settings.REPLACE_COMPONENTS
-        else settings.REPLACE_COMPONENTS.get(name, name).get("name", name)
-    )
-
-
-def _set_import(name: str) -> str:
-    """Sets React Native :attr`~sweetpotato.core.base.Component.import_name` for component.
-
-    Args:
-        name: React Native component import name.
-
-    Returns:
-        String representation of React Native import name for
-        :class:`~sweetpotato.core.base.Component` and :class:`~sweetpotato.core.base.Composite`
-    """
-
-    return (
-        name
-        if name not in settings.REPLACE_COMPONENTS
-        else settings.REPLACE_COMPONENTS.get(name).get("import")
-    )
+from sweetpotato.core.protocols import Visitor
 
 
 class MetaComponent(type):
@@ -92,15 +21,89 @@ class MetaComponent(type):
 
     def __call__(cls, *args, **kwargs) -> None:
         if cls.__name__ not in MetaComponent.__registry:
-            cls.name = _set_name(cls.__name__)
-            cls.import_name = _set_import(cls.__name__)
-            cls.package = _set_package(cls.import_name, cls.__dict__)
-            cls.props = _set_props(cls.import_name, cls.__dict__)
+            cls.name = MetaComponent.__set_name(cls.__name__)
+            cls.import_name = MetaComponent.__set_import(cls.__name__)
+            cls.package = MetaComponent.__set_package(cls.import_name, cls.__dict__)
+            cls.props = MetaComponent.__set_props(cls.import_name, cls.__dict__)
             cls.__registry.add(cls.__name__)
         if set(kwargs.keys()).difference(cls.props):
             attributes = ", ".join(set(kwargs.keys()).difference(cls.props))
             raise AttrError(key=attributes, name=cls.name)
         return super().__call__(*args, **kwargs)
+
+    @staticmethod
+    def __set_import(name: str) -> str:
+        """Sets React Native :attr`~sweetpotato.core.base.Component.import_name` for component.
+
+        Args:
+            name (str): React Native component import name.
+
+        Returns:
+            String representation of React Native import name for
+            :class:`~sweetpotato.core.base.Component` and :class:`~sweetpotato.core.base.Composite`
+        """
+
+        return (
+            name
+            if name not in settings.REPLACE_COMPONENTS
+            else settings.REPLACE_COMPONENTS.get(name).get("import")
+        )
+
+    @staticmethod
+    def __set_name(name: str) -> str:
+        """Sets React Native :attr`~sweetpotato.core.base.Component.name` for component.
+
+        Args:
+            name (str): React Native component name.
+
+        Returns:
+            String representation of React Native name for
+            :class:`~sweetpotato.core.base.Component` and :class:`~sweetpotato.core.base.Composite`.
+        """
+        return (
+            name
+            if name not in settings.REPLACE_COMPONENTS
+            else settings.REPLACE_COMPONENTS.get(name, name).get("name", name)
+        )
+
+    @staticmethod
+    def __set_package(import_name: str, cls_dict: dict) -> str:
+        """Sets React Native :attr`~sweetpotato.core.base.Component.package` for component.
+
+        Args:
+            import_name (str): React Native component name.
+            cls_dict (dict): Contains :class:`sweetpotato.core.base.Component` attributes.
+
+        Returns:
+            String representation of React Native package for
+            :class:`~sweetpotato.core.base.Component` and :class:`~sweetpotato.core.base.Composite`.
+        """
+        package = ".".join(cls_dict["__module__"].split(".")[1:2])
+        return (
+            settings.IMPORTS.get(package)
+            if import_name not in settings.REPLACE_COMPONENTS
+            else settings.REPLACE_COMPONENTS.get(import_name).get(
+                "package", import_name
+            )
+        )
+
+    @staticmethod
+    def __set_props(name: str, cls_dict: dict) -> dict:
+        """Imports and sets attribute :attr`~sweetpotato.core.base.Component._props` for all subclasses.
+
+        Args:
+            name (str): React Native component name.
+            cls_dict (dict): Contains :class:`~sweetpotato.core.base.Component` attributes.
+
+        Returns:
+            Dictionary of props from :mod:`sweetpotato.props`.
+        """
+        package = ".".join(cls_dict["__module__"].split(".")[:2])
+        props = f'{"_".join(re.findall("[A-Z][^A-Z]*", name)).upper()}_PROPS'
+        pack = package.split(".")
+        pack.insert(1, "props")
+        package = f'{".".join(pack[:2])}.{pack[-1]}_props'
+        return getattr(__import__(package, fromlist=[props]), props)
 
 
 class Component(metaclass=MetaComponent):
@@ -133,7 +136,7 @@ class Component(metaclass=MetaComponent):
         self.children = children
         self.parent = settings.APP_COMPONENT
 
-    def register(self, visitor) -> None:
+    def register(self, visitor: Visitor) -> None:
         """Registers a specified visitor with component.
 
         Args:

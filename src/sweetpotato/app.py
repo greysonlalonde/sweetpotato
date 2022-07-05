@@ -1,3 +1,8 @@
+"""Provider for React Native entry.
+
+Todo:
+    * Add module docstrings
+"""
 from typing import Optional
 
 from sweetpotato.core.build import Build
@@ -13,7 +18,7 @@ class App:
     """Provides methods for interacting with underlying :class:`sweetpotato.core.build.Build` class.
 
     Args:
-        children (:obj:`list`): List of components.
+        children (list): List of components.
     """
 
     context = ContextWrapper()
@@ -32,7 +37,7 @@ class App:
         """Starts a React Native expo client through a subprocess.
 
         Keyword Args:
-            platform (:obj:`str`, optional: Platform for expo to run on.
+            platform (:obj:`str`, optional): Platform for expo to run on.
 
         Returns:
             None
