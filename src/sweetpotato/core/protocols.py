@@ -6,6 +6,14 @@ Todo:
 from typing import Protocol, Optional, Union
 
 
+class Screen(Protocol):
+    is_screen: bool
+    state: dict
+    functions: list
+    parent: Optional[str]
+    import_name: str
+
+
 class Component(Protocol):
     parent: str
     attrs: Optional[dict[str, str]]
