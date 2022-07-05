@@ -40,6 +40,7 @@ class ApplicationRenderer(Visitor):
     def accept(cls, obj: Composite) -> None:
         cls.render_imports(obj)
         cls.render_variables(obj)
+        cls.render_state(obj)
         cls.render_functions(obj)
 
     @classmethod
@@ -67,11 +68,17 @@ class ApplicationRenderer(Visitor):
         Storage.internals[obj.parent]["variables"].append(variables)
 
     @classmethod
+    def render_state(cls, obj: Union[Component, Composite]) -> None:
+        if obj.is_screen:
+            print(obj.state, obj.parent)
+            state = ",".join([f"\n{key}: {value}" for key, value in obj.state.items()])
+            Storage.internals[obj.parent]["state"] = state
+
+    @classmethod
     def render_functions(cls, obj: Union[Component, Composite]) -> None:
-        # if obj.is_screen:
-        #     functions = "".join([f"\n{function};" for function in obj.functions])
-        #     Storage.internals[obj.import_name]["functions"].append(functions)
-        ...
+        if obj.is_screen:
+            functions = "".join([f"\n{function};" for function in obj.functions])
+            Storage.internals[obj.import_name]["functions"].append(functions)
 
 
 class ComponentRenderer(Visitor):
@@ -93,6 +100,7 @@ class ComponentRenderer(Visitor):
             "imports": {},
             "variables": [],
             "functions": [],
+            "state": [],
         }
 
 

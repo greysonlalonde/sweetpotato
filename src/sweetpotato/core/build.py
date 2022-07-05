@@ -145,10 +145,10 @@ class Build:
                     "imports"
                 ] = f"import 'react-native-gesture-handler';\n{''.join(content['imports'])}"
                 content["state"] += "navigation: RootNavigation.navigationRef"
-
         for key in content:
             if key in ["variables", "functions"]:
                 content[key] = "\n".join(content[key])
+
             component = component.replace(f"<{key.upper()}>", content[key])
         return component
 

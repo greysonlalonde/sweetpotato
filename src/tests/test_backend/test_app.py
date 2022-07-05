@@ -8,7 +8,7 @@ class TestApp(unittest.TestCase):
         Test that App class props are equal to components_props.py variable.
         """
         app = App()
-        self.assertEqual(app._props, {'theme', 'state'})
+        self.assertEqual(app._props, {"theme", "state"})
 
     def test_has_methods(self):
         """
@@ -17,5 +17,5 @@ class TestApp(unittest.TestCase):
         ...
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

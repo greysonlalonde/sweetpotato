@@ -9,8 +9,6 @@ from typing import Protocol, Optional, List, Union
 class Component(Protocol):
     parent: str
     attrs: Optional[dict[str, str]]
-    rendition: str
-    imports: dict
     name: str
     import_name: str
     is_composite: bool

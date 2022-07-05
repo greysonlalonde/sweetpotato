@@ -1,6 +1,12 @@
-from typing import List, Optional
+"""Contains classes based on React Navigation components.
 
-from sweetpotato.core.base import Composite, Component
+See `React Navigation <https://reactnavigation.org/docs/getting-started/#>`_
+"""
+
+from pprint import pprint
+from typing import Optional
+
+from sweetpotato.core.base import Composite
 
 
 class NavigationContainer(Composite):
@@ -9,11 +15,49 @@ class NavigationContainer(Composite):
     pass
 
 
+graph_dict = {}
+
+
+class Graph(dict):
+    def add_children(self, obj):
+        if obj.parent not in graph_dict:
+            graph_dict[obj.parent] = []
+        if obj.import_name not in graph_dict:
+            graph_dict[obj.parent].append(
+                {
+                    obj.import_name: {
+                        "children": obj.children,
+                        "imports": list(
+                            *map(lambda x: self.get_imports(obj, x), obj.children)
+                        ),
+                        "state": obj.state,
+                    }
+                }
+            )
+
+    def get_imports(self, obj, child):
+        print(list(map(lambda x: x.import_name, [obj, child] + child.children)))
+        imports = []
+        # imports = []
+        # if child.is_composite:
+        #     for sub_child in child.children:
+        #         if sub_child.is_composite:
+        #             self.get_imports(sub_child)
+        # print(f"child {child}")
+        # imports.append(child.import_name)
+        return map(lambda x: x.import_name, [child] + child.children)
+
+
+dom = Graph()
+
+
 class Screen(Composite):
     """React Navigation Screen component.
+
     Args:
         functions: String representation of .js based functions.
         state: Dictionary of allowed state values for component.
+
     Attributes:
         screen_name (str): Name of specific screen.
         import_name (str): Name of .js const for screen.
@@ -27,10 +71,14 @@ class Screen(Composite):
         self,
         screen_name: str,
         screen_type: str,
-        functions: Optional[list[str]] = None,
-        state: Optional[str] = None,
+        functions=None,
+        state=None,
         **kwargs,
     ) -> None:
+        if state is None:
+            state = {}
+        if functions is None:
+            functions = []
         kwargs.update(
             {
                 "name": f"'{screen_name}'",
@@ -43,6 +91,9 @@ class Screen(Composite):
         self.functions = functions
         self.state = state
         self.set_parent(self.children)
+        if self.is_screen:
+            dom.add_children(self)
+        pprint(graph_dict)
 
     def set_parent(self, children: list):
         """Sets top level component as root and sets each parent to self.

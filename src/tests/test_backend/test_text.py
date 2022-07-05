@@ -34,5 +34,5 @@ class TestText(unittest.TestCase):
         self.assertIn(phrase, text.write_component())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
