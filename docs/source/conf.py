@@ -39,14 +39,14 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
-    'sphinx_gallery.gen_gallery',
+    # 'sphinx_gallery.gen_gallery',
     # "sphinx_rtd_dark_mode",
 ]
 
-sphinx_gallery_conf = {
-    'examples_dirs': '../examples',  # path to your example scripts
-    'gallery_dirs': 'auto_examples',  # path to where to save gallery generated output
-}
+# sphinx_gallery_conf = {
+#     'examples_dirs': '../examples',  # path to your example scripts
+#     'gallery_dirs': 'auto_examples',  # path to where to save gallery generated output
+# }
 # napoleon
 napoleon_google_docstring = True
 
