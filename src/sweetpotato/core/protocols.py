@@ -16,6 +16,9 @@ class Screen(Protocol):
     parent: Optional[str]
     import_name: str
 
+    def __set_parent(self) -> None:
+        ...
+
 
 class Component(Protocol):
     """Protocol for Component class."""
@@ -29,7 +32,7 @@ class Component(Protocol):
     package: dict
     children: Optional[str]
 
-    def register(self, visitor) -> list:
+    def register(self, visitor) -> None:
         """Registers given visitor with component.
 
         Args:
@@ -57,7 +60,7 @@ class Visitor(Protocol):
         """Accepts a component and performs an action.
 
         Args:
-            component (Component): Component object.
+            component (Component | Composite): Component object.
 
         Returns:
             None

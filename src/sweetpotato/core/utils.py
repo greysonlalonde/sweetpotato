@@ -25,7 +25,7 @@ class Visitor(ABC):
         """Accepts a component and performs an action.
 
         Args:
-            obj (Component): Component object.
+            obj (Component | Composite): Component instance.
 
         Returns:
             None
@@ -48,13 +48,13 @@ class ApplicationRenderer(Visitor):
         Returns:
             None
         """
-        cls.render_imports(obj)
-        cls.render_variables(obj)
-        cls.render_state(obj)
-        cls.render_functions(obj)
+        cls._render_imports(obj)
+        cls._render_variables(obj)
+        cls._render_state(obj)
+        cls._render_functions(obj)
 
     @classmethod
-    def render_imports(cls, obj: Composite) -> None:
+    def _render_imports(cls, obj: Composite) -> None:
         """Adds imports to storage instance in a React Native acceptable format.
 
         Args:
@@ -65,14 +65,14 @@ class ApplicationRenderer(Visitor):
         """
         if obj.is_root:
             formatted = Storage.internals[obj.parent].pop("imports")
-            Storage.internals[obj.parent]["imports"] = cls.format_imports(formatted)
+            Storage.internals[obj.parent]["imports"] = cls.__format_imports(formatted)
 
     @staticmethod
-    def format_imports(imports: dict[str, str]) -> str:
+    def __format_imports(imports: dict[str, str]) -> str:
         """Formats import dictionary to React Native friendly representation.
 
         Args:
-            imports (dict): dictionary of imports in a package: import fashion.
+            imports (dict): Dictionary of imports in a package: import fashion.
 
         Returns:
             str: String representation of all imports.
@@ -84,7 +84,7 @@ class ApplicationRenderer(Visitor):
         return import_str
 
     @classmethod
-    def render_variables(cls, obj: Union[Component, Composite]) -> None:
+    def _render_variables(cls, obj: Union[Component, Composite]) -> None:
         """Adds variables to storage instance in a React Native acceptable format.
 
         Args:
@@ -97,7 +97,7 @@ class ApplicationRenderer(Visitor):
         Storage.internals[obj.parent]["variables"].append(variables)
 
     @classmethod
-    def render_state(cls, obj: Screen) -> None:
+    def _render_state(cls, obj: Screen) -> None:
         """Adds state to storage instance in a React Native acceptable format.
 
         Args:
@@ -111,7 +111,7 @@ class ApplicationRenderer(Visitor):
             Storage.internals[obj.parent]["state"] = state
 
     @classmethod
-    def render_functions(cls, obj: Screen) -> None:
+    def _render_functions(cls, obj: Screen) -> None:
         """Adds functions to storage instance in a React Native acceptable format.
 
         Args:
@@ -133,7 +133,7 @@ class ComponentRenderer(Visitor):
         """Accepts a component and adds a .js compatible rendition.
 
         Args:
-            obj (Component): Component object.
+            obj (Component | Composite): Component instance.
 
         Returns:
             None
@@ -156,21 +156,24 @@ class ImportRenderer(Visitor):
         """Accepts a component and records component imports.
 
         Args:
-            obj (`Component`): Component object.
+            obj (Component | Composite): Component instance.
 
         Returns:
             None
         """
         if obj.parent not in Storage.internals:
             Storage.internals[obj.parent] = {"imports": {}}
-        cls.add_import(obj)
+        cls.__add_import(obj)
 
     @classmethod
-    def add_import(cls, obj: Union[Component, Composite]) -> None:
+    def __add_import(cls, obj: Union[Component, Composite]) -> None:
         """Adds import dictionary to Storage object.
 
+        Args:
+            obj (Component | Composite): Component instance.
+
         Returns:
-            String representation of all imports.
+            None
         """
 
         if obj.is_screen:

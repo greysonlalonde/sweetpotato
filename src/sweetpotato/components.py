@@ -120,7 +120,7 @@ class StyleSheet(Component):
         * Add examples.
     """
 
-    def create(self, styles: dict):
+    def __create(self, styles: dict):
         ...
 
 

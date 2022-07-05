@@ -83,14 +83,14 @@ class Build:
         """
         for screen, content in cls.storage.internals.items():
             cls._write_screen(screen, content)
-        cls._format_screens()
+        cls.__format_screens()
         if not platform:
             platform = ""
-        subprocess.run(
-            f"cd {settings.REACT_NATIVE_PATH} && expo start {platform}",
-            shell=True,
-            check=True,
-        )
+        # subprocess.run(
+        #     f"cd {settings.REACT_NATIVE_PATH} && expo start {platform}",
+        #     shell=True,
+        #     check=True,
+        # )
 
     def publish(self, platform: str) -> None:
         """Publishes app to specified platform / application store.
@@ -101,7 +101,7 @@ class Build:
         raise NotImplementedError
 
     @staticmethod
-    def _format_screens() -> None:
+    def __format_screens() -> None:
         """Formats all .js files with prettier.
 
         Returns:
@@ -123,7 +123,7 @@ class Build:
             )
 
     @staticmethod
-    def _replace_values(content: dict, screen: str) -> str:
+    def __replace_values(content: dict, screen: str) -> str:
         """Sets placeholder values in the string representation of the app component.
 
         Args:
@@ -160,7 +160,7 @@ class Build:
             screen (str): Name of screen.
             content (dict): Dictionary of screen contents.
         """
-        component = cls._replace_values(content, screen)
+        component = cls.__replace_values(content, screen)
         if settings.APP_COMPONENT != screen:
             screen = f"src/{screen}"
         with open(

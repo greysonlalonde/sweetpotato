@@ -5,7 +5,7 @@ See `React Navigation <https://reactnavigation.org/docs/getting-started/#>`_
 
 from typing import Optional
 
-from sweetpotato.core.base import Composite
+from sweetpotato.core.base import Composite, Component
 
 
 class NavigationContainer(Composite):
@@ -24,8 +24,8 @@ class Screen(Composite):
     Attributes:
         screen_name (str): Name of specific screen.
         import_name (str): Name of .js const for screen.
-        state (dict): Dictionary of allowed state values for component.
-        functions (str): String representation of .js based functions.
+        state (dict, optional): Dictionary of allowed state values for component.
+        functions (list, optional): String representation of .js based functions.
     """
 
     is_screen = True
@@ -34,8 +34,8 @@ class Screen(Composite):
         self,
         screen_name: str,
         screen_type: str,
-        functions=None,
-        state=None,
+        state: Optional[dict] = None,
+        functions: Optional[list] = None,
         **kwargs,
     ) -> None:
         if state is None:
@@ -53,9 +53,9 @@ class Screen(Composite):
         self.package = f"./src/{self.import_name}.js"
         self.functions = functions
         self.state = state
-        self.set_parent(self.children)
+        self.__set_parent(self.children)
 
-    def set_parent(self, children: list):
+    def __set_parent(self, children: list[Composite, Component]) -> None:
         """Sets top level component as root and sets each parent to self.
 
         Args:
@@ -67,7 +67,7 @@ class Screen(Composite):
         self.children[0].is_root = True
         for child in children:
             if child.is_composite:
-                self.set_parent(child.children)
+                self.__set_parent(child.children)
             child.parent = self.import_name
 
     def __repr__(self):
@@ -82,9 +82,6 @@ class BaseNavigator(Composite):
 
     Attributes:
         name (str): Name/type of navigator.
-        _screens (dict): Dictionary of name: :class:`~sweetpotato.navigation.Screen`.
-        _screen_number (int): Counter to determine screen number.
-        _variables (set): Set of .js components specific to navigator type.
 
     Todo:
         * Add specific props from React Navigation.
@@ -110,10 +107,10 @@ class BaseNavigator(Composite):
         """Instantiates and adds screen to navigation component and increments screen count.
 
         Args:
-            screen_name: Name of screen component.
-            children: List of child components.
-            functions: String representation of .js functions for component.
-            state: Dictionary of applicable state values for component.
+            screen_name (str): Name of screen component.
+            children (list): List of child components.
+            functions (list): String representation of .js functions for component.
+            state (list): Dictionary of applicable state values for component.
 
         Returns:
             None
@@ -166,6 +163,6 @@ def create_native_stack_navigator(name: Optional[str] = None) -> Stack:
         name (str, optional): name of navigator.
 
     Returns:
-        Tab navigator.
+        Stack navigator.
     """
     return Stack(name=name)
