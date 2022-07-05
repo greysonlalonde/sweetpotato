@@ -9,8 +9,8 @@ class TestScrollView(unittest.TestCase):
         Test that ScrollView class props are equal to components_props.py variable.
         """
         scroll_view = ScrollView()
-        self.assertTrue(scroll_view._props)
-        self.assertEqual(scroll_view._props, SCROLL_VIEW_PROPS)
+        self.assertTrue(scroll_view.props)
+        self.assertEqual(scroll_view.props, SCROLL_VIEW_PROPS)
 
     def test_has_methods(self):
         """
