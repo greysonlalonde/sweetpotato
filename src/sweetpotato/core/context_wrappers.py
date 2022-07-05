@@ -14,6 +14,8 @@ from sweetpotato.ui_kitten import ApplicationProvider
 
 
 class Wrapper(ABC):
+    """Wrapping interface for components."""
+
     @abstractmethod
     def wrap(self, component, **kwargs) -> Composite:
         return component
@@ -22,12 +24,19 @@ class Wrapper(ABC):
 class UIKittenWrapper(Wrapper):
     """Adds UI Kitten support to app.
 
-
     Todo:
         * Replace general exception with custom exception.
     """
 
     def wrap(self, component: Composite, **kwargs) -> Composite:
+        """Wraps component in UI Kitten if enabled.
+
+        Args:
+            component (Composite): ...
+
+        Returns:
+            Composite.
+        """
         if settings.USE_UI_KITTEN:
             theme = kwargs.pop("theme", None)
             if not theme:
@@ -41,9 +50,8 @@ class UIKittenWrapper(Wrapper):
 class AuthenticationWrapper(Wrapper):
     """Adds authentication plugins to app.
 
-
     Todo:
-        * Add docstrings
+        * Add docstrings.
     """
 
     def wrap(self, component: Composite, **kwargs) -> Composite:
@@ -55,9 +63,8 @@ class AuthenticationWrapper(Wrapper):
 class NavigationWrapper(Wrapper):
     """Adds NavigationContainer component to app and gives navigation capability.
 
-
     Todo:
-        * Add docstrings
+        * Add docstrings.
     """
 
     def wrap(self, component: Composite, **kwargs) -> Composite:

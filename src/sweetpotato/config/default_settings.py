@@ -1,9 +1,7 @@
 """Default sweetpotato settings.
 
-For more information on this file, see
-https://docs.sweetpotato.com/en/1.0/topics/settings/
 For the full list of settings and their values, see
-https://docs.sweetpotato.com/en/1.0/ref/settings/
+https://sweetpotato.readthedocs.io/en/latest/settings.html
 """
 from pathlib import Path
 
@@ -12,72 +10,78 @@ import sweetpotato.functions.authentication_functions as auth_functions
 from sweetpotato.core import ThreadSafe
 
 
-# Navigation configuration
 class ReactNavigation:
     """Provides changeable configuration for React Navigation packages."""
 
-    native = "@react-navigation/native"
-    bottom_tabs = "@react-navigation/bottom-tabs"
-    stack = "@react-navigation/native-stack"
+    # Navigation configuration
+    native: str = "@react-navigation/native"
+    bottom_tabs: str = "@react-navigation/bottom-tabs"
+    stack: str = "@react-navigation/native-stack"
 
 
-# UI Kitten configuration
 class UIKitten:
     """Provides changeable configuration for UI Kitten packages."""
 
-    ui_kitten_components = "@ui-kitten/components"
+    # UI Kitten configuration
+    ui_kitten_components: str = "@ui-kitten/components"
 
 
 class Settings(metaclass=ThreadSafe):
+    """Provides and allows user to override default configuration."""
+
     # App configuration
-    APP_COMPONENT = defaults.APP_DEFAULT
-    APP_PROPS = defaults.APP_PROPS_DEFAULT
-    APP_REPR = defaults.APP_REPR_DEFAULT
+    APP_COMPONENT: str = defaults.APP_DEFAULT
+    APP_REPR: str = defaults.APP_REPR_DEFAULT
 
     # UI Kitten settings
-    USE_UI_KITTEN = False
-    UI_KITTEN_REPLACEMENTS = {}
+    USE_UI_KITTEN: bool = False
+    UI_KITTEN_REPLACEMENTS: dict = {}
 
     # Functions
-    FUNCTIONS = {}
-    USER_DEFINED_FUNCTIONS = {}
+    FUNCTIONS: dict = {}
+    USER_DEFINED_FUNCTIONS: dict = {}
 
     # User defined components
-    USER_DEFINED_COMPONENTS = {}
+    USER_DEFINED_COMPONENTS: dict = {}
 
     # API settings
-    API_URL = "http://127.0.0.1:8000"
+    API_URL: str = "http://127.0.0.1:8000"
 
     # Authentication settings
-    USE_AUTHENTICATION = False
-    LOGIN_COMPONENT = "Login"
-    LOGIN_FUNCTION = auth_functions.LOGIN.replace("API_URL", API_URL)
-    LOGOUT_FUNCTION = auth_functions.LOGOUT.replace("API_URL", API_URL)
-    SET_CREDENTIALS = auth_functions.SET_CREDENTIALS
-    STORE_DATA = auth_functions.STORE_DATA
-    RETRIEVE_DATA = auth_functions.RETRIEVE_DATA
-    STORE_SESSION = auth_functions.STORE_SESSION
-    RETRIEVE_SESSION = auth_functions.RETRIEVE_SESSION
-    REMOVE_SESSION = auth_functions.REMOVE_SESSION
-    TIMEOUT = auth_functions.TIMEOUT
-    AUTH_FUNCTIONS = {APP_COMPONENT: LOGIN_FUNCTION, LOGIN_COMPONENT: SET_CREDENTIALS}
+    USE_AUTHENTICATION: bool = False
+    LOGIN_COMPONENT: str = "Login"
+    LOGIN_FUNCTION: str = auth_functions.LOGIN.replace("API_URL", API_URL)
+    LOGOUT_FUNCTION: str = auth_functions.LOGOUT.replace("API_URL", API_URL)
+    SET_CREDENTIALS: str = auth_functions.SET_CREDENTIALS
+    STORE_DATA: str = auth_functions.STORE_DATA
+    RETRIEVE_DATA: str = auth_functions.RETRIEVE_DATA
+    STORE_SESSION: str = auth_functions.STORE_SESSION
+    RETRIEVE_SESSION: str = auth_functions.RETRIEVE_SESSION
+    REMOVE_SESSION: str = auth_functions.REMOVE_SESSION
+    TIMEOUT: str = auth_functions.TIMEOUT
+    AUTH_FUNCTIONS: dict = {
+        APP_COMPONENT: LOGIN_FUNCTION,
+        LOGIN_COMPONENT: SET_CREDENTIALS,
+    }
 
     # Navigation settings
-    USE_NAVIGATION = False
+    USE_NAVIGATION: bool = False
 
     # React Native settings
-    RESOURCE_FOLDER = "frontend"
-    SOURCE_FOLDER = "src"
-    REACT_NATIVE_PATH = f"{Path(__file__).resolve().parent.parent}/{RESOURCE_FOLDER}"
+    RESOURCE_FOLDER: str = "frontend"
+    SOURCE_FOLDER: str = "src"
+    REACT_NATIVE_PATH: str = (
+        f"{Path(__file__).resolve().parent.parent}/{RESOURCE_FOLDER}"
+    )
 
     # Imports and replacements
-    IMPORTS = {
+    IMPORTS: dict = {
         "components": "react-native",
         "ui_kitten": UIKitten.ui_kitten_components,
         "navigation": ReactNavigation.native,
         "authentication": "Authentication",
     }
-    REPLACE_COMPONENTS = {
+    REPLACE_COMPONENTS: dict = {
         "Stack": {
             "package": ReactNavigation.stack,
             "import": "createNativeStackNavigator",
@@ -117,21 +121,15 @@ class Settings(metaclass=ThreadSafe):
         "Login": {"package": "./Login", "name": "Login", "import": "Login"},
     }
 
-    REPLACE_ATTRS = {
-        "theme": {
-            "dark": "{...eva.dark}",
-            "light": "{...eva.light}",
-        },
-        "onChangeText": "onChangeText",
-        "onPress": "onPress",
-        "value": "value",
-        "secureTextEntry": "secureTextEntry",
-    }
-
-    APP_IMPORTS = set()
+    APP_IMPORTS: set = set()
 
     @classmethod
-    def set_ui_kitten(cls):
+    def set_ui_kitten(cls) -> None:
+        """Sets all necessary UI Kitten configuration for app.
+
+        Returns:
+            None
+        """
         cls.APP_IMPORTS.add("\nimport * as eva from '@eva-design/eva';")
         cls.APP_IMPORTS.add("\nimport {EvaIconsPack} from '@ui-kitten/eva-icons';")
         cls.REPLACE_COMPONENTS.update(
@@ -156,20 +154,35 @@ class Settings(metaclass=ThreadSafe):
         )
 
     @classmethod
-    def set_authentication(cls):
+    def set_authentication(cls) -> None:
+        """Sets all necessary authentication configuration for app.
+
+        Returns:
+            None
+        """
         cls.APP_IMPORTS.add(
             "\nimport AsyncStorage from '@react-native-async-storage/async-storage';"
         )
         cls.APP_IMPORTS.add("\nimport * as SecureStore from 'expo-secure-store';")
 
     @classmethod
-    def set_navigation(cls):
+    def set_navigation(cls) -> None:
+        """Sets all necessary React Navigation configuration for app.
+
+        Returns:
+            None
+        """
         cls.APP_IMPORTS.add(
             "\nimport * as RootNavigation from './src/components/RootNavigation.js';"
         )
 
     @classmethod
-    def set_api(cls):
+    def set_api(cls) -> None:
+        """Sets API configuration for app.
+
+        Returns:
+            None
+        """
         cls.LOGIN_FUNCTION = auth_functions.LOGIN.replace("API_URL", cls.API_URL)
         cls.LOGOUT_FUNCTION = auth_functions.LOGOUT.replace("API_URL", cls.API_URL)
         cls.AUTH_FUNCTIONS = {
@@ -178,13 +191,18 @@ class Settings(metaclass=ThreadSafe):
         }
 
     @classmethod
-    def set_react_native(cls):
+    def set_react_native(cls) -> None:
+        """Sets all necessary React Native configuration for app.
+
+        Returns:
+            None
+        """
         cls.REACT_NATIVE_PATH = (
             f"{Path(__file__).resolve().parent.parent}/{cls.RESOURCE_FOLDER}"
         )
 
     @classmethod
-    def __setattr__(cls, key, value):
+    def __setattr__(cls, key: str, value: str) -> None:
         if cls.__dict__.get(key, "") != value:
             setattr(cls, key, value)
         if cls.USE_UI_KITTEN:

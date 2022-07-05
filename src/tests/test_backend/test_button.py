@@ -8,11 +8,11 @@ class TestButton(unittest.TestCase):
         """
         Test that Button class props are equal to components_props.py variable.
         """
-        self.assertEqual(Button._props, BUTTON_PROPS)
+        self.assertEqual(Button.props, BUTTON_PROPS)
 
     def test_methods(self):
         ...
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

@@ -1,5 +1,5 @@
 import re
-from typing import Union, Optional, List
+from typing import Union, Optional
 
 from sweetpotato.config import settings
 from sweetpotato.core.exceptions import AttrError
@@ -79,6 +79,7 @@ def _set_import(name: str) -> str:
 
 class MetaComponent(type):
     """Base React Native component metaclass for the Component class.
+
     Note:
         The :class:`~sweetpotato.core.base.MetaComponent` metaclass sets attributes for
         all components, including user-defined ones.
@@ -127,7 +128,6 @@ class Component(metaclass=MetaComponent):
     ) -> None:
         if variables is None:
             variables = []
-        self._rendition = None
         self.variables = variables
         self.attrs = self.render_attrs(kwargs)
         self.children = children
@@ -144,25 +144,13 @@ class Component(metaclass=MetaComponent):
         """
         visitor.accept(self)
 
-    @property
-    def rendition(self) -> Optional[str]:
-        """Placeholder for component rendition, set by visitor.
-
-        Returns:
-            str: Rendition of component.
-        """
-        return self._rendition
-
-    @rendition.setter
-    def rendition(self, rendition) -> None:
-        self._rendition = rendition
-
     @staticmethod
     def render_attrs(attrs: dict[str, str]) -> str:
         """Formats attribute to React Native friendly representation.
 
         Args:
             attrs (dict): Dictionary of allowed attributes specified in component props.
+
         Returns:
             str: String representation of dictionary.
         """
@@ -175,10 +163,24 @@ class Component(metaclass=MetaComponent):
 
 
 class Composite(Component):
+    """Base React Native component with MetaComponent metaclass.
+
+    Keyword Args:
+        children (str, optional): Inner content for component.
+
+    Attributes:
+        children (str, optional): Inner content for component.
+        variables (set): Contains variables (if any) belonging to given component.
+        attrs (dict): String of given attributes for component.
+
+    Example:
+        ``component = Component(children="foo")``
+    """
+
     is_composite: bool = True
 
     def __init__(
-        self, children: Optional[Union[List, "Composite"]] = None, **kwargs
+        self, children: Optional[list[Union["Composite", Component]]] = None, **kwargs
     ) -> None:
         super().__init__(**kwargs)
         self.children = children if children else []

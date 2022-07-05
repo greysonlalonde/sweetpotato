@@ -23,7 +23,7 @@ def _access_check(file: str, mode: int) -> bool:
 
 
 def _check_dependency(
-        cmd: str, mode: int = os.F_OK | os.X_OK, path: Optional[str] = None
+    cmd: str, mode: int = os.F_OK | os.X_OK, path: Optional[str] = None
 ) -> Optional[str]:
     if os.path.dirname(cmd):
         if _access_check(cmd, mode):
@@ -145,10 +145,10 @@ class Build:
                     "imports"
                 ] = f"import 'react-native-gesture-handler';\n{''.join(content['imports'])}"
                 content["state"] += "navigation: RootNavigation.navigationRef"
-
         for key in content:
             if key in ["variables", "functions"]:
                 content[key] = "\n".join(content[key])
+
             component = component.replace(f"<{key.upper()}>", content[key])
         return component
 
@@ -164,6 +164,6 @@ class Build:
         if settings.APP_COMPONENT != screen:
             screen = f"src/{screen}"
         with open(
-                f"{settings.REACT_NATIVE_PATH}/{screen}.js", "w", encoding="utf-8"
+            f"{settings.REACT_NATIVE_PATH}/{screen}.js", "w", encoding="utf-8"
         ) as file:
             file.write(component)

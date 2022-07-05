@@ -1,21 +1,16 @@
 """Contains plugins for authentication.
 
-Attributes:
-    LOGIN_DICT: ...
-    LOGIN_CHILDREN: ...
-
 Todo:
     * Need to refactor the entire module to reflect current functionality.
 """
-from sweetpotato.config import settings
-from sweetpotato.components import Composite
-from sweetpotato.navigation import create_native_stack_navigator
-
 from sweetpotato.components import (
     Button,
     TextInput,
     View,
 )
+from sweetpotato.components import Composite
+from sweetpotato.config import settings
+from sweetpotato.navigation import create_native_stack_navigator
 
 #
 view_style = {
@@ -87,9 +82,11 @@ class AuthenticationProvider(Composite):
                 settings.STORE_SESSION,
                 settings.STORE_DATA,
             ]
-        self.functions = functions
+
         stack = create_native_stack_navigator()
         stack.screen(
+            state={"username": "", "password": "", "secureTextEntry": True},
+            functions=functions,
             children=[View(**login_screen())],
             screen_name="Login",
         )

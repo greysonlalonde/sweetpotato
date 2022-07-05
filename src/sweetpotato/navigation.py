@@ -1,6 +1,11 @@
-from typing import List, Optional
+"""Contains classes based on React Navigation components.
 
-from sweetpotato.core.base import Composite, Component
+See `React Navigation <https://reactnavigation.org/docs/getting-started/#>`_
+"""
+
+from typing import Optional
+
+from sweetpotato.core.base import Composite
 
 
 class NavigationContainer(Composite):
@@ -11,9 +16,11 @@ class NavigationContainer(Composite):
 
 class Screen(Composite):
     """React Navigation Screen component.
+
     Args:
         functions: String representation of .js based functions.
         state: Dictionary of allowed state values for component.
+
     Attributes:
         screen_name (str): Name of specific screen.
         import_name (str): Name of .js const for screen.
@@ -27,10 +34,14 @@ class Screen(Composite):
         self,
         screen_name: str,
         screen_type: str,
-        functions: Optional[list[str]] = None,
-        state: Optional[str] = None,
+        functions=None,
+        state=None,
         **kwargs,
     ) -> None:
+        if state is None:
+            state = {}
+        if functions is None:
+            functions = []
         kwargs.update(
             {
                 "name": f"'{screen_name}'",

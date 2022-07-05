@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional
 
 from sweetpotato.core.build import Build
 from sweetpotato.core.context_wrappers import ContextWrapper
@@ -19,7 +19,7 @@ class App:
     context = ContextWrapper()
     build = Build()
 
-    def __init__(self, children: Optional[List] = None, **kwargs) -> None:
+    def __init__(self, children: Optional[list] = None, **kwargs) -> None:
         super().__init__()
         if children is None:
             children = []
