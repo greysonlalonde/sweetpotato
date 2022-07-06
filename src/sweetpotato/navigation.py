@@ -32,12 +32,12 @@ class Screen(Composite):
     is_screen = True
 
     def __init__(
-        self,
-        screen_name: str,
-        screen_type: str,
-        state: Optional[dict] = None,
-        functions: Optional[list] = None,
-        **kwargs,
+            self,
+            screen_name: str,
+            screen_type: str,
+            state: Optional[dict] = None,
+            functions: Optional[list] = None,
+            **kwargs,
     ) -> None:
         if state is None:
             state = {}
@@ -56,7 +56,7 @@ class Screen(Composite):
         self.state = state
         self.__set_parent(self.children)
 
-    def __set_parent(self, children: list[Composite, Component]) -> None:
+    def __set_parent(self, children: list[Composite, 'Component']) -> None:
         """Sets top level component as root and sets each parent to self.
 
         Args:
@@ -99,11 +99,11 @@ class BaseNavigator(Composite):
         self.name = f"{self.name}.Navigator"
 
     def screen(
-        self,
-        screen_name: str,
-        children: list,
-        functions: Optional[list[str]] = None,
-        state: Optional[dict] = None,
+            self,
+            screen_name: str,
+            children: list,
+            functions: Optional[list[str]] = None,
+            state: Optional[dict] = None,
     ) -> None:
         """Instantiates and adds screen to navigation component and increments screen count.
 
