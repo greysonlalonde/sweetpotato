@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sweetpotato"
-version = "v0.2.0-alpha"
+version = "v0.3.0-alpha"
 authors = [
     { name = "Greyson R. LaLonde", email = "greyson.r.lalonde@gmail.com" },
     { name = "Corey Mutnik", email = "cmutnik@gmail.com" }

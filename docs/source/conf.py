@@ -22,8 +22,8 @@ copyright = "2022, Greyson R. LaLonde"
 author = "Greyson R. LaLonde"
 
 # The full version, including alpha/beta/rc tags
-release = "v0.2-alpha"
-version = "v0.2-alpha"
+release = "v0.3.0-alpha"
+version = "v0.3.0-alpha"
 
 # -- General configuration ---------------------------------------------------
 
@@ -41,7 +41,6 @@ extensions = [
     "sphinx.ext.todo",
     # "sphinx_rtd_dark_mode",
 ]
-
 
 # napoleon
 napoleon_google_docstring = True
