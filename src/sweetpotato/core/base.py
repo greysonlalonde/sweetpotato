@@ -1,43 +1,23 @@
-from threading import Lock
-from typing import Optional, Union, ClassVar, TypeVar, Type
+"""Core functionality of React Native components."""
 import re
+from typing import Optional, Union, ClassVar
+
 from sweetpotato.config import settings
-
-ComponentVar = TypeVar("ComponentVar", bound="Component")
-ComponentType = Type[ComponentVar]
-
-CompositeVar = TypeVar("CompositeVar", bound="Composite")
-CompositeType = Type[ComponentVar]
-# CompositeType = TypeVar("CompositeType", bound="Composite")
-VisitorType = TypeVar("VisitorType", bound="Visitor")
-
-
-class ThreadSafe(type):
-    """Metaclass for making class a thread-safe singleton."""
-
-    __instances = {}
-    __lock: Lock = Lock()
-
-    def __call__(cls, *args, **kwargs):
-        with cls.__lock:
-            if cls not in cls.__instances:
-                cls.__instances[cls] = super().__call__(*args, **kwargs)
-        return cls.__instances[cls]
+from sweetpotato.core import ThreadSafe
+from sweetpotato.core.protocols import VisitorType, ComponentType, CompositeType
 
 
 class DOM(metaclass=ThreadSafe):
     """Mimics the document object model tree."""
 
     def __init__(self, graph_dict=None):
-        """initializes a graph object
-        If no dictionary or None is given,
-        an empty dictionary will be used
-        """
+        """initializes a graph object If no dictionary or None is given, an empty dictionary will be used."""
         if not graph_dict:
             graph_dict = {}
         self._graph_dict = graph_dict
 
-    def add_node(self, component):
+    def add_node(self, component) -> None:
+        """Adds a component node to dict."""
         if component.parent not in self._graph_dict:
             self._graph_dict[component.parent] = {
                 "imports": {},
@@ -56,11 +36,10 @@ class DOM(metaclass=ThreadSafe):
 
 class MetaComponent(type):
     """Base React Native component metaclass for the Component class.
+
     Note:
         The :class:`~sweetpotato.core.base.MetaComponent` metaclass sets attributes for
         all components, including user-defined ones.
-    Todo:
-        * Can likely refactor to using `import_name` attr and removing `name`
     """
 
     __registry = set()
@@ -71,7 +50,7 @@ class MetaComponent(type):
             cls.import_name = cls.__set_import(cls.__name__)
             cls.package = MetaComponent.__set_package(cls.import_name, cls.__dict__)
             cls.props = MetaComponent.__set_props(cls.import_name, cls.__dict__)
-            cls.__registry.add(cls.__name__)
+            MetaComponent.__registry.add(cls.__name__)
         if set(kwargs.keys()).difference(cls.props):
             attributes = ", ".join(set(kwargs.keys()).difference(cls.props))
             raise AttributeError(
@@ -166,7 +145,6 @@ class Component(metaclass=MetaComponent):
     """
 
     is_composite: ClassVar[bool] = False
-    package: ClassVar[str] = "components"
 
     def __init__(
         self, children: Optional[str] = None, variables=None, **kwargs
@@ -185,7 +163,7 @@ class Component(metaclass=MetaComponent):
         """Registers a specified visitor with component.
 
         Args:
-            visitor (`Visitor`): Visitor.
+            visitor (Visitor): Visitor.
 
         Returns:
             None
@@ -222,7 +200,7 @@ class Composite(Component):
         _state (dict, optional): Dictionary of allowed state values for component.
 
     Example:
-        ``component = Composite(children=[])``
+        ``composite = Composite(children=[])``
     """
 
     is_composite: ClassVar[bool] = True
@@ -243,7 +221,6 @@ class Composite(Component):
     @property
     def children(self) -> str:
         """Children."""
-
         return "".join(map(repr, self._children))
 
     def register(self, visitor) -> None:

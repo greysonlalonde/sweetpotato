@@ -1,13 +1,12 @@
 """
 Todo:
-    * Add docstrings for all classes & methods.
-    * Add typing.
+    * Can refactor away from using abstract class.
 """
 from abc import ABC, abstractmethod
 from typing import Union
 
 from sweetpotato.core.base import DOM
-from sweetpotato.core.protocols import Component, Composite, Screen
+from sweetpotato.core.protocols import ComponentType, CompositeType
 
 
 class Visitor(ABC):
@@ -15,7 +14,7 @@ class Visitor(ABC):
 
     @classmethod
     @abstractmethod
-    def accept(cls, obj: Union[Component, Composite]) -> None:
+    def accept(cls, obj: Union[ComponentType, CompositeType]) -> None:
         """Accepts a component and performs an action.
 
         Args:
@@ -33,11 +32,11 @@ class ApplicationRenderer(Visitor):
     dom = DOM()
 
     @classmethod
-    def accept(cls, obj: Union[Composite, Screen]) -> None:
+    def accept(cls, obj: CompositeType) -> None:
         """Accepts a component and performs ....
 
         Args:
-            obj (Composite | Screen): Component object.
+            obj (Composite): Component object.
 
         Returns:
             None
