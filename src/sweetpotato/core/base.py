@@ -160,7 +160,7 @@ class Component(metaclass=MetaComponent):
     package: ClassVar[str] = "components"
 
     def __init__(
-            self, children: Optional[str] = None, variables=None, **kwargs
+        self, children: Optional[str] = None, variables=None, **kwargs
     ) -> None:
         self.name = self.__class__.__name__
         self.import_name = self.name
@@ -221,10 +221,10 @@ class Composite(Component):
     is_root: ClassVar[bool] = False
 
     def __init__(
-            self,
-            children: Optional[list[Type[Union[ComponentType, CompositeType]]]] = None,
-            variables: Optional[list] = None,
-            **kwargs,
+        self,
+        children: Optional[list[Type[Union[ComponentType, CompositeType]]]] = None,
+        variables: Optional[list] = None,
+        **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self._variables = variables if variables else []
