@@ -3,8 +3,12 @@ from typing import Optional, Union, ClassVar, TypeVar, Type
 import re
 from sweetpotato.config import settings
 
-ComponentType = TypeVar("ComponentType", bound="Component")
-CompositeType = TypeVar("CompositeType", bound="Composite")
+ComponentVar = TypeVar("ComponentVar", bound="Component")
+ComponentType = Type[ComponentVar]
+
+CompositeVar = TypeVar("CompositeVar", bound="Composite")
+CompositeType = Type[ComponentVar]
+# CompositeType = TypeVar("CompositeType", bound="Composite")
 VisitorType = TypeVar("VisitorType", bound="Visitor")
 
 
@@ -44,7 +48,7 @@ class DOM(metaclass=ThreadSafe):
         if component.package not in self._graph_dict[component.parent]["imports"]:
             self._graph_dict[component.parent]["imports"][component.package] = set()
         self._graph_dict[component.parent]["imports"][component.package].add(
-            component.import_name
+            component.import_name,
         )
         self._graph_dict[component.parent]["variables"].append(component.variables)
         self._graph_dict[component.parent]["children"] = component
@@ -64,7 +68,7 @@ class MetaComponent(type):
     def __call__(cls, *args, **kwargs) -> None:
         if cls.__name__ not in MetaComponent.__registry:
             cls.name = MetaComponent.__set_name(cls.__name__)
-            cls.import_name = MetaComponent.__set_import(cls.name)
+            cls.import_name = cls.__set_import(cls.__name__)
             cls.package = MetaComponent.__set_package(cls.import_name, cls.__dict__)
             cls.props = MetaComponent.__set_props(cls.import_name, cls.__dict__)
             cls.__registry.add(cls.__name__)
@@ -78,13 +82,14 @@ class MetaComponent(type):
     @staticmethod
     def __set_import(name: str) -> str:
         """Sets React Native :attr`~sweetpotato.core.base.Component.import_name` for component.
+
         Args:
             name (str): React Native component import name.
+
         Returns:
             String representation of React Native import name for
             :class:`~sweetpotato.core.base.Component` and :class:`~sweetpotato.core.base.Composite`
         """
-
         return (
             name
             if name not in settings.REPLACE_COMPONENTS
@@ -94,8 +99,10 @@ class MetaComponent(type):
     @staticmethod
     def __set_name(name: str) -> str:
         """Sets React Native :attr`~sweetpotato.core.base.Component.name` for component.
+
         Args:
             name (str): React Native component name.
+
         Returns:
             String representation of React Native name for
             :class:`~sweetpotato.core.base.Component` and :class:`~sweetpotato.core.base.Composite`.
@@ -109,9 +116,11 @@ class MetaComponent(type):
     @staticmethod
     def __set_package(import_name: str, cls_dict: dict) -> str:
         """Sets React Native :attr`~sweetpotato.core.base.Component.package` for component.
+
         Args:
             import_name (str): React Native component name.
             cls_dict (dict): Contains :class:`sweetpotato.core.base.Component` attributes.
+
         Returns:
             String representation of React Native package for
             :class:`~sweetpotato.core.base.Component` and :class:`~sweetpotato.core.base.Composite`.
@@ -160,10 +169,8 @@ class Component(metaclass=MetaComponent):
     package: ClassVar[str] = "components"
 
     def __init__(
-        self, children: Optional[str] = None, variables=None, **kwargs
+            self, children: Optional[str] = None, variables=None, **kwargs
     ) -> None:
-        self.name = self.__class__.__name__
-        self.import_name = self.name
         self.attrs = self.render_attrs(kwargs)
         self._children = children
         self.variables = variables if variables else ""
@@ -212,6 +219,7 @@ class Composite(Component):
     Attributes:
         _children (list, optional): Inner content for component.
         _variables (set, optional): Contains variables (if any) belonging to given component.
+        _state (dict, optional): Dictionary of allowed state values for component.
 
     Example:
         ``component = Composite(children=[])``
@@ -221,14 +229,16 @@ class Composite(Component):
     is_root: ClassVar[bool] = False
 
     def __init__(
-        self,
-        children: Optional[list[Type[Union[ComponentType, CompositeType]]]] = None,
-        variables: Optional[list] = None,
-        **kwargs,
+            self,
+            children: Optional[list[Union[ComponentType, CompositeType]]] = None,
+            variables: Optional[list] = None,
+            state: Optional[dict] = None,
+            **kwargs,
     ) -> None:
         super().__init__(**kwargs)
-        self._variables = variables if variables else []
         self._children = children if children else []
+        self._variables = variables if variables else []
+        self._state = state if state else {}
 
     @property
     def children(self) -> str:

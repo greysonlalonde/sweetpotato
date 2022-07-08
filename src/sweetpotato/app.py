@@ -25,8 +25,8 @@ class App:
     def __init__(self, children: Optional[list] = None, **kwargs) -> None:
         if children is None:
             children = []
-        self.context = self.context.wrap(children, **kwargs)
-        self.context.register(visitor=ApplicationRenderer)
+        self._context = self.context.wrap(children, **kwargs)
+        self._context.register(visitor=ApplicationRenderer)
 
     def run(self, platform: Optional[str] = None) -> None:
         """Starts a React Native expo client through a subprocess.

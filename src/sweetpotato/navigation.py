@@ -37,14 +37,13 @@ class Screen(Composite):
     Attributes:
         screen_name (str): Name of specific screen.
         import_name (str): Name of .js const for screen.
-        state (dict, optional): Dictionary of allowed state values for component.
         functions (list, optional): String representation of .js based functions.
     """
 
     is_root = True
 
     def __init__(
-        self, children: list, screen_type: str, screen_name: str, **kwargs
+            self, children: list, screen_type: str, screen_name: str, **kwargs
     ) -> None:
         kwargs.update(
             {
@@ -93,23 +92,19 @@ class BaseNavigator(Composite):
         * Add specific props from React Navigation.
     """
 
-    def __init__(self, name: str = None, **kwargs):
+    def __init__(self, name: str = None, **kwargs) -> None:
         super().__init__(**kwargs)
-        self._children = []
+        self.name = self._set_custom_name(name=name) if name else self.name
         self.variables = f"const {self.name} = {self.import_name}()"
-
-        self.name = (
-            f"{self._set_custom_name(name=name)}.Navigator"
-            if name
-            else f"{self.name}.Navigator"
-        )
+        self.screen_type = self.name.split(".")[0]
+        self.name = f"{self.name}.Navigator"
 
     def screen(
-        self,
-        screen_name,
-        children,
-        functions: Optional[list] = None,
-        state: Optional[dict] = None,
+            self,
+            screen_name,
+            children,
+            functions: Optional[list] = None,
+            state: Optional[dict] = None,
     ):
         """Instantiates and adds screen to navigation component and increments screen count.
 
@@ -124,7 +119,12 @@ class BaseNavigator(Composite):
         """
         screen_type = self.name.split(".")[0]
         self._children.append(
-            Screen(screen_name=screen_name, screen_type=screen_type, children=children)
+            Screen(
+                screen_name=screen_name,
+                screen_type=screen_type,
+                children=children,
+                state=state,
+            )
         )
 
     @staticmethod
@@ -134,7 +134,7 @@ class BaseNavigator(Composite):
         return (".".join(component_name)).title()
 
 
-class Stack(BaseNavigator):
+class StackNavigator(BaseNavigator):
     """Abstraction of React Navigation StackNavigator component.
 
     See https://reactnavigation.org/docs/stack-navigator
@@ -143,7 +143,7 @@ class Stack(BaseNavigator):
     pass
 
 
-class Tab(BaseNavigator):
+class TabNavigator(BaseNavigator):
     """Abstraction of React Navigation TabNavigator component.
 
     See https://reactnavigation.org/docs/bottom-tab-navigator
@@ -152,7 +152,7 @@ class Tab(BaseNavigator):
     pass
 
 
-def create_bottom_tab_navigator(name: Optional[str] = None) -> Tab:
+def create_bottom_tab_navigator(name: Optional[str] = None) -> TabNavigator:
     """Function representing the createBottomTabNavigator function in react-navigation.
 
     Args:
@@ -161,10 +161,10 @@ def create_bottom_tab_navigator(name: Optional[str] = None) -> Tab:
     Returns:
         Tab navigator.
     """
-    return Tab(name=name)
+    return TabNavigator(name=name)
 
 
-def create_native_stack_navigator(name: Optional[str] = None) -> Stack:
+def create_native_stack_navigator(name: Optional[str] = None) -> StackNavigator:
     """Function representing the createNativeStackNavigator function in react-navigation.
 
     Args:
@@ -173,4 +173,4 @@ def create_native_stack_navigator(name: Optional[str] = None) -> Stack:
     Returns:
         Stack navigator.
     """
-    return Stack(name=name)
+    return StackNavigator(name=name)

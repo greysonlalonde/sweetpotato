@@ -1,8 +1,8 @@
 import React from "react";
-import { View, TextInput } from "react-native";
-import { Text, Button } from "@ui-kitten/components";
+import { View, Input } from "react-native";
+import { Button, Text } from "@ui-kitten/components";
 
-export default class Login extends React.Component {
+export class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};

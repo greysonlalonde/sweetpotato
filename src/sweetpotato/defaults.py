@@ -24,9 +24,7 @@ import React from 'react';
 export default class <NAME> extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            <STATE>    
-        }
+        this.state = <STATE>    
     }    
     
     <FUNCTIONS>

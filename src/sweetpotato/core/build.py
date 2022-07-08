@@ -105,7 +105,9 @@ class Build:
             placeholder values set.
         """
         component = settings.APP_REPR.replace("<NAME>", screen)
-        content.update(dict(state=""))
+        if settings.APP_COMPONENT != screen:
+            component = component.replace("default", "")
+        # content.update(dict(state=""))
         if settings.APP_COMPONENT == screen:
             content[
                 "imports"
@@ -114,7 +116,9 @@ class Build:
                 content[
                     "imports"
                 ] = f"import 'react-native-gesture-handler';\n{''.join(content['imports'])}"
-                content["state"] += "navigation: RootNavigation.navigationRef"
+                content["state"].update(
+                    **{"navigation": "RootNavigation.navigationRef"}
+                )
         for key in content:
             if key in ["variables", "functions"]:
                 content[key] = "\n".join(content[key])

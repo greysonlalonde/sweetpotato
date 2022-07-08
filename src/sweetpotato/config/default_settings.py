@@ -82,15 +82,15 @@ class Settings(metaclass=ThreadSafe):
         "authentication": "Authentication",
     }
     REPLACE_COMPONENTS: dict = {
-        "Stack": {
+        "StackNavigator": {
             "package": ReactNavigation.stack,
             "import": "createNativeStackNavigator",
-            "name": "StackNavigator",
+            "name": "Stack",
         },
-        "Tab": {
+        "TabNavigator": {
             "package": ReactNavigation.bottom_tabs,
             "import": "createBottomTabNavigator",
-            "name": "TabNavigator",
+            "name": "Tab",
         },
         "createNativeStackNavigator": {
             "package": ReactNavigation.stack,
@@ -109,7 +109,7 @@ class Settings(metaclass=ThreadSafe):
             "name": "NavigationContainer",
         },
         "AuthenticationProvider": {
-            "package": "./AuthenticationProvider",
+            # "package": "",
             "name": "AuthenticationProvider",
             "import": "AuthenticationProvider",
         },

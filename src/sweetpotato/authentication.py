@@ -72,7 +72,9 @@ class AuthenticationProvider(Composite):
         _screen_number (int): Amount of screens.
     """
 
-    def __init__(self, functions: list = None, login_screen=None, **kwargs):
+    package = None
+
+    def __init__(self, functions: list = None, login_screen=None, state=None, **kwargs):
         if login_screen is None:
             login_screen = login
         if functions is None:
