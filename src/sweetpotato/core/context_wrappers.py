@@ -8,7 +8,7 @@ from abc import abstractmethod, ABC
 from sweetpotato.authentication import AuthenticationProvider
 from sweetpotato.components import SafeAreaProvider
 from sweetpotato.config import settings
-from sweetpotato.core.protocols import Composite
+from sweetpotato.core.protocols import CompositeType
 from sweetpotato.navigation import NavigationContainer
 from sweetpotato.ui_kitten import ApplicationProvider
 
@@ -17,7 +17,8 @@ class Wrapper(ABC):
     """Wrapping interface for components."""
 
     @abstractmethod
-    def wrap(self, component, **kwargs) -> Composite:
+    def wrap(self, component, **kwargs) -> CompositeType:
+        """Abstract component wrapping."""
         return component
 
 
@@ -28,7 +29,7 @@ class UIKittenWrapper(Wrapper):
         * Replace general exception with custom exception.
     """
 
-    def wrap(self, component: Composite, **kwargs) -> Composite:
+    def wrap(self, component: CompositeType, **kwargs) -> CompositeType:
         """Wraps component in UI Kitten if enabled.
 
         Args:
@@ -54,7 +55,15 @@ class AuthenticationWrapper(Wrapper):
         * Add docstrings.
     """
 
-    def wrap(self, component: Composite, **kwargs) -> Composite:
+    def wrap(self, component: CompositeType, **kwargs) -> CompositeType:
+        """Wraps component in AuthenticationProvider if enabled.
+
+        Args:
+            component (Composite): ...
+
+        Returns:
+            Composite.
+        """
         if settings.USE_AUTHENTICATION:
             component = AuthenticationProvider(children=[component])
         return super().wrap(component, **kwargs)
@@ -67,7 +76,15 @@ class NavigationWrapper(Wrapper):
         * Add docstrings.
     """
 
-    def wrap(self, component: Composite, **kwargs) -> Composite:
+    def wrap(self, component: CompositeType, **kwargs) -> CompositeType:
+        """Wraps component in NavigationContainer if enabled.
+
+        Args:
+            component (Composite): ...
+
+        Returns:
+            Composite.
+        """
         if settings.USE_NAVIGATION:
             component = NavigationContainer(
                 children=[component], ref="RootNavigation.navigationRef"
@@ -83,7 +100,15 @@ class SafeAreaWrapper(Wrapper):
         * Add docstrings
     """
 
-    def wrap(self, component, **kwargs) -> Composite:
+    def wrap(self, component: CompositeType, **kwargs) -> CompositeType:
+        """Wraps component in SafeAreaProvider.
+
+        Args:
+            component (Composite): ...
+
+        Returns:
+            Composite.
+        """
         component = SafeAreaProvider(children=[component])
         return super().wrap(component, **kwargs)
 
@@ -98,7 +123,15 @@ class ContextWrapper(
         * Add docstrings
     """
 
-    def wrap(self, component: list, **kwargs) -> Composite:
+    def wrap(self, component: list[CompositeType], **kwargs) -> CompositeType:
+        """Checks and wraps component in provided wrappers, if configured.
+
+        Args:
+            component (Composite): ...
+
+        Returns:
+            Composite.
+        """
         component = super().wrap(component[0], **kwargs)
         component.is_root = True
         return component

@@ -1,4 +1,5 @@
 import unittest
+
 from sweetpotato.components import TextInput
 from sweetpotato.props.components_props import TEXT_INPUT_PROPS
 

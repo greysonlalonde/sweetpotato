@@ -7,6 +7,8 @@ Attributes:
 """
 UI_KITTEN_COMPONENTS = {
     "Text",
+    "Input",
+    "TextInput",
     "Button",
 }
 
@@ -23,16 +25,14 @@ import React from 'react';
 export default class <NAME> extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            <STATE>    
-        }
+        this.state = <STATE>    
     }    
     
     <FUNCTIONS>
 
     render() {
         return (
-                <COMPONENT>
+                <CHILDREN>
         );
     }
 }"""

@@ -1,9 +1,37 @@
+"""Core functionality of React Native components."""
 import re
-from typing import Union, Optional
+from typing import Optional, Union, ClassVar
 
 from sweetpotato.config import settings
-from sweetpotato.core.exceptions import AttrError
-from sweetpotato.core.protocols import Visitor
+from sweetpotato.core import ThreadSafe
+from sweetpotato.core.protocols import VisitorType, ComponentVar, CompositeVar
+
+
+class DOM(metaclass=ThreadSafe):
+    """Mimics the document object model tree."""
+
+    def __init__(self, graph_dict=None):
+        """initializes a graph object If no dictionary or None is given, an empty dictionary will be used."""
+        if not graph_dict:
+            graph_dict = {}
+        self.graph_dict = graph_dict
+
+    def add_node(self, component) -> None:
+        """Adds a component node to dict."""
+        if component.parent not in self.graph_dict:
+            self.graph_dict[component.parent] = {
+                "imports": {},
+                "functions": [],
+                "state": {},
+                "variables": [],
+            }
+        if component.package not in self.graph_dict[component.parent]["imports"]:
+            self.graph_dict[component.parent]["imports"][component.package] = set()
+        self.graph_dict[component.parent]["imports"][component.package].add(
+            component.import_name,
+        )
+        self.graph_dict[component.parent]["variables"].append(component.variables)
+        self.graph_dict[component.parent]["children"] = component
 
 
 class MetaComponent(type):
@@ -12,9 +40,6 @@ class MetaComponent(type):
     Note:
         The :class:`~sweetpotato.core.base.MetaComponent` metaclass sets attributes for
         all components, including user-defined ones.
-
-    Todo:
-        * Can likely refactor to using `import_name` attr and removing `name`
     """
 
     __registry = set()
@@ -22,13 +47,15 @@ class MetaComponent(type):
     def __call__(cls, *args, **kwargs) -> None:
         if cls.__name__ not in MetaComponent.__registry:
             cls.name = MetaComponent.__set_name(cls.__name__)
-            cls.import_name = MetaComponent.__set_import(cls.__name__)
+            cls.import_name = cls.__set_import(cls.__name__)
             cls.package = MetaComponent.__set_package(cls.import_name, cls.__dict__)
             cls.props = MetaComponent.__set_props(cls.import_name, cls.__dict__)
-            cls.__registry.add(cls.__name__)
+            MetaComponent.__registry.add(cls.__name__)
         if set(kwargs.keys()).difference(cls.props):
             attributes = ", ".join(set(kwargs.keys()).difference(cls.props))
-            raise AttrError(key=attributes, name=cls.name)
+            raise AttributeError(
+                f"Component {cls.import_name} does not have attribute(s): {attributes}"
+            )
         return super().__call__(*args, **kwargs)
 
     @staticmethod
@@ -42,7 +69,6 @@ class MetaComponent(type):
             String representation of React Native import name for
             :class:`~sweetpotato.core.base.Component` and :class:`~sweetpotato.core.base.Composite`
         """
-
         return (
             name
             if name not in settings.REPLACE_COMPONENTS
@@ -90,11 +116,9 @@ class MetaComponent(type):
     @staticmethod
     def __set_props(name: str, cls_dict: dict) -> dict:
         """Imports and sets attribute :attr`~sweetpotato.core.base.Component._props` for all subclasses.
-
         Args:
             name (str): React Native component name.
             cls_dict (dict): Contains :class:`~sweetpotato.core.base.Component` attributes.
-
         Returns:
             Dictionary of props from :mod:`sweetpotato.props`.
         """
@@ -113,34 +137,33 @@ class Component(metaclass=MetaComponent):
         children (str, optional): Inner content for component.
 
     Attributes:
-        children (str, optional): Inner content for component.
-        variables (set): Contains variables (if any) belonging to given component.
-        attrs (dict): String of given attributes for component.
+        _children (str, optional): Inner content for component.
+        _attrs (dict): String of given attributes for component.
 
     Example:
         ``component = Component(children="foo")``
     """
 
-    is_screen: bool = False
-    is_root: bool = False
-    is_composite: bool = False
-    package: str = "components"
+    is_composite: ClassVar[bool] = False
 
     def __init__(
-        self, children: Optional[Union[int, str]] = None, variables=None, **kwargs
+        self, children: Optional[str] = None, variables=None, **kwargs
     ) -> None:
-        if variables is None:
-            variables = []
-        self.variables = variables
         self.attrs = self.render_attrs(kwargs)
-        self.children = children
+        self._children = children
+        self.variables = variables if variables else ""
         self.parent = settings.APP_COMPONENT
 
-    def register(self, visitor: Visitor) -> None:
+    @property
+    def children(self) -> Optional[str]:
+        """Children."""
+        return self._children
+
+    def register(self, visitor: VisitorType) -> None:
         """Registers a specified visitor with component.
 
         Args:
-            visitor (`Visitor`): Visitor.
+            visitor (Visitor): Visitor.
 
         Returns:
             None
@@ -159,34 +182,46 @@ class Component(metaclass=MetaComponent):
         """
         return "".join([f" {k}={'{'}{v}{'}'}" for k, v in attrs.items()])
 
-    def __repr__(self):
-        if self.children:
-            return f"<{self.name}{self.attrs}>{self.children}</{self.name}>"
-        return f"<{self.name}{self.attrs}/>"
+    def __repr__(self) -> str:
+        if self._children:
+            return f"<{self.name} {self.attrs}>{self.children}</{self.name}>"
+        return f"<{self.name} {self.attrs}/>"
 
 
 class Composite(Component):
     """Base React Native component with MetaComponent metaclass.
 
     Keyword Args:
-        children (str, optional): Inner content for component.
+        children (list, optional): Inner content for component.
 
     Attributes:
-        children (str, optional): Inner content for component.
-        variables (set): Contains variables (if any) belonging to given component.
-        attrs (dict): String of given attributes for component.
+        _children (list, optional): Inner content for component.
+        _variables (set, optional): Contains variables (if any) belonging to given component.
+        _state (dict, optional): Dictionary of allowed state values for component.
 
     Example:
-        ``component = Component(children="foo")``
+        ``composite = Composite(children=[])``
     """
 
-    is_composite: bool = True
+    is_composite: ClassVar[bool] = True
+    is_root: ClassVar[bool] = False
 
     def __init__(
-        self, children: Optional[list[Union["Composite", Component]]] = None, **kwargs
+        self,
+        children: Optional[list[Union[ComponentVar, CompositeVar]]] = None,
+        variables: Optional[list] = None,
+        state: Optional[dict] = None,
+        **kwargs,
     ) -> None:
         super().__init__(**kwargs)
-        self.children = children if children else []
+        self._children = children if children else []
+        self._variables = variables if variables else []
+        self._state = state if state else {}
+
+    @property
+    def children(self) -> str:
+        """Children."""
+        return "".join(map(repr, self._children))
 
     def register(self, visitor) -> None:
         """Registers a specified visitor with component and child components.
@@ -197,9 +232,6 @@ class Composite(Component):
         Returns:
             None
         """
-        for child in self.children:
+        for child in self._children:
             child.register(visitor)
         super().register(visitor)
-
-    def __repr__(self):
-        return f"<{self.name}{self.attrs}>{''.join(map(repr, self.children))}</{self.name}>"

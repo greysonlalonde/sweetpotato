@@ -1,4 +1,5 @@
 import unittest
+
 from sweetpotato.app import App
 
 
