@@ -4,7 +4,7 @@ from typing import Optional, Union, ClassVar
 
 from sweetpotato.config import settings
 from sweetpotato.core import ThreadSafe
-from sweetpotato.core.protocols import VisitorType, ComponentType, CompositeType
+from sweetpotato.core.protocols import VisitorType, ComponentVar, CompositeVar
 
 
 class DOM(metaclass=ThreadSafe):
@@ -14,24 +14,24 @@ class DOM(metaclass=ThreadSafe):
         """initializes a graph object If no dictionary or None is given, an empty dictionary will be used."""
         if not graph_dict:
             graph_dict = {}
-        self._graph_dict = graph_dict
+        self.graph_dict = graph_dict
 
     def add_node(self, component) -> None:
         """Adds a component node to dict."""
-        if component.parent not in self._graph_dict:
-            self._graph_dict[component.parent] = {
+        if component.parent not in self.graph_dict:
+            self.graph_dict[component.parent] = {
                 "imports": {},
                 "functions": [],
                 "state": {},
                 "variables": [],
             }
-        if component.package not in self._graph_dict[component.parent]["imports"]:
-            self._graph_dict[component.parent]["imports"][component.package] = set()
-        self._graph_dict[component.parent]["imports"][component.package].add(
+        if component.package not in self.graph_dict[component.parent]["imports"]:
+            self.graph_dict[component.parent]["imports"][component.package] = set()
+        self.graph_dict[component.parent]["imports"][component.package].add(
             component.import_name,
         )
-        self._graph_dict[component.parent]["variables"].append(component.variables)
-        self._graph_dict[component.parent]["children"] = component
+        self.graph_dict[component.parent]["variables"].append(component.variables)
+        self.graph_dict[component.parent]["children"] = component
 
 
 class MetaComponent(type):
@@ -208,7 +208,7 @@ class Composite(Component):
 
     def __init__(
         self,
-        children: Optional[list[Union[ComponentType, CompositeType]]] = None,
+        children: Optional[list[Union[ComponentVar, CompositeVar]]] = None,
         variables: Optional[list] = None,
         state: Optional[dict] = None,
         **kwargs,

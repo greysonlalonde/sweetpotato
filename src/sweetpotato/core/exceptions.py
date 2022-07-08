@@ -1,6 +1,7 @@
 """Contains general sweetpotato exceptions
 
-
+Todo:
+    * Can likely remove many of these.
 """
 
 

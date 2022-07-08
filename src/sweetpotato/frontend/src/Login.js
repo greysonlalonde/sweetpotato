@@ -1,6 +1,6 @@
 import React from "react";
-import { View, Input } from "react-native";
-import { Button, Text } from "@ui-kitten/components";
+import { Button, Input, Text } from "@ui-kitten/components";
+import { View } from "react-native";
 
 export class Login extends React.Component {
   constructor(props) {
@@ -26,7 +26,7 @@ export class Login extends React.Component {
             justifyContent: "center",
           }}
         >
-          <TextInput
+          <Input
             placeholder={"Username"}
             value={this.state.username}
             onChangeText={(text) => this.setUsername(text)}
@@ -40,7 +40,7 @@ export class Login extends React.Component {
             justifyContent: "center",
           }}
         >
-          <TextInput
+          <Input
             placeholder={Password}
             value={this.state.password}
             onChangeText={(text) => this.setPassword(text)}

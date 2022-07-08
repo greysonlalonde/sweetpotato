@@ -7,6 +7,7 @@ Attributes:
 """
 UI_KITTEN_COMPONENTS = {
     "Text",
+    "Input",
     "TextInput",
     "Button",
 }

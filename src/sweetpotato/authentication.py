@@ -12,7 +12,6 @@ from sweetpotato.components import Composite
 from sweetpotato.config import settings
 from sweetpotato.navigation import create_native_stack_navigator
 
-#
 view_style = {
     "justifyContent": "center",
     "alignItems": "center",
@@ -49,7 +48,7 @@ def login():
             )
         ],
     )
-    LOGIN_SCREEN = dict(
+    login_screen = dict(
         style=view_style,
         children=[
             username_row,
@@ -57,7 +56,7 @@ def login():
             Button(title="SUBMIT", onPress="() => this.login()"),
         ],
     )
-    return LOGIN_SCREEN
+    return login_screen
 
 
 #
@@ -74,7 +73,8 @@ class AuthenticationProvider(Composite):
 
     package = None
 
-    def __init__(self, functions: list = None, login_screen=None, state=None, **kwargs):
+    def __init__(self, functions: list = None, login_screen=None, **kwargs):
+        super().__init__(**kwargs)
         if login_screen is None:
             login_screen = login
         if functions is None:
@@ -92,8 +92,6 @@ class AuthenticationProvider(Composite):
             children=[View(**login_screen())],
             screen_name="Login",
         )
-        # stack.screen(children=kwargs.pop('children'), screen_name="Authenticated")
-        super().__init__(**kwargs)
         self._children.append(stack)
 
     def __repr__(self):

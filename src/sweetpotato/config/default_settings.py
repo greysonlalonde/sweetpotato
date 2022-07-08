@@ -136,6 +136,10 @@ class Settings(metaclass=ThreadSafe):
             **dict(
                 TextInput={
                     "import": "Input",
+                    "name": "Input",
+                    "package": UIKitten.ui_kitten_components,
+                },
+                Input={
                     "package": UIKitten.ui_kitten_components,
                 },
                 Text={

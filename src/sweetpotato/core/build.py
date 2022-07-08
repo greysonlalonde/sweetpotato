@@ -43,7 +43,7 @@ class Build:
             None
         """
 
-        for screen, content in cls.storage._graph_dict.items():
+        for screen, content in cls.storage.graph_dict.items():
             content["imports"] = cls.__format_imports(content["imports"])
             cls._write_screen(screen, content)
         cls.__format_screens()

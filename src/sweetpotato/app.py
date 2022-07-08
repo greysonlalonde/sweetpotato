@@ -7,9 +7,8 @@ from typing import Optional
 
 from sweetpotato.core.build import Build
 from sweetpotato.core.context_wrappers import ContextWrapper
-from sweetpotato.core.utils import (
-    ApplicationRenderer,
-)
+from sweetpotato.core.protocols import CompositeVar
+from sweetpotato.core.utils import ApplicationRenderer
 
 
 class App:
@@ -22,7 +21,7 @@ class App:
     context = ContextWrapper()
     build = Build()
 
-    def __init__(self, children: Optional[list] = None, **kwargs) -> None:
+    def __init__(self, children: Optional[list[CompositeVar]] = None, **kwargs) -> None:
         if children is None:
             children = []
         self._context = self.context.wrap(children, **kwargs)
