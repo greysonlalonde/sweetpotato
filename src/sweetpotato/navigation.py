@@ -43,7 +43,7 @@ class Screen(Composite):
     is_root = True
 
     def __init__(
-            self, children: list, screen_type: str, screen_name: str, **kwargs
+        self, children: list, screen_type: str, screen_name: str, **kwargs
     ) -> None:
         kwargs.update(
             {
@@ -100,11 +100,11 @@ class BaseNavigator(Composite):
         self.name = f"{self.name}.Navigator"
 
     def screen(
-            self,
-            screen_name,
-            children,
-            functions: Optional[list] = None,
-            state: Optional[dict] = None,
+        self,
+        screen_name,
+        children,
+        functions: Optional[list] = None,
+        state: Optional[dict] = None,
     ):
         """Instantiates and adds screen to navigation component and increments screen count.
 
