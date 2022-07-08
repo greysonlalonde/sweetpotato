@@ -7,6 +7,7 @@ Attributes:
 """
 UI_KITTEN_COMPONENTS = {
     "Text",
+    "TextInput",
     "Button",
 }
 
@@ -32,7 +33,7 @@ export default class <NAME> extends React.Component {
 
     render() {
         return (
-                <COMPONENT>
+                <CHILDREN>
         );
     }
 }"""

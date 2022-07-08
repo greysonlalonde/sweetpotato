@@ -32,7 +32,7 @@ class ApplicationProvider(Composite):
         super().__init__(**kwargs)
 
     def __repr__(self):
-        return f"<{self.name} {'{'}...eva{'}'}{self.attrs}>{''.join(map(repr, self.children))}</{self.name}>"
+        return f"<{self.name} {'{'}...eva{'}'}{self.attrs}>{''.join(map(repr, self._children))}</{self.name}>"
 
 
 class Layout(Composite):

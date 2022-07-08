@@ -4,9 +4,9 @@ Provides props for react-navigation components.
 
 NAVIGATION_CONTAINER_PROPS = {"children", "ref"}
 
-NATIVE_STACK_NAVIGATOR_PROPS = {"name"}
+STACK_NAVIGATOR_PROPS = {"name"}
 
-BOTTOM_TAB_NAVIGATOR_PROPS = {"name"}
+TAB_NAVIGATOR_PROPS = {"name"}
 
 DRAWER_NAVIGATOR_PROPS = {}
 

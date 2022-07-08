@@ -8,9 +8,7 @@ from typing import Optional
 from sweetpotato.core.build import Build
 from sweetpotato.core.context_wrappers import ContextWrapper
 from sweetpotato.core.utils import (
-    ComponentRenderer,
     ApplicationRenderer,
-    ImportRenderer,
 )
 
 
@@ -25,12 +23,9 @@ class App:
     build = Build()
 
     def __init__(self, children: Optional[list] = None, **kwargs) -> None:
-        super().__init__()
         if children is None:
             children = []
         self.context = self.context.wrap(children, **kwargs)
-        self.context.register(visitor=ComponentRenderer)
-        self.context.register(visitor=ImportRenderer)
         self.context.register(visitor=ApplicationRenderer)
 
     def run(self, platform: Optional[str] = None) -> None:

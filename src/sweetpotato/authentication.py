@@ -92,7 +92,7 @@ class AuthenticationProvider(Composite):
         )
         # stack.screen(children=kwargs.pop('children'), screen_name="Authenticated")
         super().__init__(**kwargs)
-        self.children.append(stack)
+        self._children.append(stack)
 
     def __repr__(self):
-        return f"{'{'}this.state.authenticated ? {''.join(map(repr, [self.children[0]]))} : {self.children[1]}{'}'}"
+        return f"{'{'}this.state.authenticated ? {''.join(map(repr, [self._children[0]]))} : {self._children[1]}{'}'}"
