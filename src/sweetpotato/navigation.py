@@ -105,7 +105,7 @@ class BaseNavigator(Composite):
         children,
         functions: Optional[list] = None,
         state: Optional[dict] = None,
-    ):
+    ) -> None:
         """Instantiates and adds screen to navigation component and increments screen count.
 
         Args:
