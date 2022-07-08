@@ -23,4 +23,4 @@ jobs:
           pip install pylint
       - name: Analyze with pylint
         run: |
-          cd src && pylint --fail-under=9 
+          cd src && pylint sweetpotato --fail-under=7.5
