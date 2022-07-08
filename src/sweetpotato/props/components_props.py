@@ -8,6 +8,7 @@ BUTTON_PROPS = {
     "title",
     "onPress",
     "children",
+
 }
 
 IMAGE_PROPS = {
