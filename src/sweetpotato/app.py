@@ -15,14 +15,14 @@ class App:
     """Provides methods for interacting with underlying :class:`sweetpotato.core.build.Build` class.
 
     Args:
-        children (list): List of components.
+        component (CompositeVar, optional): Top level component.
     """
 
     context = ContextWrapper()
     build = Build()
 
-    def __init__(self, children: Optional[list[CompositeVar]] = None, **kwargs) -> None:
-        self._context = self.context.wrap(children, **kwargs)
+    def __init__(self, component: Optional[CompositeVar] = None, **kwargs) -> None:
+        self._context = self.context.wrap(component, **kwargs)
         self._context.register(visitor=ApplicationRenderer)
 
     def run(self, platform: Optional[str] = None) -> None:

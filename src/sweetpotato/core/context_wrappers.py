@@ -123,7 +123,7 @@ class ContextWrapper(
         * Add docstrings
     """
 
-    def wrap(self, component: list[CompositeType] | None, **kwargs) -> CompositeType:
+    def wrap(self, component: CompositeType | None, **kwargs) -> CompositeType:
         """Checks and wraps component in provided wrappers, if configured.
 
         Args:
@@ -132,6 +132,6 @@ class ContextWrapper(
         Returns:
             Composite.
         """
-        component = super().wrap(component[0], **kwargs) if component else []
         component.is_root = True
+        component = super().wrap(component, **kwargs) if component else []
         return component

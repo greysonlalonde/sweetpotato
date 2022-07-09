@@ -42,14 +42,18 @@ class Screen(Composite):
     """
 
     is_root: ClassVar[bool] = True
+    parent = None
 
-    def __init__(self, screen_type: str, screen_name: str, **kwargs) -> None:
+    def __init__(
+        self, screen_type: str, screen_name: str, functions=None, **kwargs
+    ) -> None:
         kwargs.update(
             {
                 "name": f"'{screen_name}'",
             }
         )
         super().__init__(**kwargs)
+        self._functions = functions if functions else []
         self.screen_type = f"{screen_type}.{self.name}"
         self.screen_name = screen_name
         self.import_name = "".join(
@@ -128,6 +132,7 @@ class BaseNavigator(Composite):
                 screen_name=screen_name,
                 screen_type=screen_type,
                 children=children,
+                functions=functions,
                 state=state,
             )
         )

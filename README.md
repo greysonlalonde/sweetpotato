@@ -56,7 +56,7 @@ tab.screen(
     screen_name="Home",
     children=[home_page],
 )
-app = App(children=[tab], theme="dark")
+app = App(component=tab, theme="dark")
 
 if __name__ == "__main__":
     app.run()
@@ -77,14 +77,14 @@ from sweetpotato.components import (
     Text,
 )
 
-settings.USE_UI_KITTEN = True
+settings.USE_NAVIGATION = True
 
 tab = create_bottom_tab_navigator()
 
 tab.screen(screen_name="Screen One", children=[View(children=[Text(text="Hello")])])
 tab.screen(screen_name="Screen Two", children=[View(children=[Text(text="World")])])
 
-app = App(children=[tab])
+app = App(component=tab)
 
 if __name__ == "__main__":
     app.run()

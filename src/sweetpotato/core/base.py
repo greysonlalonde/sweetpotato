@@ -11,7 +11,6 @@ class DOM(metaclass=ThreadSafe):
     """Mimics the document object model tree."""
 
     def __init__(self, graph_dict=None):
-        """initializes a graph object If no dictionary or None is given, an empty dictionary will be used."""
         if not graph_dict:
             graph_dict = {}
         self.graph_dict = graph_dict
@@ -32,6 +31,10 @@ class DOM(metaclass=ThreadSafe):
         )
         self.graph_dict[component.parent]["variables"].append(component.variables)
         self.graph_dict[component.parent]["children"] = component
+        if component.is_composite and component.is_root:
+            self.graph_dict[component.parent]["functions"].append(
+                "\n".join(component._functions)
+            )
 
 
 class MetaComponent(type):
@@ -42,7 +45,7 @@ class MetaComponent(type):
         all components, including user-defined ones.
     """
 
-    __registry = set()
+    __registry: set = set()
 
     def __call__(cls, *args, **kwargs) -> None:
         if cls.__name__ not in MetaComponent.__registry:
@@ -211,11 +214,13 @@ class Composite(Component):
         children: Optional[list[ComponentVar | CompositeVar]] = None,
         variables: Optional[list] = None,
         state: Optional[dict] = None,
+        functions: Optional[list] = None,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self._children = children if children else []
         self._variables = variables if variables else []
+        self._functions = functions if functions else []
         self._state = state if state else {}
 
     @property
