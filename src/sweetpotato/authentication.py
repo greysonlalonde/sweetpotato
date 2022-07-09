@@ -27,6 +27,7 @@ row_style = {
 
 
 def login():
+    """Provides default login plugin screen."""
     username_row = View(
         style=row_style,
         children=[

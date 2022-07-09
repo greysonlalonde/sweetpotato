@@ -70,11 +70,14 @@ Navigation example:
 
 ```python
 from sweetpotato.app import App
+from sweetpotato.config import settings
 from sweetpotato.navigation import create_bottom_tab_navigator
 from sweetpotato.components import (
     View,
     Text,
 )
+
+settings.USE_UI_KITTEN = True
 
 tab = create_bottom_tab_navigator()
 

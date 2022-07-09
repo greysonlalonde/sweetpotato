@@ -20,7 +20,7 @@ class ApplicationProvider(Composite):
     See https://akveo.github.io/react-native-ui-kitten/docs/components/application-provider
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs) -> None:
         kwargs.update(
             {
                 "children": [
@@ -31,7 +31,7 @@ class ApplicationProvider(Composite):
         )
         super().__init__(**kwargs)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<{self.name} {'{'}...eva{'}'}{self.attrs}>{''.join(map(repr, self._children))}</{self.name}>"
 
 

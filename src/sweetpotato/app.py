@@ -22,8 +22,6 @@ class App:
     build = Build()
 
     def __init__(self, children: Optional[list[CompositeVar]] = None, **kwargs) -> None:
-        if children is None:
-            children = []
         self._context = self.context.wrap(children, **kwargs)
         self._context.register(visitor=ApplicationRenderer)
 
@@ -37,3 +35,11 @@ class App:
             None
         """
         self.build.run(platform=platform)
+
+    def publish(self, platform: str) -> None:
+        """Publishes app to specified platform / application store.
+
+        Args:
+            platform (str): Platform app to be published on.
+        """
+        self.build.publish(platform=platform)

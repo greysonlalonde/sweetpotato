@@ -1,6 +1,6 @@
 """Core functionality of React Native components."""
 import re
-from typing import Optional, Union, ClassVar
+from typing import Optional, ClassVar
 
 from sweetpotato.config import settings
 from sweetpotato.core import ThreadSafe
@@ -208,7 +208,7 @@ class Composite(Component):
 
     def __init__(
         self,
-        children: Optional[list[Union[ComponentVar, CompositeVar]]] = None,
+        children: Optional[list[ComponentVar | CompositeVar]] = None,
         variables: Optional[list] = None,
         state: Optional[dict] = None,
         **kwargs,

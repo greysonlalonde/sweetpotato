@@ -4,9 +4,10 @@
 See `React Navigation <https://reactnavigation.org/docs/getting-started/#>`_
 """
 
-from typing import Optional
+from typing import Optional, ClassVar
 
 from sweetpotato.core.base import Composite, Component
+from sweetpotato.core.protocols import ComponentType, CompositeType
 
 
 class NavigationContainer(Composite):
@@ -40,17 +41,15 @@ class Screen(Composite):
         functions (list, optional): String representation of .js based functions.
     """
 
-    is_root = True
+    is_root: ClassVar[bool] = True
 
-    def __init__(
-        self, children: list, screen_type: str, screen_name: str, **kwargs
-    ) -> None:
+    def __init__(self, screen_type: str, screen_name: str, **kwargs) -> None:
         kwargs.update(
             {
                 "name": f"'{screen_name}'",
             }
         )
-        super().__init__(children, **kwargs)
+        super().__init__(**kwargs)
         self.screen_type = f"{screen_type}.{self.name}"
         self.screen_name = screen_name
         self.import_name = "".join(
@@ -59,7 +58,7 @@ class Screen(Composite):
         self.package = f"./src/{self.import_name}.js"
         self.__set_parent(self._children)
 
-    def __set_parent(self, children: list[Composite, "Component"]) -> None:
+    def __set_parent(self, children: list[CompositeType | ComponentType]) -> None:
         """Sets top level component as root and sets each parent to self.
         Args:
             children (list): List of components.
@@ -99,12 +98,18 @@ class BaseNavigator(Composite):
         self.screen_type = self.name.split(".")[0]
         self.name = f"{self.name}.Navigator"
 
+    @staticmethod
+    def _set_custom_name(name: str) -> str:
+        component_name = name.split(".")
+        component_name[0] = name
+        return (".".join(component_name)).title()
+
     def screen(
         self,
         screen_name,
         children,
         functions: Optional[list] = None,
-        state: Optional[dict] = None,
+        state: Optional[dict[str, str]] = None,
     ) -> None:
         """Instantiates and adds screen to navigation component and increments screen count.
 
@@ -126,12 +131,6 @@ class BaseNavigator(Composite):
                 state=state,
             )
         )
-
-    @staticmethod
-    def _set_custom_name(name):
-        component_name = name.split(".")
-        component_name[0] = name
-        return (".".join(component_name)).title()
 
 
 class StackNavigator(BaseNavigator):
