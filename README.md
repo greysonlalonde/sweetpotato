@@ -1,7 +1,7 @@
 <img src="https://raw.githubusercontent.com/greysonlalonde/sweetpotato/main/media/sweetpotato_github_banner.png" height=25% alt="">
 
 -----
-[![alt text](https://img.shields.io/badge/pypi-0.3.a0-blue)](https://pypi.org/project/sweetpotato)
+[![alt text](https://img.shields.io/badge/pypi-0.4.a0-blue)](https://pypi.org/project/sweetpotato)
 [![alt text](https://img.shields.io/badge/license-MIT-green)](https://github.com/greysonlalonde/sweetpotato/blob/main/LICENSE)
 [![Documentation Status](https://readthedocs.org/projects/sweetpotato/badge/?version=latest)](https://sweetpotato.readthedocs.io/en/latest/?badge=latest)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -42,7 +42,7 @@ image_style = {'height': 200, 'width': 200, 'borderRadius': 50}
 tab = create_bottom_tab_navigator(name="tab")
 
 image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Ipomoea_batatas_006.JPG/1920px"
-            "-Ipomoea_batatas_006.JPG "
+"-Ipomoea_batatas_006.JPG "
 home_page = Layout(
     style=view_style,
     children=[
