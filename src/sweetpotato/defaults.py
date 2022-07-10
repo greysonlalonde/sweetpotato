@@ -5,18 +5,18 @@ Attributes:
     ~APP_DEFAULT: ...
     ~APP_PROPS_DEFAULT: ...
 """
-UI_KITTEN_COMPONENTS = {
+UI_KITTEN_COMPONENTS: set = {
     "Text",
     "Input",
     "TextInput",
     "Button",
 }
 
-APP_DEFAULT = "App"
+APP_COMPONENT: str = "App"
 
-APP_PROPS_DEFAULT = {"state", "theme"}
+APP_PROPS_DEFAULT: set = {"state", "theme"}
 
-APP_REPR_DEFAULT = """
+APP_REPR_DEFAULT: str = """
 import React from 'react';
 <IMPORTS>
 

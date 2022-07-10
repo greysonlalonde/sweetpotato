@@ -18,8 +18,6 @@ class ActivityIndicator(Component):
     See https://reactnative.dev/docs/activityindicator.
     """
 
-    pass
-
 
 class Text(Component):
     """React Native Text component.
@@ -40,8 +38,6 @@ class TextInput(Component):
 
     See https://reactnative.dev/docs/textinput.
     """
-
-    pass
 
 
 class Button(Composite):
@@ -80,16 +76,12 @@ class Image(Component):
        ``image = Image(source={"uri": image_source})``
     """
 
-    pass
-
 
 class FlatList(Component):
     """React Native FlatList component.
 
     See https://reactnative.dev/docs/flatlist.
     """
-
-    pass
 
 
 class SafeAreaProvider(Composite):
@@ -98,16 +90,12 @@ class SafeAreaProvider(Composite):
     See https://docs.expo.dev/versions/latest/sdk/safe-area-context/.
     """
 
-    pass
-
 
 class ScrollView(Component):
     """React Native ScrollView component.
 
     See https://reactnative.dev/docs/scrollview.
     """
-
-    pass
 
 
 class StyleSheet(Component):
@@ -120,8 +108,8 @@ class StyleSheet(Component):
         * Add examples.
     """
 
-    def __create(self, styles: dict):
-        ...
+    def __create(self, styles: dict) -> None:
+        raise NotImplementedError
 
 
 class TouchableOpacity(Composite):
@@ -130,13 +118,9 @@ class TouchableOpacity(Composite):
     See https://reactnative.dev/docs/touchableopacity.
     """
 
-    pass
-
 
 class View(Composite):
     """React Native View component.
 
     See https://reactnative.dev/docs/view.
     """
-
-    pass

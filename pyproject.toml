@@ -11,12 +11,14 @@ authors = [
 ]
 description = "Sweetpotato provides an intuitive wrapper around React Native."
 readme = "README.md"
+
 requires-python = ">=3.7"
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Development Status :: 2 - Pre-Alpha",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
 [project.urls]

@@ -1,20 +1,24 @@
 """Core functionality of React Native components."""
 import re
-from typing import Optional, Union, ClassVar
+from typing import Optional, ClassVar
 
 from sweetpotato.config import settings
 from sweetpotato.core import ThreadSafe
-from sweetpotato.core.protocols import VisitorType, ComponentVar, CompositeVar
+from sweetpotato.core.protocols import RendererType, ComponentVar, CompositeVar
 
 
 class DOM(metaclass=ThreadSafe):
     """Mimics the document object model tree."""
 
     def __init__(self, graph_dict=None):
-        """initializes a graph object If no dictionary or None is given, an empty dictionary will be used."""
         if not graph_dict:
             graph_dict = {}
         self.graph_dict = graph_dict
+
+    @property
+    def component(self) -> str:
+        """Returns string representation of main app components."""
+        return self.graph_dict[settings.APP_COMPONENT]["children"]
 
     def add_node(self, component) -> None:
         """Adds a component node to dict."""
@@ -32,6 +36,10 @@ class DOM(metaclass=ThreadSafe):
         )
         self.graph_dict[component.parent]["variables"].append(component.variables)
         self.graph_dict[component.parent]["children"] = component
+        if component.is_composite and component.is_root:
+            self.graph_dict[component.parent]["functions"].append(
+                "\n".join(component._functions)
+            )
 
 
 class MetaComponent(type):
@@ -42,7 +50,7 @@ class MetaComponent(type):
         all components, including user-defined ones.
     """
 
-    __registry = set()
+    __registry: set = set()
 
     def __call__(cls, *args, **kwargs) -> None:
         if cls.__name__ not in MetaComponent.__registry:
@@ -115,7 +123,7 @@ class MetaComponent(type):
 
     @staticmethod
     def __set_props(name: str, cls_dict: dict) -> dict:
-        """Imports and sets attribute :attr`~sweetpotato.core.base.Component._props` for all subclasses.
+        """Imports and sets attribute props for all subclasses.
         Args:
             name (str): React Native component name.
             cls_dict (dict): Contains :class:`~sweetpotato.core.base.Component` attributes.
@@ -138,7 +146,7 @@ class Component(metaclass=MetaComponent):
 
     Attributes:
         _children (str, optional): Inner content for component.
-        _attrs (dict): String of given attributes for component.
+        attrs (dict): String of given attributes for component.
 
     Example:
         ``component = Component(children="foo")``
@@ -159,16 +167,16 @@ class Component(metaclass=MetaComponent):
         """Children."""
         return self._children
 
-    def register(self, visitor: VisitorType) -> None:
+    def register(self, renderer: RendererType) -> None:
         """Registers a specified visitor with component.
 
         Args:
-            visitor (Visitor): Visitor.
+            renderer (Renderer): Renderer.
 
         Returns:
             None
         """
-        visitor.accept(self)
+        renderer.accept(self)
 
     @staticmethod
     def render_attrs(attrs: dict[str, str]) -> str:
@@ -198,6 +206,7 @@ class Composite(Component):
         _children (list, optional): Inner content for component.
         _variables (set, optional): Contains variables (if any) belonging to given component.
         _state (dict, optional): Dictionary of allowed state values for component.
+        _functions (list, optional): Functions for component, passed to top level component.
 
     Example:
         ``composite = Composite(children=[])``
@@ -208,14 +217,16 @@ class Composite(Component):
 
     def __init__(
         self,
-        children: Optional[list[Union[ComponentVar, CompositeVar]]] = None,
+        children: Optional[list[ComponentVar | CompositeVar]] = None,
         variables: Optional[list] = None,
         state: Optional[dict] = None,
+        functions: Optional[list] = None,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self._children = children if children else []
         self._variables = variables if variables else []
+        self._functions = functions if functions else []
         self._state = state if state else {}
 
     @property
@@ -223,15 +234,15 @@ class Composite(Component):
         """Children."""
         return "".join(map(repr, self._children))
 
-    def register(self, visitor) -> None:
-        """Registers a specified visitor with component and child components.
+    def register(self, renderer) -> None:
+        """Registers a specified renderer with component and child components.
 
         Args:
-            visitor (Visitor): Visitor.
+            renderer (Renderer): Renderer.
 
         Returns:
             None
         """
         for child in self._children:
-            child.register(visitor)
-        super().register(visitor)
+            child.register(renderer)
+        super().register(renderer)

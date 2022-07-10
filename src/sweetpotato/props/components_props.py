@@ -301,6 +301,7 @@ TEXT_INPUT_PROPS = {
 INPUT_PROPS = {"onChangeText", "placeholder", "value", "secureTextEntry"}
 
 VIEW_PROPS = {
+    "functions",
     "accessibilityActions",
     "accessibilityElementsHidden",
     "accessibilityHint",

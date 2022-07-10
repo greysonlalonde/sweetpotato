@@ -16,7 +16,7 @@ setup(
     install_requires=[],
     version="v0.4.0-alpha",
     license="MIT",
-    description="React-native development for python.",
+    description="React Native development for python.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     classifiers=[

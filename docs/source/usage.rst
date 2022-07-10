@@ -20,7 +20,7 @@ For example:
     }
 
     content = [View(style=styles, children=[Text(text="Hello World")])]
-    app = App(children=content)
+    app = App(component=content)
 
    if __name__ == "__main__":
        app.run()
@@ -52,7 +52,7 @@ your children as arguments to the :meth:`~sweetpotato.navigation.BaseNavigator.s
     tab.screen(screen_name="Screen One", children=[View(children=[Text(text="Hello")])])
     tab.screen(screen_name="Screen Two", children=[View(children=[Text(text="World")])])
 
-    app = App(children=[tab])
+    app = App(component=tab)
 
     if __name__ == "__main__":
         app.run()
@@ -98,10 +98,30 @@ Example:
         )
    ]
 
-   app = App(children=content, theme="dark")
+   app = App(component=content, theme="dark")
 
    if __name__ == "__main__":
        app.run()
 
 
 
+Functions
+----------------
+Sweetpotato supports passing rendering pure javascript functions. Pass the functions in a list to the top level component.
+
+Example:
+
+.. code-block:: python
+
+   component = View(
+    functions=["testFunction = () => {console.log('Hello, world')};"],
+    children=[Button(title="Press", onPress="() => this.test()")]
+   )
+
+   app = App(
+        component=component}
+
+   )
+
+   if __name__ == "__main__":
+       app.run()

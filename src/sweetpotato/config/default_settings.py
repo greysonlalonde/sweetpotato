@@ -5,8 +5,8 @@ https://sweetpotato.readthedocs.io/en/latest/settings.html
 """
 from pathlib import Path
 
-import sweetpotato.defaults as defaults
 import sweetpotato.functions.authentication_functions as auth_functions
+from sweetpotato import defaults
 from sweetpotato.core import ThreadSafe
 
 
@@ -30,7 +30,7 @@ class Settings(metaclass=ThreadSafe):
     """Provides and allows user to override default configuration."""
 
     # App configuration
-    APP_COMPONENT: str = defaults.APP_DEFAULT
+    APP_COMPONENT: str = defaults.APP_COMPONENT
     APP_REPR: str = defaults.APP_REPR_DEFAULT
 
     # UI Kitten settings

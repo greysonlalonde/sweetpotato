@@ -27,6 +27,7 @@ row_style = {
 
 
 def login():
+    """Provides default login plugin screen."""
     username_row = View(
         style=row_style,
         children=[
@@ -74,9 +75,6 @@ class AuthenticationProvider(Composite):
     package = None
 
     def __init__(self, functions: list = None, login_screen=None, **kwargs):
-        super().__init__(**kwargs)
-        if login_screen is None:
-            login_screen = login
         if functions is None:
             functions = [
                 settings.SET_CREDENTIALS,
@@ -84,15 +82,19 @@ class AuthenticationProvider(Composite):
                 settings.STORE_SESSION,
                 settings.STORE_DATA,
             ]
+        super().__init__(**kwargs)
+        if login_screen is None:
+            login_screen = login
 
         stack = create_native_stack_navigator()
         stack.screen(
             state={"username": "", "password": "", "secureTextEntry": True},
-            functions=functions,
-            children=[View(**login_screen())],
+            children=[View(functions=functions, **login_screen())],
             screen_name="Login",
         )
+
         self._children.append(stack)
 
     def __repr__(self):
-        return f"{'{'}this.state.authenticated ? {''.join(map(repr, [self._children[0]]))} : {self._children[1]}{'}'}"
+        authenticated = "".join(map(repr, [self._children[0]]))
+        return f"{'{'}this.state.authenticated ? {authenticated} : {self._children[1]}{'}'}"

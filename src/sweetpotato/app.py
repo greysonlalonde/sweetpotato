@@ -15,17 +15,14 @@ class App:
     """Provides methods for interacting with underlying :class:`sweetpotato.core.build.Build` class.
 
     Args:
-        children (list): List of components.
+        component (CompositeVar, optional): Top level component.
     """
 
-    context = ContextWrapper()
-    build = Build()
+    _context = ContextWrapper()
+    _build = Build()
 
-    def __init__(self, children: Optional[list[CompositeVar]] = None, **kwargs) -> None:
-        if children is None:
-            children = []
-        self._context = self.context.wrap(children, **kwargs)
-        self._context.register(visitor=ApplicationRenderer)
+    def __init__(self, component: Optional[CompositeVar] = None, **kwargs) -> None:
+        self._context.wrap(component, **kwargs).register(renderer=ApplicationRenderer)
 
     def run(self, platform: Optional[str] = None) -> None:
         """Starts a React Native expo client through a subprocess.
@@ -36,4 +33,20 @@ class App:
         Returns:
             None
         """
-        self.build.run(platform=platform)
+        self._build.run(platform=platform)
+
+    def publish(self, platform: str) -> None:
+        """Publishes app to specified platform / application store.
+
+        Args:
+            platform (str): Platform app to be published on.
+        """
+        self._build.publish(platform=platform)
+
+    def show(self) -> None:
+        """Prints .js rendition of application to console.
+
+        Returns:
+            None
+        """
+        print(self._build.show())
