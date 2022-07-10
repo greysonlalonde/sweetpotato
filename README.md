@@ -22,7 +22,12 @@ accessible from Python.
 See [https://sweetpotato.readthedocs.io](https://sweetpotato.readthedocs.io) for documentation.
 
 -----
-Cross-platform example:
+You can view the below example at the following links:
+[Web](https://snack-web-player.s3.us-west-1.amazonaws.com/v2/44/index.html?initialUrl=exp%3A%2F%2Fexp.host%2F%40snack%2Fsdk.44.0.0-GZGNQHl!bJ&origin=https%3A%2F%2Fsnack.expo.dev&verbose=false)
+,
+[iOS](https://appetize.io/embed/8bnmakzrptf1hv9dq7v7bnteem?autoplay=false&debug=true&device=iphone12&embed=true&scale=73&screenOnly=false&xDocMsg=true&xdocMsg=true&params=%7B%22EXDevMenuDisableAutoLaunch%22%3Atrue%2C%22EXKernelLaunchUrlDefaultsKey%22%3A%22exp%3A%2F%2Fexp.host%2F%40greysonlalonde13%2Ffbfde8%2BGZGNQHl%21bJ%22%2C%22EXKernelDisableNuxDefaultsKey%22%3Atrue%7D&osVersion=14.5)
+,
+[Android](https://appetize.io/embed/xc1w6f1krd589zhp22a0mgftyw?autoplay=false&debug=true&device=pixel4&embed=true&launchUrl=exp%3A%2F%2Fexp.host%2F%40greysonlalonde13%2Ffbfde8%2BGZGNQHl%21bJ&scale=81&screenOnly=false&xDocMsg=true&xdocMsg=true&params=%7B%22EXDevMenuDisableAutoLaunch%22%3Atrue%2C%22EXKernelLaunchUrlDefaultsKey%22%3A%22exp%3A%2F%2Fexp.host%2F%40greysonlalonde13%2Ffbfde8%2BGZGNQHl%21bJ%22%2C%22EXKernelDisableNuxDefaultsKey%22%3Atrue%7D&osVersion=11.0)
 
 ```python
 from sweetpotato.app import App
