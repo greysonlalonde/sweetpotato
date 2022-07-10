@@ -30,7 +30,7 @@ class Build:
         dependencies = dependencies if dependencies else ["npm", "yarn", "expo"]
         for dependency in dependencies:
             if not self.__check_dependency(dependency):
-                raise Exception(f"Dependency package {dependency} not found.")
+                raise ImportError(f"Dependency package {dependency} not found.")
 
     @classmethod
     def run(cls, platform: Optional[str] = None) -> None:
@@ -63,16 +63,32 @@ class Build:
         """
         raise NotImplementedError
 
+    def show(self, verbose: bool = False) -> DOM:
+        """Prints .js rendition of application to console.
+
+        Keyword Args:
+            verbose (bool): Whether to include extra details (imports, component count, etc).
+
+        Returns:
+            DOM
+
+        Todo:
+            Implement verbose argument.
+        """
+        if not verbose:
+            return self.storage.component
+        raise NotImplementedError
+
     @staticmethod
     def __format_imports(imports_: dict[str, str]) -> str:
-        string = ""
+        import_string = ""
         for key, value in imports_.items():
-            string += f'import {value} from "{key}";\n'.replace("'", "")
-        return string
+            import_string += f'import {value} from "{key}";\n'.replace("'", "")
+        return import_string
 
     @staticmethod
     def __format_screens() -> None:
-        """Formats all .js files with prettier.
+        """Formats all .js files with the prettier package.
 
         Returns:
             None
@@ -103,6 +119,9 @@ class Build:
         Returns:
             component (str): String representation of app component with
             placeholder values set.
+
+        Todo:
+            * Refactor this travesty.
         """
         component = settings.APP_REPR.replace("<NAME>", screen)
         if settings.APP_COMPONENT != screen:

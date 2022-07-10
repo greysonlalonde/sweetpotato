@@ -4,7 +4,7 @@ from typing import Optional, ClassVar
 
 from sweetpotato.config import settings
 from sweetpotato.core import ThreadSafe
-from sweetpotato.core.protocols import VisitorType, ComponentVar, CompositeVar
+from sweetpotato.core.protocols import RendererType, ComponentVar, CompositeVar
 
 
 class DOM(metaclass=ThreadSafe):
@@ -14,6 +14,10 @@ class DOM(metaclass=ThreadSafe):
         if not graph_dict:
             graph_dict = {}
         self.graph_dict = graph_dict
+
+    @property
+    def component(self):
+        return self.graph_dict[settings.APP_COMPONENT]['children']
 
     def add_node(self, component) -> None:
         """Adds a component node to dict."""
@@ -141,7 +145,8 @@ class Component(metaclass=MetaComponent):
 
     Attributes:
         _children (str, optional): Inner content for component.
-        _attrs (dict): String of given attributes for component.
+        attrs (dict): String of given attributes for component.
+        name (str): Name of component.
 
     Example:
         ``component = Component(children="foo")``
@@ -150,7 +155,7 @@ class Component(metaclass=MetaComponent):
     is_composite: ClassVar[bool] = False
 
     def __init__(
-        self, children: Optional[str] = None, variables=None, **kwargs
+            self, children: Optional[str] = None, variables=None, **kwargs
     ) -> None:
         self.attrs = self.render_attrs(kwargs)
         self._children = children
@@ -162,16 +167,16 @@ class Component(metaclass=MetaComponent):
         """Children."""
         return self._children
 
-    def register(self, visitor: VisitorType) -> None:
+    def register(self, renderer: RendererType) -> None:
         """Registers a specified visitor with component.
 
         Args:
-            visitor (Visitor): Visitor.
+            renderer (Renderer): Renderer.
 
         Returns:
             None
         """
-        visitor.accept(self)
+        renderer.accept(self)
 
     @staticmethod
     def render_attrs(attrs: dict[str, str]) -> str:
@@ -201,6 +206,7 @@ class Composite(Component):
         _children (list, optional): Inner content for component.
         _variables (set, optional): Contains variables (if any) belonging to given component.
         _state (dict, optional): Dictionary of allowed state values for component.
+        _functions (list, optional): Functions for component, passed to top level component.
 
     Example:
         ``composite = Composite(children=[])``
@@ -210,12 +216,12 @@ class Composite(Component):
     is_root: ClassVar[bool] = False
 
     def __init__(
-        self,
-        children: Optional[list[ComponentVar | CompositeVar]] = None,
-        variables: Optional[list] = None,
-        state: Optional[dict] = None,
-        functions: Optional[list] = None,
-        **kwargs,
+            self,
+            children: Optional[list[ComponentVar | CompositeVar]] = None,
+            variables: Optional[list] = None,
+            state: Optional[dict] = None,
+            functions: Optional[list] = None,
+            **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self._children = children if children else []
@@ -228,15 +234,15 @@ class Composite(Component):
         """Children."""
         return "".join(map(repr, self._children))
 
-    def register(self, visitor) -> None:
-        """Registers a specified visitor with component and child components.
+    def register(self, renderer) -> None:
+        """Registers a specified renderer with component and child components.
 
         Args:
-            visitor (Visitor): Visitor.
+            renderer (Renderer): Renderer.
 
         Returns:
             None
         """
         for child in self._children:
-            child.register(visitor)
-        super().register(visitor)
+            child.register(renderer)
+        super().register(renderer)

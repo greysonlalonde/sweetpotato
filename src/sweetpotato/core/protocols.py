@@ -12,5 +12,5 @@ ComponentType = Type[ComponentVar]
 CompositeVar = TypeVar("CompositeVar", bound="Composite")
 CompositeType = Type[ComponentVar]
 
-VisitorVar = TypeVar("VisitorVar", bound="Visitor")
-VisitorType = Type[VisitorVar]
+RendererVar = TypeVar("RendererVar", bound="Renderer")
+RendererType = Type[RendererVar]

@@ -8,7 +8,7 @@ from sweetpotato.core.base import DOM
 from sweetpotato.core.protocols import ComponentType, CompositeType
 
 
-class Visitor(ABC):
+class Renderer(ABC):
     """Interface for visitors."""
 
     @classmethod
@@ -25,7 +25,7 @@ class Visitor(ABC):
         raise NotImplementedError
 
 
-class ApplicationRenderer(Visitor):
+class ApplicationRenderer(Renderer):
     """Accepts a top level component and performs all rendering."""
 
     dom = DOM()

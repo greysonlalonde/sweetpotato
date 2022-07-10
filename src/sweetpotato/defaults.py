@@ -12,7 +12,7 @@ UI_KITTEN_COMPONENTS: set = {
     "Button",
 }
 
-APP_DEFAULT: str = "App"
+APP_COMPONENT: str = "App"
 
 APP_PROPS_DEFAULT: set = {"state", "theme"}
 

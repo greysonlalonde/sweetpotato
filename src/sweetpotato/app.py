@@ -18,12 +18,11 @@ class App:
         component (CompositeVar, optional): Top level component.
     """
 
-    context = ContextWrapper()
-    build = Build()
+    _context = ContextWrapper()
+    _build = Build()
 
     def __init__(self, component: Optional[CompositeVar] = None, **kwargs) -> None:
-        self._context = self.context.wrap(component, **kwargs)
-        self._context.register(visitor=ApplicationRenderer)
+        self._context.wrap(component, **kwargs).register(renderer=ApplicationRenderer)
 
     def run(self, platform: Optional[str] = None) -> None:
         """Starts a React Native expo client through a subprocess.
@@ -34,7 +33,7 @@ class App:
         Returns:
             None
         """
-        self.build.run(platform=platform)
+        self._build.run(platform=platform)
 
     def publish(self, platform: str) -> None:
         """Publishes app to specified platform / application store.
@@ -42,4 +41,12 @@ class App:
         Args:
             platform (str): Platform app to be published on.
         """
-        self.build.publish(platform=platform)
+        self._build.publish(platform=platform)
+
+    def show(self) -> None:
+        """Prints .js rendition of application to console.
+
+        Returns:
+            None
+        """
+        print(self._build.show())
