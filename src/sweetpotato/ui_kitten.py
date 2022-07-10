@@ -11,8 +11,6 @@ class IconRegistry(Component):
     See `<https://akveo.github.io/react-native-ui-kitten/docs/components/icon/overview#icon>`_
     """
 
-    pass
-
 
 class ApplicationProvider(Composite):
     """Implementation of ui-kitten ApplicationProvider component.
@@ -40,5 +38,3 @@ class Layout(Composite):
 
     See https://akveo.github.io/react-native-ui-kitten/docs/components/layout.
     """
-
-    pass

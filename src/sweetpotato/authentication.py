@@ -96,5 +96,5 @@ class AuthenticationProvider(Composite):
         self._children.append(stack)
 
     def __repr__(self):
-        authenticated = ''.join(map(repr, [self._children[0]]))
+        authenticated = "".join(map(repr, [self._children[0]]))
         return f"{'{'}this.state.authenticated ? {authenticated} : {self._children[1]}{'}'}"

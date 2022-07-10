@@ -13,8 +13,6 @@ from sweetpotato.core.protocols import ComponentType, CompositeType
 class NavigationContainer(Composite):
     """React Navigation NavigationContainer component."""
 
-    pass
-
 
 class RootNavigation(Component):
     """React Navigation component based on for navigating without the prop.
@@ -144,16 +142,12 @@ class StackNavigator(BaseNavigator):
     See https://reactnavigation.org/docs/stack-navigator
     """
 
-    pass
-
 
 class TabNavigator(BaseNavigator):
     """Abstraction of React Navigation TabNavigator component.
 
     See https://reactnavigation.org/docs/bottom-tab-navigator
     """
-
-    pass
 
 
 def create_bottom_tab_navigator(name: Optional[str] = None) -> TabNavigator:

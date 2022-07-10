@@ -16,8 +16,9 @@ class DOM(metaclass=ThreadSafe):
         self.graph_dict = graph_dict
 
     @property
-    def component(self):
-        return self.graph_dict[settings.APP_COMPONENT]['children']
+    def component(self) -> str:
+        """Returns string representation of main app components."""
+        return self.graph_dict[settings.APP_COMPONENT]["children"]
 
     def add_node(self, component) -> None:
         """Adds a component node to dict."""
@@ -122,7 +123,7 @@ class MetaComponent(type):
 
     @staticmethod
     def __set_props(name: str, cls_dict: dict) -> dict:
-        """Imports and sets attribute :attr`~sweetpotato.core.base.Component._props` for all subclasses.
+        """Imports and sets attribute props for all subclasses.
         Args:
             name (str): React Native component name.
             cls_dict (dict): Contains :class:`~sweetpotato.core.base.Component` attributes.
@@ -146,7 +147,6 @@ class Component(metaclass=MetaComponent):
     Attributes:
         _children (str, optional): Inner content for component.
         attrs (dict): String of given attributes for component.
-        name (str): Name of component.
 
     Example:
         ``component = Component(children="foo")``
@@ -155,7 +155,7 @@ class Component(metaclass=MetaComponent):
     is_composite: ClassVar[bool] = False
 
     def __init__(
-            self, children: Optional[str] = None, variables=None, **kwargs
+        self, children: Optional[str] = None, variables=None, **kwargs
     ) -> None:
         self.attrs = self.render_attrs(kwargs)
         self._children = children
@@ -216,12 +216,12 @@ class Composite(Component):
     is_root: ClassVar[bool] = False
 
     def __init__(
-            self,
-            children: Optional[list[ComponentVar | CompositeVar]] = None,
-            variables: Optional[list] = None,
-            state: Optional[dict] = None,
-            functions: Optional[list] = None,
-            **kwargs,
+        self,
+        children: Optional[list[ComponentVar | CompositeVar]] = None,
+        variables: Optional[list] = None,
+        state: Optional[dict] = None,
+        functions: Optional[list] = None,
+        **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self._children = children if children else []

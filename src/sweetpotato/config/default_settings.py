@@ -5,8 +5,8 @@ https://sweetpotato.readthedocs.io/en/latest/settings.html
 """
 from pathlib import Path
 
-from sweetpotato import defaults
 import sweetpotato.functions.authentication_functions as auth_functions
+from sweetpotato import defaults
 from sweetpotato.core import ThreadSafe
 
 

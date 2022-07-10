@@ -133,5 +133,5 @@ class ContextWrapper(
             Composite.
         """
         component.is_root = True
-        component = super().wrap(component, **kwargs) if component else []
+        component = super().wrap(component, **kwargs)
         return component
