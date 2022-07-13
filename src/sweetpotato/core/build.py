@@ -56,11 +56,11 @@ class Build:
         cls.__format_screens()
         if not platform:
             platform = ""
-        # subprocess.run(
-        #     f"cd {settings.REACT_NATIVE_PATH} && expo start {platform}",
-        #     shell=True,
-        #     check=True,
-        # )
+        subprocess.run(
+            f"cd {settings.REACT_NATIVE_PATH} && expo start {platform}",
+            shell=True,
+            check=True,
+        )
 
     @staticmethod
     def publish(platform: str) -> None:
@@ -175,19 +175,19 @@ class Build:
         if settings.APP_COMPONENT != screen:
             screen = f"src/{screen}"
         with open(
-            f"{settings.REACT_NATIVE_PATH}/{screen}.js", "w", encoding="utf-8"
+                f"{settings.REACT_NATIVE_PATH}/{screen}.js", "w", encoding="utf-8"
         ) as file:
             file.write(component)
 
     @staticmethod
     def __access_check(file: str, mode: int) -> bool:
         return (
-            os.path.exists(file) and os.access(file, mode) and not os.path.isdir(file)
+                os.path.exists(file) and os.access(file, mode) and not os.path.isdir(file)
         )
 
     @classmethod
     def __check_dependency(
-        cls, cmd: str, mode: int = os.F_OK | os.X_OK, path: Optional[str] = None
+            cls, cmd: str, mode: int = os.F_OK | os.X_OK, path: Optional[str] = None
     ) -> Optional[str]:
         if os.path.dirname(cmd):
             if cls.__access_check(cmd, mode):
