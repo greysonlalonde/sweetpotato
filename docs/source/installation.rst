@@ -16,9 +16,14 @@ Enable `yarn <https://yarnpkg.com/getting-started/install>`_ through corepack an
 
     (venv) $ corepack enable && npm install --global expo-cli
 
+If you plan to distribute your application, install `eas <https://docs.expo.dev/build/introduction/>`_
+
+.. code-block:: console
+
+    (venv) $ npm install -g eas-cli
+
 Finally, install **sweetpotato** using pip:
 
 .. code-block:: console
 
-   # pip:
    (venv) $ pip install sweetpotato

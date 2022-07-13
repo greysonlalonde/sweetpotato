@@ -18,7 +18,7 @@ Contents
 .. toctree::
     installation
     usage
-    settings
+    build
     api
 
 
