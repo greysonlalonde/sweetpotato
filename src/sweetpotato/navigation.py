@@ -4,7 +4,7 @@
 See `React Navigation <https://reactnavigation.org/docs/getting-started/#>`_
 """
 
-from typing import Optional, ClassVar
+from typing import Optional
 
 from sweetpotato.core.base import Composite, Component
 from sweetpotato.core.protocols import ComponentType, CompositeType
@@ -39,11 +39,11 @@ class Screen(Composite):
         functions (list, optional): String representation of .js based functions.
     """
 
-    is_root: ClassVar[bool] = True
+    is_root: bool = True
     parent = None
 
     def __init__(
-        self, screen_type: str, screen_name: str, functions=None, **kwargs
+            self, screen_type: str, screen_name: str, functions=None, **kwargs
     ) -> None:
         kwargs.update(
             {
@@ -107,11 +107,11 @@ class BaseNavigator(Composite):
         return (".".join(component_name)).title()
 
     def screen(
-        self,
-        screen_name,
-        children,
-        functions: Optional[list] = None,
-        state: Optional[dict[str, str]] = None,
+            self,
+            screen_name,
+            children,
+            functions: Optional[list] = None,
+            state: Optional[dict[str, str]] = None,
     ) -> None:
         """Instantiates and adds screen to navigation component and increments screen count.
 
