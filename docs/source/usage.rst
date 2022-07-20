@@ -114,8 +114,8 @@ Example:
 .. code-block:: python
 
    component = View(
-    functions=["testFunction = () => {console.log('Hello, world')};"],
-    children=[Button(title="Press", onPress="() => this.test()")]
+    functions=["testFunction = () => {alert('Hello, world')}"],
+    children=[Button(title="Press", onPress="() => this.testFunction()")]
    )
 
    app = App(
