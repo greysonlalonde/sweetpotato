@@ -25,7 +25,7 @@ class Build:
 
     storage = DOM()
 
-    def __init__(self, dependencies: list[str] = None) -> None:
+    def __init__(self, dependencies: Optional[list[str]] = None) -> None:
         dependencies = (
             dependencies
             if dependencies
@@ -76,7 +76,9 @@ class Build:
             file.seek(0)
             json.dump(eas_conf, file)
             file.truncate()
-        # os.system(f"cd {settings.REACT_NATIVE_PATH} && eas build -p ios --profile preview")
+        os.system(
+            f"cd {settings.REACT_NATIVE_PATH} && eas build -p ios --profile preview"
+        )
 
         # raise NotImplementedError
 
@@ -175,19 +177,19 @@ class Build:
         if settings.APP_COMPONENT != screen:
             screen = f"src/{screen}"
         with open(
-                f"{settings.REACT_NATIVE_PATH}/{screen}.js", "w", encoding="utf-8"
+            f"{settings.REACT_NATIVE_PATH}/{screen}.js", "w", encoding="utf-8"
         ) as file:
             file.write(component)
 
     @staticmethod
     def __access_check(file: str, mode: int) -> bool:
         return (
-                os.path.exists(file) and os.access(file, mode) and not os.path.isdir(file)
+            os.path.exists(file) and os.access(file, mode) and not os.path.isdir(file)
         )
 
     @classmethod
     def __check_dependency(
-            cls, cmd: str, mode: int = os.F_OK | os.X_OK, path: Optional[str] = None
+        cls, cmd: str, mode: int = os.F_OK | os.X_OK, path: Optional[str] = None
     ) -> Optional[str]:
         if os.path.dirname(cmd):
             if cls.__access_check(cmd, mode):
