@@ -22,12 +22,8 @@ accessible from Python.
 See [https://sweetpotato.readthedocs.io](https://sweetpotato.readthedocs.io) for documentation.
 
 -----
-You can view the below example at the following links:
-[Web](https://snack-web-player.s3.us-west-1.amazonaws.com/v2/44/index.html?initialUrl=exp%3A%2F%2Fexp.host%2F%40greysonlalonde13%2Famused-crackers%2BAAZPRuW6dY&origin=https%3A%2F%2Fsnack.expo.dev&verbose=false)
-,
-[iOS](https://appetize.io/embed/8bnmakzrptf1hv9dq7v7bnteem?autoplay=false&debug=true&device=iphone12&embed=true&scale=73&screenOnly=false&xDocMsg=true&xdocMsg=true&params=%7B%22EXDevMenuDisableAutoLaunch%22%3Atrue%2C%22EXKernelLaunchUrlDefaultsKey%22%3A%22exp%3A%2F%2Fexp.host%2F%40greysonlalonde13%2Famused-crackers%2BAAZPRuW6dY%22%2C%22EXKernelDisableNuxDefaultsKey%22%3Atrue%7D&osVersion=14.5)
-,
-[Android](https://appetize.io/embed/xc1w6f1krd589zhp22a0mgftyw?autoplay=false&debug=true&device=pixel4&embed=true&launchUrl=exp%3A%2F%2Fexp.host%2F%40greysonlalonde13%2Famused-crackers%2BAAZPRuW6dY&scale=81&screenOnly=false&xDocMsg=true&xdocMsg=true&params=%7B%22EXDevMenuDisableAutoLaunch%22%3Atrue%2C%22EXKernelLaunchUrlDefaultsKey%22%3A%22exp%3A%2F%2Fexp.host%2F%40greysonlalonde13%2Famused-crackers%2BAAZPRuW6dY%22%2C%22EXKernelDisableNuxDefaultsKey%22%3Atrue%7D&osVersion=11.0)
+You can view the below example at the following link:
+[https://snack.expo.dev/@greysonlalonde13/amused-crackers](https://snack.expo.dev/@greysonlalonde13/amused-crackers)
 
 ```python
 from sweetpotato.app import App
@@ -46,8 +42,7 @@ view_style = {
 image_style = {'height': 200, 'width': 200, 'borderRadius': 50}
 tab = create_bottom_tab_navigator(name="tab")
 
-image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Ipomoea_batatas_006.JPG/1920px"
-"-Ipomoea_batatas_006.JPG "
+image_url = "https://raw.githubusercontent.com/greysonlalonde/sweetpotato/main/media/sweetpotatoes.JPG"
 home_page = Layout(
     style=view_style,
     children=[
