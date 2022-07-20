@@ -41,7 +41,7 @@ class UIKittenWrapper(Wrapper):
         if settings.USE_UI_KITTEN:
             theme = kwargs.pop("theme", None)
             if not theme:
-                raise Exception("UI Kitten must be provided a theme.")
+                raise KeyError("UI Kitten must be provided a theme.")
             component = ApplicationProvider(
                 children=[component], theme=f"{'{'}...eva.{theme}{'}'}"
             )

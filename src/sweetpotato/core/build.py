@@ -2,12 +2,11 @@
 The `_access_check` and `_check_dependency` functions are essentially copies from
 https://github.com/cookiecutter/whichcraft/blob/master/whichcraft.py#L20.
 
-# npm install -g eas-cli
-
 Todo:
     * Add docstrings for all classes & methods.
     * Add typing.
 """
+import json
 import os
 import subprocess
 import sys
@@ -26,8 +25,16 @@ class Build:
 
     storage = DOM()
 
-    def __init__(self, dependencies: list[str] = None) -> None:
-        dependencies = dependencies if dependencies else ["npm", "yarn", "expo"]
+    def __init__(self, dependencies: Optional[list[str]] = None) -> None:
+        dependencies = (
+            dependencies
+            if dependencies
+            else [
+                "npm",
+                "yarn",
+                "expo",
+            ]
+        )
         for dependency in dependencies:
             if not self.__check_dependency(dependency):
                 raise ImportError(f"Dependency package {dependency} not found.")
@@ -55,22 +62,34 @@ class Build:
             check=True,
         )
 
-    def publish(self, platform: str) -> None:
+    @staticmethod
+    def publish(platform: str) -> None:
         """Publishes app to specified platform / application store.
 
         Args:
             platform (str): Platform app to be published on.
         """
-        raise NotImplementedError
+        with open(f"{settings.REACT_NATIVE_PATH}/eas.json", "r+") as file:
+            eas_conf = json.load(file)
+            if platform == "ios":
+                eas_conf["build"]["preview"][platform] = {"simulator": True}
+            file.seek(0)
+            json.dump(eas_conf, file)
+            file.truncate()
+        os.system(
+            f"cd {settings.REACT_NATIVE_PATH} && eas build -p ios --profile preview"
+        )
 
-    def show(self, verbose: bool = False) -> DOM:
+        # raise NotImplementedError
+
+    def show(self, verbose: bool = False) -> str:
         """Prints .js rendition of application to console.
 
         Keyword Args:
             verbose (bool): Whether to include extra details (imports, component count, etc).
 
         Returns:
-            DOM
+            str
 
         Todo:
             Implement verbose argument.
@@ -98,6 +117,7 @@ class Build:
                 f"cd {settings.REACT_NATIVE_PATH} && yarn prettier",
                 shell=True,
                 check=True,
+                stdout=subprocess.DEVNULL,
             )
 
         except subprocess.CalledProcessError as error:
@@ -106,6 +126,7 @@ class Build:
                 f"cd {settings.REACT_NATIVE_PATH} && yarn install",
                 shell=True,
                 check=True,
+                stdout=subprocess.DEVNULL,
             )
 
     @staticmethod

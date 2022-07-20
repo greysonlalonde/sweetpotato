@@ -153,4 +153,3 @@ cython_debug/
 typing_tests.py
 
 src/sweetpotato/frontend/src/*
-src/sweetpotato/frontend/App.js

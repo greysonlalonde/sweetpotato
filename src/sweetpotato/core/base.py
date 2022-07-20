@@ -1,6 +1,6 @@
 """Core functionality of React Native components."""
 import re
-from typing import Optional, ClassVar
+from typing import Optional
 
 from sweetpotato.config import settings
 from sweetpotato.core import ThreadSafe
@@ -152,7 +152,7 @@ class Component(metaclass=MetaComponent):
         ``component = Component(children="foo")``
     """
 
-    is_composite: ClassVar[bool] = False
+    is_composite: bool = False
 
     def __init__(
         self, children: Optional[str] = None, variables=None, **kwargs
@@ -212,8 +212,8 @@ class Composite(Component):
         ``composite = Composite(children=[])``
     """
 
-    is_composite: ClassVar[bool] = True
-    is_root: ClassVar[bool] = False
+    is_composite: bool = True
+    is_root: bool = False
 
     def __init__(
         self,

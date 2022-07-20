@@ -4,7 +4,7 @@
 See `React Navigation <https://reactnavigation.org/docs/getting-started/#>`_
 """
 
-from typing import Optional, ClassVar
+from typing import Optional
 
 from sweetpotato.core.base import Composite, Component
 from sweetpotato.core.protocols import ComponentType, CompositeType
@@ -39,7 +39,7 @@ class Screen(Composite):
         functions (list, optional): String representation of .js based functions.
     """
 
-    is_root: ClassVar[bool] = True
+    is_root: bool = True
     parent = None
 
     def __init__(
