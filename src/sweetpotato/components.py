@@ -108,7 +108,7 @@ class StyleSheet(Component):
         * Add examples.
     """
 
-    def __create(self, styles: dict) -> None:
+    def __create(self, styles: dict[str, str]) -> None:
         raise NotImplementedError
 
 

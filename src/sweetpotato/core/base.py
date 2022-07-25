@@ -1,6 +1,6 @@
 """Core functionality of React Native components."""
 import re
-from typing import Optional
+from typing import Optional, Union
 
 from sweetpotato.config import settings
 from sweetpotato.core import ThreadSafe
@@ -10,7 +10,7 @@ from sweetpotato.core.protocols import RendererType, ComponentVar, CompositeVar
 class DOM(metaclass=ThreadSafe):
     """Mimics the document object model tree."""
 
-    def __init__(self, graph_dict=None):
+    def __init__(self, graph_dict: Optional[dict] = None) -> None:
         if not graph_dict:
             graph_dict = {}
         self.graph_dict = graph_dict
@@ -20,7 +20,7 @@ class DOM(metaclass=ThreadSafe):
         """Returns string representation of main app components."""
         return self.graph_dict[settings.APP_COMPONENT]["children"]
 
-    def add_node(self, component) -> None:
+    def add_node(self, component: CompositeVar) -> None:
         """Adds a component node to dict."""
         if component.parent not in self.graph_dict:
             self.graph_dict[component.parent] = {
@@ -155,7 +155,7 @@ class Component(metaclass=MetaComponent):
     is_composite: bool = False
 
     def __init__(
-        self, children: Optional[str] = None, variables=None, **kwargs
+        self, children: Optional[str] = None, variables: Optional[str] = None, **kwargs
     ) -> None:
         self.attrs = self.render_attrs(kwargs)
         self._children = children
@@ -217,10 +217,10 @@ class Composite(Component):
 
     def __init__(
         self,
-        children: Optional[list[ComponentVar | CompositeVar]] = None,
-        variables: Optional[list] = None,
-        state: Optional[dict] = None,
-        functions: Optional[list] = None,
+        children: Optional[list[Union[ComponentVar, CompositeVar]]] = None,
+        variables: Optional[list[str]] = None,
+        state: Optional[dict[str, str]] = None,
+        functions: Optional[list[str]] = None,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -234,7 +234,7 @@ class Composite(Component):
         """Children."""
         return "".join(map(repr, self._children))
 
-    def register(self, renderer) -> None:
+    def register(self, renderer: RendererType) -> None:
         """Registers a specified renderer with component and child components.
 
         Args:

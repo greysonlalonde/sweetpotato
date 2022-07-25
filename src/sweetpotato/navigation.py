@@ -7,7 +7,7 @@ See `React Navigation <https://reactnavigation.org/docs/getting-started/#>`_
 from typing import Optional
 
 from sweetpotato.core.base import Composite, Component
-from sweetpotato.core.protocols import ComponentType, CompositeType
+from sweetpotato.core.protocols import ComponentType, CompositeType, CompositeVar
 
 
 class NavigationContainer(Composite):
@@ -108,8 +108,8 @@ class BaseNavigator(Composite):
 
     def screen(
         self,
-        screen_name,
-        children,
+        screen_name: str,
+        children: list[CompositeVar],
         functions: Optional[list] = None,
         state: Optional[dict[str, str]] = None,
     ) -> None:
