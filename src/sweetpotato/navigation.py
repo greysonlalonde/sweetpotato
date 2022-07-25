@@ -4,7 +4,7 @@
 See `React Navigation <https://reactnavigation.org/docs/getting-started/#>`_
 """
 
-from typing import Optional
+from typing import Optional, Union
 
 from sweetpotato.core.base import Composite, Component
 from sweetpotato.core.protocols import ComponentType, CompositeType, CompositeVar
@@ -60,7 +60,7 @@ class Screen(Composite):
         self.package = f"./src/{self.import_name}.js"
         self.__set_parent(self._children)
 
-    def __set_parent(self, children: list[CompositeType | ComponentType]) -> None:
+    def __set_parent(self, children: list[Union[CompositeType, ComponentType]]) -> None:
         """Sets top level component as root and sets each parent to self.
         Args:
             children (list): List of components.

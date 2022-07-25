@@ -4,6 +4,7 @@ Todo:
     * Add typing.
 """
 from abc import abstractmethod, ABC
+from typing import Union
 
 from sweetpotato.authentication import AuthenticationProvider
 from sweetpotato.components import SafeAreaProvider
@@ -123,7 +124,7 @@ class ContextWrapper(
         * Add docstrings
     """
 
-    def wrap(self, component: CompositeType | None, **kwargs) -> CompositeType:
+    def wrap(self, component: Union[CompositeType, None], **kwargs) -> CompositeType:
         """Checks and wraps component in provided wrappers, if configured.
 
         Args:
