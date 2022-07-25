@@ -1,6 +1,7 @@
 import unittest
 
-from sweetpotato.app import App
+
+# from sweetpotato.app import App
 
 
 class TestApp(unittest.TestCase):
