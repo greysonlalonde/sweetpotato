@@ -10,7 +10,7 @@ import json
 import os
 import subprocess
 import sys
-from typing import Optional, Union
+from typing import Optional
 
 from sweetpotato.config import settings
 from sweetpotato.core.base import DOM
@@ -189,7 +189,7 @@ class Build:
 
     @classmethod
     def __check_dependency(
-        cls, cmd: str, mode: int = Union[os.F_OK, os.X_OK], path: Optional[str] = None
+        cls, cmd: str, mode: int = os.F_OK | os.X_OK, path: Optional[str] = None
     ) -> Optional[str]:
         if os.path.dirname(cmd):
             if cls.__access_check(cmd, mode):
