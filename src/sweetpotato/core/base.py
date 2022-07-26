@@ -148,13 +148,14 @@ class Component(metaclass=MetaComponent):
     Args:
         children: Inner content for component.
         variables: Contains variables (if any) belonging to given component.
+        kwargs: Arbitrary keyword arguments.
 
     Attributes:
         _children: Inner content for component.
         attrs: String of given attributes for component.
         variables: Contains variables (if any) belonging to given component.
         parent: Name of parent component, defaults to `'App'`
-        kwargs: Arbitrary keyword arguments.
+        name: Name of component, set in MetaComponent.
 
     Example:
         ``component = Component(children="foo")``

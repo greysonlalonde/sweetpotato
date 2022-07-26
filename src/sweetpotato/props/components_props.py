@@ -295,7 +295,6 @@ TEXT_INPUT_PROPS: set = {
     # "onBlur",
     # "inputAccessoryViewID",
     # "onChangeText",
-    "secureTextEntry",
 }  #: Default allowed props for TextInput component.
 
 INPUT_PROPS: set = {
