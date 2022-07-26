@@ -7,7 +7,7 @@ Sweetpotato provides an intuitive wrapper around React Native, making cross-plat
 accessible from Python.
 Check out the :doc:`installation` section, and then head over to :doc:`usage` for further information.
 
-.. note::
+.. attention::
 
    This project is still in early stages of development and is not stable.
 
@@ -18,6 +18,7 @@ Contents
 .. toctree::
     installation
     usage
+    components
     build
     api
 

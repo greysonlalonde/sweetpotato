@@ -63,7 +63,7 @@ class Build:
         """Publishes app to specified platform / application store.
 
         Args:
-            platform: Platform app to be published on.
+            platform: Platform for app to be published on.
         """
         with open(f"{settings.REACT_NATIVE_PATH}/eas.json", "r+") as file:
             eas_conf = json.load(file)

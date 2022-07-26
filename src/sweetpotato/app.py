@@ -29,8 +29,10 @@ class App:
 
     Args:
         component: Top level component, default is the sweetpotato welcome screen.
+        context: Context wrapper for application.
+        build: Build tools for application.
         theme: Theme of @eva-design/eva, one of dark, light.
-        **kwargs: Arbitrary keyword arguments.
+        kwargs: Arbitrary keyword arguments.
 
     Examples:
         `app = App()`
