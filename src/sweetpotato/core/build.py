@@ -20,7 +20,7 @@ class Build:
     """Contains actions for expo flow, dependency detection, app testing and publishing.
 
     Args:
-        dependencies (:obj:`list`, optional): User defined dependencies to replace inbuilt ones.
+        dependencies: User defined dependencies to replace inbuilt ones.
     """
 
     storage = DOM()
@@ -43,19 +43,15 @@ class Build:
     def run(cls, platform: Optional[str] = None) -> None:
         """Starts a React Native expo client through a subprocess.
 
-        Keyword Args:
-            platform (:obj:`str`, optional): Platform for expo to run on.
-
-        Returns:
-            None
+        Args:
+            platform: Platform for expo to run on.
         """
 
+        platform = "" if not platform else platform
         for screen, content in cls.storage.graph_dict.items():
             content["imports"] = cls.__format_imports(content["imports"])
             cls._write_screen(screen, content)
         cls.__format_screens()
-        if not platform:
-            platform = ""
         subprocess.run(
             f"cd {settings.REACT_NATIVE_PATH} && expo start {platform}",
             shell=True,
@@ -67,7 +63,7 @@ class Build:
         """Publishes app to specified platform / application store.
 
         Args:
-            platform (str): Platform app to be published on.
+            platform: Platform for app to be published on.
         """
         with open(f"{settings.REACT_NATIVE_PATH}/eas.json", "r+") as file:
             eas_conf = json.load(file)
@@ -85,11 +81,11 @@ class Build:
     def show(self, verbose: bool = False) -> str:
         """Prints .js rendition of application to console.
 
-        Keyword Args:
-            verbose (bool): Whether to include extra details (imports, component count, etc).
+        Args:
+            verbose: Whether to include extra details (imports, component count, etc).
 
         Returns:
-            str
+            String rendition of application in .js format.
 
         Todo:
             Implement verbose argument.
@@ -107,11 +103,7 @@ class Build:
 
     @staticmethod
     def __format_screens() -> None:
-        """Formats all .js files with the prettier package.
-
-        Returns:
-            None
-        """
+        """Formats all .js files with the prettier package."""
         try:
             subprocess.run(
                 f"cd {settings.REACT_NATIVE_PATH} && yarn prettier",
@@ -134,12 +126,11 @@ class Build:
         """Sets placeholder values in the string representation of the app component.
 
         Args:
-            content (dict): Dictionary of screen contents.
-            screen (str): Name of screen.
+            content: Dictionary of screen contents.
+            screen: Name of screen.
 
         Returns:
-            component (str): String representation of app component with
-            placeholder values set.
+            component: String representation of app component with placeholder values set.
 
         Todo:
             * Refactor this travesty.
@@ -170,8 +161,8 @@ class Build:
         """Writes screen contents to file with screen name as file name.
 
         Args:
-            screen (str): Name of screen.
-            content (dict): Dictionary of screen contents.
+            screen: Name of screen.
+            content: Dictionary of screen contents.
         """
         component = cls.__replace_values(content, screen)
         if settings.APP_COMPONENT != screen:

@@ -125,11 +125,7 @@ class Settings(metaclass=ThreadSafe):
 
     @classmethod
     def set_ui_kitten(cls) -> None:
-        """Sets all necessary UI Kitten configuration for app.
-
-        Returns:
-            None
-        """
+        """Sets all necessary UI Kitten configuration for app."""
         cls.APP_IMPORTS.add("\nimport * as eva from '@eva-design/eva';")
         cls.APP_IMPORTS.add("\nimport {EvaIconsPack} from '@ui-kitten/eva-icons';")
         cls.REPLACE_COMPONENTS.update(
@@ -159,11 +155,7 @@ class Settings(metaclass=ThreadSafe):
 
     @classmethod
     def set_authentication(cls) -> None:
-        """Sets all necessary authentication configuration for app.
-
-        Returns:
-            None
-        """
+        """Sets all necessary authentication configuration for app."""
         cls.APP_IMPORTS.add(
             "\nimport AsyncStorage from '@react-native-async-storage/async-storage';"
         )
@@ -171,22 +163,14 @@ class Settings(metaclass=ThreadSafe):
 
     @classmethod
     def set_navigation(cls) -> None:
-        """Sets all necessary React Navigation configuration for app.
-
-        Returns:
-            None
-        """
+        """Sets all necessary React Navigation configuration for app."""
         cls.APP_IMPORTS.add(
             "\nimport * as RootNavigation from './src/components/RootNavigation.js';"
         )
 
     @classmethod
     def set_api(cls) -> None:
-        """Sets API configuration for app.
-
-        Returns:
-            None
-        """
+        """Sets API configuration for app."""
         cls.LOGIN_FUNCTION = auth_functions.LOGIN.replace("API_URL", cls.API_URL)
         cls.LOGOUT_FUNCTION = auth_functions.LOGOUT.replace("API_URL", cls.API_URL)
         cls.AUTH_FUNCTIONS = {
@@ -196,11 +180,7 @@ class Settings(metaclass=ThreadSafe):
 
     @classmethod
     def set_react_native(cls) -> None:
-        """Sets all necessary React Native configuration for app.
-
-        Returns:
-            None
-        """
+        """Sets all necessary React Native configuration for app."""
         cls.REACT_NATIVE_PATH = (
             f"{Path(__file__).resolve().parent.parent}/{cls.RESOURCE_FOLDER}"
         )

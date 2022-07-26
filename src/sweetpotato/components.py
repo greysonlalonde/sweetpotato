@@ -51,9 +51,6 @@ class Button(Composite):
 
     Example:
        ``button = Button(title="foo")``
-
-    Todo:
-        * Need to refactor as composite. Buttons can have children, i.e. text.
     """
 
     def __init__(self, **kwargs) -> None:
@@ -108,7 +105,7 @@ class StyleSheet(Component):
         * Add examples.
     """
 
-    def __create(self, styles: dict) -> None:
+    def __create(self, styles: dict[str, str]) -> None:
         raise NotImplementedError
 
 

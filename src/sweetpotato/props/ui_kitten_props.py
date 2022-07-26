@@ -1,13 +1,13 @@
 """Provides props for ui-kitten components.
 """
-ICON_REGISTRY_PROPS = {"icons"}
+ICON_REGISTRY_PROPS: set = {"icons"}
 
-APPLICATION_PROVIDER_PROPS = {"theme", "children"}
+APPLICATION_PROVIDER_PROPS: set = {"theme", "children"}
 
-LAYOUT_PROPS = {"children", "style"}
+LAYOUT_PROPS: set = {"children", "style"}
 
-TEXT_PROPS = {"text"}
+TEXT_PROPS: set = {"text"}
 
-BUTTON_PROPS = {"title", "onPress"}
+BUTTON_PROPS: set = {"title", "onPress"}
 
-INPUT_PROPS = {"placeholder", "value", "onChangeText", "secureTextEntry"}
+INPUT_PROPS: set = {"placeholder", "value", "onChangeText", "secureTextEntry"}

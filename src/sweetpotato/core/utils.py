@@ -3,6 +3,7 @@ Todo:
     * Can refactor away from using abstract class.
 """
 from abc import ABC, abstractmethod
+from typing import Union
 
 from sweetpotato.core.base import DOM
 from sweetpotato.core.protocols import ComponentType, CompositeType
@@ -13,14 +14,11 @@ class Renderer(ABC):
 
     @classmethod
     @abstractmethod
-    def accept(cls, obj: ComponentType | CompositeType) -> None:
+    def accept(cls, obj: Union[ComponentType, CompositeType]) -> None:
         """Accepts a component and performs an action.
 
         Args:
-            obj (Component | Composite): Component instance.
-
-        Returns:
-            None
+            obj: Component instance.
         """
         raise NotImplementedError
 
@@ -35,9 +33,6 @@ class ApplicationRenderer(Renderer):
         """Accepts a component and performs ....
 
         Args:
-            obj (Composite): Component object.
-
-        Returns:
-            None
+            obj: Component object.
         """
         cls.dom.add_node(obj)
