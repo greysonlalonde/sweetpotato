@@ -2,7 +2,6 @@
 import unittest
 
 from sweetpotato.app import App
-
 from sweetpotato.components import View, Text
 
 
