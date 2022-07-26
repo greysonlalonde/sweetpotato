@@ -30,7 +30,6 @@ class App:
     Args:
         component: Top level component, default is the sweetpotato welcome screen.
         theme: Theme of @eva-design/eva, one of dark, light.
-        *args: Variable length argument list.
         **kwargs: Arbitrary keyword arguments.
 
     Examples:
