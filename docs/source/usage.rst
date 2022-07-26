@@ -19,7 +19,7 @@ For example:
         "flex": 1,
     }
 
-    content = [View(style=styles, children=[Text(text="Hello World")])]
+    content = View(style=styles, children=[Text(text="Hello World")])
     app = App(component=content)
 
    if __name__ == "__main__":
@@ -82,21 +82,20 @@ Example:
        "flex": 1,
    }
 
-   content = [
-        Layout(
-            style=layout_style,
-            children=[
-                View(
-                    children=[
-                        Text(
-                            text="I am using",
-                        ),
-                    ],
-                ),
-                View(children=[Button(title="UI Kitten")]),
-            ]
-        )
-   ]
+   content = Layout(
+        style=layout_style,
+        children=[
+            View(
+                children=[
+                    Text(
+                        text="I am using",
+                    ),
+                ],
+            ),
+            View(children=[Button(title="UI Kitten")]),
+        ]
+   )
+
 
    app = App(component=content, theme="dark")
 
