@@ -18,7 +18,7 @@ class Wrapper(ABC):
     """Wrapping interface for components."""
 
     @abstractmethod
-    def wrap(self, component, theme, **kwargs) -> CompositeType:
+    def wrap(self, component, theme: Optional[str] = None, **kwargs) -> CompositeType:
         """Abstract component wrapping."""
         return component
 
@@ -27,7 +27,7 @@ class UIKittenWrapper(Wrapper):
     """Adds UI Kitten support to app."""
 
     def wrap(
-        self, component: CompositeType, theme: Optional[str] = None, **kwargs
+            self, component: CompositeType, theme: Optional[str] = None, **kwargs
     ) -> CompositeType:
         """Wraps component in UI Kitten if enabled.
 
@@ -56,7 +56,7 @@ class AuthenticationWrapper(Wrapper):
     """
 
     def wrap(
-        self, component: CompositeType, theme: Optional[str] = None, **kwargs
+            self, component: CompositeType, theme: Optional[str] = None, **kwargs
     ) -> CompositeType:
         """Wraps component in AuthenticationProvider if enabled.
 
@@ -80,7 +80,7 @@ class NavigationWrapper(Wrapper):
     """
 
     def wrap(
-        self, component: CompositeType, theme: Optional[str] = None, **kwargs
+            self, component: CompositeType, theme: Optional[str] = None, **kwargs
     ) -> CompositeType:
         """Wraps component in NavigationContainer if enabled.
 
@@ -107,7 +107,7 @@ class SafeAreaWrapper(Wrapper):
     """
 
     def wrap(
-        self, component: CompositeType, theme: Optional[str] = None, **kwargs
+            self, component: CompositeType, theme: Optional[str] = None, **kwargs
     ) -> CompositeType:
         """Wraps component in SafeAreaProvider.
 
@@ -127,16 +127,15 @@ class ContextWrapper(
 ):
     """Checks for and adds navigation, authentication, and ui-kitten contexts.
 
-
     Todo:
         * Add docstrings
     """
 
     def wrap(
-        self,
-        component: Union[CompositeType, None],
-        theme: Optional[str] = None,
-        **kwargs,
+            self,
+            component: Union[CompositeType, None],
+            theme: Optional[str] = None,
+            **kwargs,
     ) -> CompositeType:
         """Checks and wraps component in provided wrappers, if configured.
 
@@ -147,6 +146,7 @@ class ContextWrapper(
         Returns:
             Composite.
         """
+        kwargs['theme'] = theme
         component.is_root = True
         component = super().wrap(component, **kwargs)
         return component

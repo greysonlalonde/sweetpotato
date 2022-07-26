@@ -1,4 +1,4 @@
-"""Default React Native component props.
+"""Default component props.
 
-For more information on props, see `this page <https://reactnative.dev/docs/props>`_
+For more information on props, see `<https://reactnative.dev/docs/props>`_
 """

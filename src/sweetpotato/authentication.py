@@ -65,12 +65,14 @@ def login() -> dict:
     return login_screen
 
 
-#
-# auth_state = {"username": "", "password": "", "secureTextEntry": True}
-
-
 class AuthenticationProvider(Composite):
     """Authentication provider for app.
+
+    Args:
+        functions: list of functions passes to authentication component.
+        login_screen: function returning login screen component.
+        login_screen_name: Name of login screen.
+        kwargs: Arbitrary keyword arguments.
 
     Attributes:
         _screens: Set of all screens under authentication.

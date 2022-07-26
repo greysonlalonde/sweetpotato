@@ -1,5 +1,5 @@
 """
-Provides props for components.
+Allowed props for React Native components.
 """
 BUTTON_PROPS: set = {
     "color",
@@ -8,7 +8,7 @@ BUTTON_PROPS: set = {
     "title",
     "onPress",
     "children",
-}
+}  #: Default allowed props for Button component.
 
 IMAGE_PROPS: set = {
     "onPartialLoad",
@@ -27,7 +27,7 @@ IMAGE_PROPS: set = {
     "fadeDuration",
     "capInsets",
     "resizeMode",
-}
+}  #: Default allowed props for Image component.
 
 NAVIGATION_PROPS: set = set()
 
@@ -138,9 +138,9 @@ SCROLL_VIEW_PROPS: set = {
     # "indicatorStyle",
     # "pinchGestureEnabled",
     # "automaticallyAdjustsScrollIndicatorInsets",
-}
+}  #: Default allowed props for ScrollView component.
 
-FLAT_LIST_PROPS: set = set()
+FLAT_LIST_PROPS: set = set()  #: Default allowed props for FlatList component.
 
 TEXT_PROPS: set = {
     "children",
@@ -189,7 +189,7 @@ TEXT_PROPS: set = {
     # "minimumFontScale",
     # "pressRetentionOffset",
     # "onLongPress",
-}
+}  #: Default allowed props for Text component.
 
 TEXT_INPUT_PROPS: set = {
     "allowFontScaling",
@@ -296,9 +296,14 @@ TEXT_INPUT_PROPS: set = {
     # "inputAccessoryViewID",
     # "onChangeText",
     "secureTextEntry",
-}
+}  #: Default allowed props for TextInput component.
 
-INPUT_PROPS: set = {"onChangeText", "placeholder", "value", "secureTextEntry"}
+INPUT_PROPS: set = {
+    "onChangeText",
+    "placeholder",
+    "value",
+    "secureTextEntry",
+}  #: Default allowed props for Input component.
 
 VIEW_PROPS: set = {
     "functions",
@@ -364,7 +369,7 @@ VIEW_PROPS: set = {
     # "onAccessibilityEscape",
     # "onMagicTap",
     "children",
-}
+}  #: Default allowed props for View component.
 
 ACTIVITY_INDICATOR_PROPS: set = {
     # need to look at extending view props here
@@ -372,14 +377,16 @@ ACTIVITY_INDICATOR_PROPS: set = {
     "color",
     "hidesWhenStopped",
     "size",
-}
+}  #: Default allowed props for ActivityIndicator component.
 
-TOUCHABLE_OPACITY_PROPS: set = set()
+TOUCHABLE_OPACITY_PROPS: set = (
+    set()
+)  #: Default allowed props for TouchableOpacity component.
 
-STYLE_SHEET_PROPS: set = set()
+STYLE_SHEET_PROPS: set = set()  #: Default allowed props for StyleSheet component.
 
-APP_PROPS: set = {"state"}
+APP_PROPS: set = {"state"}  #: Default allowed props for App component.
 
 SAFE_AREA_PROVIDER_PROPS: set = {
     "children",
-}
+}  #: Default allowed props for SafeAreaProvider component.

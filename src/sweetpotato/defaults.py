@@ -1,21 +1,15 @@
-"""Default attributes for :class:`sweetpotato.config.default_settings.Settings` object.
+"""Default attributes for :class:`~sweetpotato.config.default_settings.Settings`."""
 
-Attributes:
-    UI_KITTEN_COMPONENTS: Available UI Kitten components.
-    APP_COMPONENT: Name of application, defaults to `'App'`.
-    APP_PROPS_DEFAULT: Default props for application.
-    APP_REPR_DEFAULT: String representation of .js class component
-"""
 UI_KITTEN_COMPONENTS: set = {
     "Text",
     "Input",
     "TextInput",
     "Button",
-}
+}  #: List of @ui-kitten/components replacements.
 
-APP_COMPONENT: str = "App"
+APP_COMPONENT: str = "App"  #: Name of application component.
 
-APP_PROPS_DEFAULT: set = {"state", "theme"}
+APP_PROPS_DEFAULT: set = {"state", "theme"}  #: Default allowed props for application.
 
 APP_REPR_DEFAULT: str = """
 import React from 'react';
@@ -36,4 +30,4 @@ export default class <NAME> extends React.Component {
                 <CHILDREN>
         );
     }
-}"""
+}"""  #: Default .js string representation of application component.
