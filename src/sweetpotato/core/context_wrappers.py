@@ -4,6 +4,7 @@ Todo:
     * Add typing.
 """
 from abc import abstractmethod, ABC
+from typing import Union, Optional
 
 from sweetpotato.authentication import AuthenticationProvider
 from sweetpotato.components import SafeAreaProvider
@@ -17,23 +18,22 @@ class Wrapper(ABC):
     """Wrapping interface for components."""
 
     @abstractmethod
-    def wrap(self, component, **kwargs) -> CompositeType:
+    def wrap(self, component, theme, **kwargs) -> CompositeType:
         """Abstract component wrapping."""
         return component
 
 
 class UIKittenWrapper(Wrapper):
-    """Adds UI Kitten support to app.
+    """Adds UI Kitten support to app."""
 
-    Todo:
-        * Replace general exception with custom exception.
-    """
-
-    def wrap(self, component: CompositeType, **kwargs) -> CompositeType:
+    def wrap(
+        self, component: CompositeType, theme: Optional[str] = None, **kwargs
+    ) -> CompositeType:
         """Wraps component in UI Kitten if enabled.
 
         Args:
-            component (Composite): ...
+            theme: Theme of UI Kitten if enabled.
+            component: ...
 
         Returns:
             Composite.
@@ -55,10 +55,13 @@ class AuthenticationWrapper(Wrapper):
         * Add docstrings.
     """
 
-    def wrap(self, component: CompositeType, **kwargs) -> CompositeType:
+    def wrap(
+        self, component: CompositeType, theme: Optional[str] = None, **kwargs
+    ) -> CompositeType:
         """Wraps component in AuthenticationProvider if enabled.
 
         Args:
+            theme: Theme of UI Kitten if enabled.
             component (Composite): ...
 
         Returns:
@@ -76,10 +79,13 @@ class NavigationWrapper(Wrapper):
         * Add docstrings.
     """
 
-    def wrap(self, component: CompositeType, **kwargs) -> CompositeType:
+    def wrap(
+        self, component: CompositeType, theme: Optional[str] = None, **kwargs
+    ) -> CompositeType:
         """Wraps component in NavigationContainer if enabled.
 
         Args:
+            theme: Theme of UI Kitten if enabled.
             component (Composite): ...
 
         Returns:
@@ -100,10 +106,13 @@ class SafeAreaWrapper(Wrapper):
         * Add docstrings
     """
 
-    def wrap(self, component: CompositeType, **kwargs) -> CompositeType:
+    def wrap(
+        self, component: CompositeType, theme: Optional[str] = None, **kwargs
+    ) -> CompositeType:
         """Wraps component in SafeAreaProvider.
 
         Args:
+            theme: Theme of UI Kitten if enabled.
             component (Composite): ...
 
         Returns:
@@ -123,10 +132,16 @@ class ContextWrapper(
         * Add docstrings
     """
 
-    def wrap(self, component: CompositeType | None, **kwargs) -> CompositeType:
+    def wrap(
+        self,
+        component: Union[CompositeType, None],
+        theme: Optional[str] = None,
+        **kwargs,
+    ) -> CompositeType:
         """Checks and wraps component in provided wrappers, if configured.
 
         Args:
+            theme: Theme of UI Kitten if enabled.
             component (Composite): ...
 
         Returns:

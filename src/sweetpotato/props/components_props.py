@@ -1,7 +1,7 @@
 """
 Provides props for components.
 """
-BUTTON_PROPS = {
+BUTTON_PROPS: set = {
     "color",
     "hasTVPreferredFocus",
     "touchSoundDisabled",
@@ -10,7 +10,7 @@ BUTTON_PROPS = {
     "children",
 }
 
-IMAGE_PROPS = {
+IMAGE_PROPS: set = {
     "onPartialLoad",
     "onProgress",
     "onLoadStart",
@@ -29,9 +29,9 @@ IMAGE_PROPS = {
     "resizeMode",
 }
 
-NAVIGATION_PROPS = {}
+NAVIGATION_PROPS: set = set()
 
-SCROLL_VIEW_PROPS = {
+SCROLL_VIEW_PROPS: set = {
     "StickyHeaderComponent",
     "alwaysBounceHorizontal",
     "alwaysBounceVertical",
@@ -140,9 +140,9 @@ SCROLL_VIEW_PROPS = {
     # "automaticallyAdjustsScrollIndicatorInsets",
 }
 
-FLAT_LIST_PROPS = {}
+FLAT_LIST_PROPS: set = set()
 
-TEXT_PROPS = {
+TEXT_PROPS: set = {
     "children",
     "accessibilityHint",
     "accessibilityLabel",
@@ -191,7 +191,7 @@ TEXT_PROPS = {
     # "onLongPress",
 }
 
-TEXT_INPUT_PROPS = {
+TEXT_INPUT_PROPS: set = {
     "allowFontScaling",
     "autoCapitalize",
     "autoComplete",
@@ -298,9 +298,9 @@ TEXT_INPUT_PROPS = {
     "secureTextEntry",
 }
 
-INPUT_PROPS = {"onChangeText", "placeholder", "value", "secureTextEntry"}
+INPUT_PROPS: set = {"onChangeText", "placeholder", "value", "secureTextEntry"}
 
-VIEW_PROPS = {
+VIEW_PROPS: set = {
     "functions",
     "accessibilityActions",
     "accessibilityElementsHidden",
@@ -366,7 +366,7 @@ VIEW_PROPS = {
     "children",
 }
 
-ACTIVITY_INDICATOR_PROPS = {
+ACTIVITY_INDICATOR_PROPS: set = {
     # need to look at extending view props here
     "animating",
     "color",
@@ -374,12 +374,12 @@ ACTIVITY_INDICATOR_PROPS = {
     "size",
 }
 
-TOUCHABLE_OPACITY_PROPS = {}
+TOUCHABLE_OPACITY_PROPS: set = set()
 
-STYLE_SHEET_PROPS = {}
+STYLE_SHEET_PROPS: set = set()
 
-APP_PROPS = {"state"}
+APP_PROPS: set = {"state"}
 
-SAFE_AREA_PROVIDER_PROPS = {
+SAFE_AREA_PROVIDER_PROPS: set = {
     "children",
 }

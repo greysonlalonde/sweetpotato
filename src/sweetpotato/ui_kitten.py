@@ -16,6 +16,9 @@ class ApplicationProvider(Composite):
     """Implementation of ui-kitten ApplicationProvider component.
 
     See https://akveo.github.io/react-native-ui-kitten/docs/components/application-provider
+
+    Args:
+        kwargs: Arbitrary keyword arguments.
     """
 
     def __init__(self, **kwargs) -> None:

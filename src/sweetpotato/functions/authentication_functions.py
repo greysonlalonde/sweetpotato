@@ -2,7 +2,7 @@
 Default authentication and credential storage functions.
 
 """
-LOGIN = """
+LOGIN: str = """
 login = () => {
         let formData = new FormData();
         formData.append("username", this.state.username);
@@ -34,7 +34,7 @@ login = () => {
     }
 """
 
-LOGOUT = """
+LOGOUT: str = """
 logout = () => {
         this.removeUserSession()
             .then((tokens) => {
@@ -58,7 +58,7 @@ logout = () => {
     }
 """
 
-SET_CREDENTIALS = """
+SET_CREDENTIALS: str = """
 setUsername = (text) => {
         this.setState({username: text});
     }
@@ -68,7 +68,7 @@ setUsername = (text) => {
     }
     """
 
-STORE_DATA = """_storeData = async (tokens) => {
+STORE_DATA: str = """_storeData = async (tokens) => {
         try {
             await AsyncStorage.setItem(
                 'access_token',
@@ -83,7 +83,7 @@ STORE_DATA = """_storeData = async (tokens) => {
         }
     };"""
 
-RETRIEVE_DATA = """_retrieveData = async () => {
+RETRIEVE_DATA: str = """_retrieveData = async () => {
         try {
             const refreshToken = await AsyncStorage.getItem('refresh_token');
             const accessToken = await AsyncStorage.getItem('access_token');
@@ -93,7 +93,7 @@ RETRIEVE_DATA = """_retrieveData = async () => {
         }
     };"""
 
-STORE_SESSION = """
+STORE_SESSION: str = """
 storeUserSession = async (data) => {
         if (this.state.platform === "mobile") {
             try {
@@ -122,7 +122,7 @@ storeUserSession = async (data) => {
     }
 """
 
-RETRIEVE_SESSION = """
+RETRIEVE_SESSION: str = """
 retrieveUserSession = async () => {
         if (this.state.platform === "mobile") {
             try {
@@ -145,7 +145,7 @@ retrieveUserSession = async () => {
     }
 """
 
-REMOVE_SESSION = """
+REMOVE_SESSION: str = """
 removeUserSession = async () => {
         try {
             const access_token = await SecureStore.getItemAsync("access_token");
@@ -159,7 +159,7 @@ removeUserSession = async () => {
     }
 """
 
-TIMEOUT = """
+TIMEOUT: str = """
 timeout(delay) {
         return new Promise((res) => setTimeout(res, delay));
     }

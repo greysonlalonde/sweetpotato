@@ -1,9 +1,10 @@
 """Default attributes for :class:`sweetpotato.config.default_settings.Settings` object.
 
 Attributes:
-    ~UI_KITTEN_COMPONENTS: ...
-    ~APP_DEFAULT: ...
-    ~APP_PROPS_DEFAULT: ...
+    UI_KITTEN_COMPONENTS: Available UI Kitten components.
+    APP_COMPONENT: Name of application, defaults to `'App'`.
+    APP_PROPS_DEFAULT: Default props for application.
+    APP_REPR_DEFAULT: String representation of .js class component
 """
 UI_KITTEN_COMPONENTS: set = {
     "Text",
