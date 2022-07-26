@@ -90,10 +90,12 @@ html_theme_options = {
     #     "color-brand-primary": "#7C4DFF",
     #     "color-brand-content": "#7C4DFF",
     # },
-    # "dark_css_variables": {
-    #     "color-brand-primary": "#7C4DFF",
-    #     "color-brand-content": "#7C4DFF",
-    # },
+    "dark_css_variables": {
+        "color-brand-primary": "#7C4DFF",
+        "color-brand-content": "#7C4DFF",
+        "color-highlight-on-target": "#7C4DFF",
+        "color-background-item": "var(--color-background-secondary)"
+    },
 }
 html_title = "Sweetpotato"
 html_logo = "_static/sweetpotato.png"
