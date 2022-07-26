@@ -51,9 +51,6 @@ class Button(Composite):
 
     Example:
        ``button = Button(title="foo")``
-
-    Todo:
-        * Need to refactor as composite. Buttons can have children, i.e. text.
     """
 
     def __init__(self, **kwargs) -> None:

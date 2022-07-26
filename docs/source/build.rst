@@ -1,5 +1,6 @@
 Build
 =======
 
-.. _build::
+Packaging an app
+----------------
 

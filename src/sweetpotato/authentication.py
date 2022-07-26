@@ -14,22 +14,25 @@ from sweetpotato.components import Composite
 from sweetpotato.config import settings
 from sweetpotato.navigation import create_native_stack_navigator
 
-view_style = {
-    "justifyContent": "center",
-    "alignItems": "center",
-    "width": "100%",
-    "flex": 1,
-}
-row_style = {
-    "flexDirection": "row",
-    "marginTop": 4,
-    "width": "100%",
-    "justifyContent": "center",
-}
-
 
 def login() -> dict:
-    """Provides default login plugin screen."""
+    """Provides default login plugin screen.
+
+    Returns:
+        Dictionary of styles and components to be passed to a View or Layout instance.
+    """
+    view_style: dict = {
+        "justifyContent": "center",
+        "alignItems": "center",
+        "width": "100%",
+        "flex": 1,
+    }
+    row_style: dict = {
+        "flexDirection": "row",
+        "marginTop": 4,
+        "width": "100%",
+        "justifyContent": "center",
+    }
     username_row = View(
         style=row_style,
         children=[
@@ -70,8 +73,8 @@ class AuthenticationProvider(Composite):
     """Authentication provider for app.
 
     Attributes:
-        _screens (set): Set of all screens under authentication.
-        _screen_number (int): Amount of screens.
+        _screens: Set of all screens under authentication.
+        _screen_number: Amount of screens.
     """
 
     package = None

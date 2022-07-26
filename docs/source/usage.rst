@@ -4,7 +4,7 @@ Usage
 Creating an app
 ----------------
 
-To create an application, import the App class, give it some child elements *wrapped in a list*, and run the app.
+To create an application, import the :class:`~sweetpotato.app.App` class, give it some child elements *wrapped in a list*, and run the app.
 
 For example:
 
@@ -32,7 +32,7 @@ For example:
 
 .. warning::
 
-    Don't forget to wrap your children in a list. Otherwise, a :class:`~sweetpotato.core.exceptions.NoChildrenError` will be raised.
+    Don't forget to wrap your children in a list. Otherwise, a :class:`~TypeError` will be raised.
 
 
 Navigation
@@ -62,7 +62,7 @@ Design
 ----------------
 
 Sweetpotato utilizes the React Native `UI Kitten <https://akveo.github.io/react-native-ui-kitten/>`_ framework for quick and aesthetic system design.
-To enable it, simply import the :mod:`~sweetpotato.settings`, set :data:`sweetpotato.settings.USE_UI_KITTEN`, and use :mod:`sweetpotato.ui_kitten` components. Make sure to read the UI Kitten documentation
+To enable it, simply import the :data:`~sweetpotato.config.settings`, set :attr:`~sweetpotato.config.default_settings.Settings.USE_UI_KITTEN`, and use :mod:`~sweetpotato.ui_kitten` components. Make sure to read the UI Kitten documentation
 and set a theme for the :class:`~sweetpotato.app.App` class.
 
 Example:
@@ -107,20 +107,19 @@ Example:
 
 Functions
 ----------------
-Sweetpotato supports passing rendering pure javascript functions. Pass the functions in a list to the top level component.
+Sweetpotato supports rendering of pure javascript functions. Pass the functions in a list to the top level component.
 
 Example:
 
 .. code-block:: python
 
    component = View(
-    functions=["testFunction = () => {alert('Hello, world')}"],
-    children=[Button(title="Press", onPress="() => this.testFunction()")]
+       functions=["testFunction = () => {alert('Hello, world')}"],
+       children=[Button(title="Press", onPress="() => this.testFunction()")]
    )
 
    app = App(
-        component=component}
-
+       component=component
    )
 
    if __name__ == "__main__":

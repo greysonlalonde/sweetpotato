@@ -18,10 +18,7 @@ class Renderer(ABC):
         """Accepts a component and performs an action.
 
         Args:
-            obj (Component | Composite): Component instance.
-
-        Returns:
-            None
+            obj: Component instance.
         """
         raise NotImplementedError
 
@@ -36,9 +33,6 @@ class ApplicationRenderer(Renderer):
         """Accepts a component and performs ....
 
         Args:
-            obj (Composite): Component object.
-
-        Returns:
-            None
+            obj: Component object.
         """
         cls.dom.add_node(obj)

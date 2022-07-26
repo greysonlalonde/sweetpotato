@@ -39,7 +39,7 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
-    "sphinx_rtd_dark_mode",
+    # "sphinx_rtd_dark_mode",
 ]
 
 # napoleon
@@ -64,8 +64,8 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
-# html_theme = "sphinx_book_theme"
+# html_theme = "sphinx_rtd_theme"
+html_theme = "sphinx_book_theme"
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
