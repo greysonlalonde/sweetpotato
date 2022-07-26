@@ -39,9 +39,8 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
-    'sphinx_copybutton',
+    "sphinx_copybutton",
     "sphinxext.opengraph",
-    # "sphinx_rtd_dark_mode",
 ]
 
 # napoleon
