@@ -32,7 +32,7 @@ login = () => {
                 console.log(`stored error = ${error}`);
             });
     }
-"""
+"""  #: Login function for authentication.
 
 LOGOUT: str = """
 logout = () => {
@@ -56,7 +56,7 @@ logout = () => {
                 console.log(JSON.stringify(error));
             });
     }
-"""
+"""  #: Logout function for authentication.
 
 SET_CREDENTIALS: str = """
 setUsername = (text) => {
@@ -66,7 +66,7 @@ setUsername = (text) => {
     setPassword = (text) => {
         this.setState({password: text, password2: text});
     }
-    """
+"""  #: Credential setting function for authentication.
 
 STORE_DATA: str = """_storeData = async (tokens) => {
         try {
@@ -81,7 +81,7 @@ STORE_DATA: str = """_storeData = async (tokens) => {
         } catch (error) {
             console.log(error)
         }
-    };"""
+};"""  #: Data storage setting function for authentication.
 
 RETRIEVE_DATA: str = """_retrieveData = async () => {
         try {
@@ -91,7 +91,7 @@ RETRIEVE_DATA: str = """_retrieveData = async () => {
         } catch (error) {
             console.log(error);
         }
-    };"""
+};"""  #: Data retrieval function for authentication.
 
 STORE_SESSION: str = """
 storeUserSession = async (data) => {
@@ -120,7 +120,7 @@ storeUserSession = async (data) => {
             console.log("error")
         }
     }
-"""
+"""  #: Session storage function for authentication.
 
 RETRIEVE_SESSION: str = """
 retrieveUserSession = async () => {
@@ -143,7 +143,7 @@ retrieveUserSession = async () => {
             console.log("error")
         }
     }
-"""
+"""  #: Session retrieval function for authentication.
 
 REMOVE_SESSION: str = """
 removeUserSession = async () => {
@@ -157,10 +157,10 @@ removeUserSession = async () => {
             this.setState({error: error.detail});
         }
     }
-"""
+"""  #: Session removal function for authentication.
 
 TIMEOUT: str = """
 timeout(delay) {
         return new Promise((res) => setTimeout(res, delay));
     }
-"""
+"""  #: Generic timeout function for authentication.

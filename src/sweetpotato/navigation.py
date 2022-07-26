@@ -32,7 +32,7 @@ class Screen(Composite):
     Args:
         functions: List of string representation of .js based functions.
         state: Dictionary of allowed state values for component.
-        **kwargs: Arbitrary keyword arguments.
+        kwargs: Arbitrary keyword arguments.
 
     Attributes:
         screen_name: Name of specific screen.
@@ -89,7 +89,7 @@ class BaseNavigator(Composite):
 
     Args:
         name: Name/type of navigator.
-        **kwargs: Arbitrary keyword arguments.
+        kwargs: Arbitrary keyword arguments.
 
     Attributes:
         name: Name/type of navigator.

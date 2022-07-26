@@ -1,7 +1,7 @@
 <img src="https://raw.githubusercontent.com/greysonlalonde/sweetpotato/main/media/sweetpotato_github_banner.png" height=25% alt="">
 
 -----
-[![alt text](https://img.shields.io/badge/pypi-0.4.a0-blue)](https://pypi.org/project/sweetpotato)
+[![alt text](https://img.shields.io/badge/pypi-0.5.a0-blue)](https://pypi.org/project/sweetpotato)
 [![alt text](https://img.shields.io/badge/license-MIT-green)](https://github.com/greysonlalonde/sweetpotato/blob/main/LICENSE)
 [![Documentation Status](https://readthedocs.org/projects/sweetpotato/badge/?version=latest)](https://sweetpotato.readthedocs.io/en/latest/?badge=latest)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -65,28 +65,3 @@ if __name__ == "__main__":
 
 iOS, Android, and web:
 <img src="https://raw.githubusercontent.com/greysonlalonde/sweetpotato/main/media/sweetpotato_readme_example.jpg" width=100% height=25% alt="">
-
-Navigation example:
-
-```python
-from sweetpotato.app import App
-from sweetpotato.config import settings
-from sweetpotato.navigation import create_bottom_tab_navigator
-from sweetpotato.components import (
-    View,
-    Text,
-)
-
-settings.USE_NAVIGATION = True
-
-tab = create_bottom_tab_navigator()
-
-tab.screen(screen_name="Screen One", children=[View(children=[Text(text="Hello")])])
-tab.screen(screen_name="Screen Two", children=[View(children=[Text(text="World")])])
-
-app = App(component=tab)
-
-if __name__ == "__main__":
-    app.run()
-```
-

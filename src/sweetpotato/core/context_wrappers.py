@@ -18,7 +18,7 @@ class Wrapper(ABC):
     """Wrapping interface for components."""
 
     @abstractmethod
-    def wrap(self, component, theme, **kwargs) -> CompositeType:
+    def wrap(self, component, theme: Optional[str] = None, **kwargs) -> CompositeType:
         """Abstract component wrapping."""
         return component
 
@@ -127,7 +127,6 @@ class ContextWrapper(
 ):
     """Checks for and adds navigation, authentication, and ui-kitten contexts.
 
-
     Todo:
         * Add docstrings
     """
@@ -147,6 +146,7 @@ class ContextWrapper(
         Returns:
             Composite.
         """
+        kwargs["theme"] = theme
         component.is_root = True
         component = super().wrap(component, **kwargs)
         return component

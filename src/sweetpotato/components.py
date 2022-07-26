@@ -26,7 +26,7 @@ class Text(Component):
 
     Args:
         text: Inner content for Text component inplace of children.
-        **kwargs: Arbitrary allowed props for component.
+        kwargs: Arbitrary allowed props for component.
     """
 
     def __init__(self, text: Optional[str] = None, **kwargs) -> None:
@@ -47,7 +47,7 @@ class Button(Composite):
 
     Keyword Args:
         title: Title for button.
-        **kwargs: Arbitrary allowed props for component.
+        kwargs: Arbitrary allowed props for component.
 
     Example:
        ``button = Button(title="foo")``

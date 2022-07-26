@@ -154,7 +154,7 @@ class Component(metaclass=MetaComponent):
         attrs: String of given attributes for component.
         variables: Contains variables (if any) belonging to given component.
         parent: Name of parent component, defaults to `'App'`
-        **kwargs: Arbitrary keyword arguments.
+        kwargs: Arbitrary keyword arguments.
 
     Example:
         ``component = Component(children="foo")``
@@ -209,7 +209,7 @@ class Composite(Component):
         variables: Contains variables (if any) belonging to given component.
         state: Dictionary of allowed state values for component.
         functions: Functions for component, passed to top level component.
-        **kwargs: Arbitrary keyword arguments.
+        kwargs: Arbitrary keyword arguments.
 
     Attributes:
         _children: Inner content for component.

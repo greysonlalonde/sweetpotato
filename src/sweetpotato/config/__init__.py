@@ -8,4 +8,4 @@ Todo:
 """
 from sweetpotato.config.default_settings import Settings
 
-settings = Settings()
+settings = Settings()  #: default settings instance for app..

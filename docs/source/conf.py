@@ -22,8 +22,8 @@ copyright = "2022, Greyson R. LaLonde"
 author = "Greyson R. LaLonde"
 
 # The full version, including alpha/beta/rc tags
-release = "v0.4.0-alpha"
-version = "v0.4.0-alpha"
+release = "v0.5.0-alpha"
+version = "v0.5.0-alpha"
 
 # -- General configuration ---------------------------------------------------
 
@@ -41,6 +41,7 @@ extensions = [
     "sphinx.ext.todo",
     "sphinx_copybutton",
     "sphinxext.opengraph",
+    "sphinx_design",
 ]
 
 # napoleon
@@ -93,7 +94,6 @@ html_theme_options = {
     "dark_css_variables": {
         "color-brand-primary": "#7C4DFF",
         "color-brand-content": "#7C4DFF",
-        "color-highlight-on-target": "#7C4DFF",
         "color-background-item": "var(--color-background-secondary)",
     },
 }
