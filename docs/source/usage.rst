@@ -13,14 +13,14 @@ For example:
    from sweetpotato.components import View, Text
    from sweetpotato.app import App
 
-    styles = {
+   styles = {
         "justifyContent": "center",
         "alignItems": "center",
         "flex": 1,
-    }
+   }
 
-    content = View(style=styles, children=[Text(text="Hello World")])
-    app = App(component=content)
+   content = View(style=styles, children=[Text(text="Hello World")])
+   app = App(component=content)
 
    if __name__ == "__main__":
        app.run()
