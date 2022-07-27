@@ -26,13 +26,10 @@ class Wrapper(ABC):
 class UIKittenWrapper(Wrapper):
     """Adds UI Kitten support to app."""
 
-    def wrap(
-        self, component: CompositeType, theme: Optional[str] = None, **kwargs
-    ) -> CompositeType:
+    def wrap(self, component: CompositeType, **kwargs) -> CompositeType:
         """Wraps component in UI Kitten if enabled.
 
         Args:
-            theme: Theme of UI Kitten if enabled.
             component: ...
 
         Returns:
@@ -55,13 +52,10 @@ class AuthenticationWrapper(Wrapper):
         * Add docstrings.
     """
 
-    def wrap(
-        self, component: CompositeType, theme: Optional[str] = None, **kwargs
-    ) -> CompositeType:
+    def wrap(self, component: CompositeType, **kwargs) -> CompositeType:
         """Wraps component in AuthenticationProvider if enabled.
 
         Args:
-            theme: Theme of UI Kitten if enabled.
             component (Composite): ...
 
         Returns:
@@ -79,13 +73,10 @@ class NavigationWrapper(Wrapper):
         * Add docstrings.
     """
 
-    def wrap(
-        self, component: CompositeType, theme: Optional[str] = None, **kwargs
-    ) -> CompositeType:
+    def wrap(self, component: CompositeType, **kwargs) -> CompositeType:
         """Wraps component in NavigationContainer if enabled.
 
         Args:
-            theme: Theme of UI Kitten if enabled.
             component (Composite): ...
 
         Returns:
@@ -106,13 +97,10 @@ class SafeAreaWrapper(Wrapper):
         * Add docstrings
     """
 
-    def wrap(
-        self, component: CompositeType, theme: Optional[str] = None, **kwargs
-    ) -> CompositeType:
+    def wrap(self, component: CompositeType, **kwargs) -> CompositeType:
         """Wraps component in SafeAreaProvider.
 
         Args:
-            theme: Theme of UI Kitten if enabled.
             component (Composite): ...
 
         Returns:
@@ -134,19 +122,16 @@ class ContextWrapper(
     def wrap(
         self,
         component: Union[CompositeType, None],
-        theme: Optional[str] = None,
         **kwargs,
     ) -> CompositeType:
         """Checks and wraps component in provided wrappers, if configured.
 
         Args:
-            theme: Theme of UI Kitten if enabled.
             component (Composite): ...
 
         Returns:
             Composite.
         """
-        kwargs["theme"] = theme
         component.is_root = True
         component = super().wrap(component, **kwargs)
         return component

@@ -49,7 +49,7 @@ class App:
         self._context = ContextWrapper() if not context else context
         self._build = Build() if not build else build
         self._context.wrap(
-            component if component else default_screen(), theme, **kwargs
+            component if component else default_screen(), theme=theme, **kwargs
         ).register(renderer=ApplicationRenderer)
 
     def run(self, platform: Optional[str] = None) -> None:

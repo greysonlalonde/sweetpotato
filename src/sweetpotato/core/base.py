@@ -41,9 +41,7 @@ class DOM(metaclass=ThreadSafe):
         self.graph_dict[component.parent]["variables"].append(component.variables)
         self.graph_dict[component.parent]["children"] = component
         if component.is_composite and component.is_root:
-            self.graph_dict[component.parent]["functions"].append(
-                "\n".join(component._functions)
-            )
+            self.graph_dict[component.parent]["functions"].append(component.functions)
 
 
 class MetaComponent(type):
@@ -128,6 +126,7 @@ class MetaComponent(type):
     @staticmethod
     def __set_props(name: str, cls_dict: dict) -> dict:
         """Imports and sets attribute props for all subclasses.
+
         Args:
             name: React Native component name.
             cls_dict: Contains :class:`~sweetpotato.core.base.Component` attributes.
@@ -157,7 +156,7 @@ class Component(metaclass=MetaComponent):
         parent: Name of parent component, defaults to `'App'`
 
     Example:
-        ``component = Component(children="foo")``
+        component = Component(children="foo")
     """
 
     is_composite: bool = False  #: Indicates whether component may have inner content.
@@ -196,18 +195,6 @@ class Component(metaclass=MetaComponent):
         """
         renderer.accept(self)
 
-    @staticmethod
-    def render_attrs(attrs: dict[str, str]) -> str:
-        """Formats attribute to React Native friendly representation.
-
-        Args:
-            attrs: Dictionary of allowed attributes specified in component props.
-
-        Returns:
-            String representation of dictionary.
-        """
-        return "".join([f" {k}={'{'}{v}{'}'}" for k, v in attrs.items()])
-
     def __repr__(self) -> str:
         if self._children:
             return f"<{self.name} {self.attrs}>{self.children}</{self.name}>"
@@ -229,7 +216,7 @@ class Composite(Component):
         _functions: Functions for component, passed to top level component.
 
     Example:
-        ``composite = Composite(children=[])``
+        composite = Composite(children=[])
     """
 
     is_context: bool = False  #: Indicates whether component is a context, similar to an inline if else.
@@ -252,6 +239,11 @@ class Composite(Component):
     def children(self) -> str:
         """Property returning a string rendition of child components"""
         return "".join(map(repr, self._children))
+
+    @property
+    def functions(self) -> Optional[str]:
+        """Property returning string of variables (if any) belonging to given component."""
+        return "".join(self._functions)
 
     def register(self, renderer: RendererType) -> None:
         """Registers a specified renderer with component and child components.

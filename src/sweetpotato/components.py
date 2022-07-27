@@ -28,7 +28,7 @@ class Text(Component):
         kwargs: Arbitrary allowed props for component.
 
     Example:
-       ``text = Text(text="foo")``
+        text = Text(text="foo")
     """
 
     def __init__(self, text: Optional[str] = None, **kwargs) -> None:
@@ -52,7 +52,7 @@ class Button(Composite):
         kwargs: Arbitrary allowed props for component.
 
     Example:
-       ``button = Button(title="foo")``
+        button = Button(title="foo")
     """
 
     def __init__(self, **kwargs) -> None:
@@ -72,7 +72,7 @@ class Image(Component):
     See https://reactnative.dev/docs/image.
 
     Example:
-       ``image = Image(source={"uri": image_source})``
+        image = Image(source={"uri": image_source})
     """
 
 
@@ -102,16 +102,16 @@ class StyleSheet:
 
     See https://reactnative.dev/docs/stylesheet.
 
-    Todo:
-        * Add stylesheet methods.
-        * Add examples.
+    Args:
+        styles: Dictionary of dicts consisting of styles.
 
     Example:
-        from sweetpotato.components import StyleSheet
-
         styles = StyleSheet.create({
             "container": {"flex": 1, "justifyContent": "center", "alignItems": "center"}
         })
+
+    Todo:
+        * Implement compose and flatten methods.
     """
 
     def __init__(self, styles: dict[str, dict[str, Union[str, int]]]) -> None:
