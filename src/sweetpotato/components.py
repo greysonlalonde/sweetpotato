@@ -27,6 +27,9 @@ class Text(Component):
     Args:
         text: Inner content for Text component inplace of children.
         kwargs: Arbitrary allowed props for component.
+
+    Example:
+       ``text = Text(text="foo")``
     """
 
     def __init__(self, text: Optional[str] = None, **kwargs) -> None:
@@ -95,7 +98,7 @@ class ScrollView(Component):
     """
 
 
-class StyleSheet(Component):
+class StyleSheet:
     """React Native StyleSheet component.
 
     See https://reactnative.dev/docs/stylesheet.
@@ -105,8 +108,21 @@ class StyleSheet(Component):
         * Add examples.
     """
 
-    def __create(self, styles: dict[str, str]) -> None:
+    def __init__(self, styles):
+        self.styles = styles
+
+    @classmethod
+    def create(cls, styles: dict[str, dict[str, str]]) -> 'StyleSheet':
+        return cls(styles)
+
+    def compose(self):
         raise NotImplementedError
+
+    def flatten(self):
+        raise NotImplementedError
+
+    def __getattr__(self, item):
+        return self.styles[item]
 
 
 class TouchableOpacity(Composite):
