@@ -112,7 +112,7 @@ class StyleSheet:
         self.styles = styles
 
     @classmethod
-    def create(cls, styles: dict[str, dict[str, str]]) -> 'StyleSheet':
+    def create(cls, styles: dict[str, dict[str, str]]) -> "StyleSheet":
         return cls(styles)
 
     def compose(self):
