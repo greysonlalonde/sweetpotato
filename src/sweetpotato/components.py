@@ -3,10 +3,9 @@
 See the `React Native docs <https://reactnative.dev/docs/components-and-apis>`_ for more.
 
 Todo:
-    * Add Stylesheet class methods.
     * Add examples to all classes.
 """
-from typing import Optional
+from typing import Optional, Union
 
 from sweetpotato.config import settings
 from sweetpotato.core.base import Component, Composite
@@ -115,11 +114,11 @@ class StyleSheet:
         })
     """
 
-    def __init__(self, styles):
+    def __init__(self, styles: dict[str, dict[str, Union[str, int]]]) -> None:
         self.styles = styles
 
     @classmethod
-    def create(cls, styles: dict[str, dict[str, str | int]]) -> "StyleSheet":
+    def create(cls, styles: dict[str, dict[str, Union[str, int]]]) -> "StyleSheet":
         """Method for creating stylesheet for use with components.
 
         Args:
@@ -127,15 +126,15 @@ class StyleSheet:
         """
         return cls(styles)
 
-    def compose(self):
+    def compose(self) -> None:
         """Not implemented."""
         raise NotImplementedError
 
-    def flatten(self):
+    def flatten(self) -> None:
         """Not implemented."""
         raise NotImplementedError
 
-    def __getattr__(self, item):
+    def __getattr__(self, item: str) -> dict:
         return self.styles[item]
 
 
