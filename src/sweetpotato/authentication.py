@@ -47,7 +47,7 @@ def login() -> dict:
         style=row_style,
         children=[
             TextInput(
-                placeholder="Password",
+                placeholder="'Password'",
                 value="this.state.password",
                 onChangeText="(text) => this.setPassword(text)",
                 secureTextEntry="this.state.secureTextEntry",
@@ -73,13 +73,9 @@ class AuthenticationProvider(Composite):
         login_screen: function returning login screen component.
         login_screen_name: Name of login screen.
         kwargs: Arbitrary keyword arguments.
-
-    Attributes:
-        _screens: Set of all screens under authentication.
-        _screen_number: Amount of screens.
     """
 
-    package = None
+    is_context = True
 
     def __init__(
         self,

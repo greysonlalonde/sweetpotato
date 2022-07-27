@@ -1,5 +1,4 @@
-"""Provides core functionality and utilities for components.
-"""
+"""Provides core functionality and utilities for components."""
 
 from threading import Lock
 

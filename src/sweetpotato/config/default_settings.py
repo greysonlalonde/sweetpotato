@@ -107,7 +107,6 @@ class Settings(metaclass=ThreadSafe):
         "components": "react-native",
         "ui_kitten": UIKitten.ui_kitten_components,
         "navigation": ReactNavigation.native,
-        "authentication": "Authentication",
     }  #: Major packages and corresponding sweetpotato modules.
     REPLACE_COMPONENTS: dict = {
         "StackNavigator": {
@@ -136,16 +135,6 @@ class Settings(metaclass=ThreadSafe):
             "import": "NavigationContainer",
             "name": "NavigationContainer",
         },
-        "AuthenticationProvider": {
-            "name": "AuthenticationProvider",
-            "import": "AuthenticationProvider",
-        },
-        "Authenticated": {
-            "package": "./Authenticated",
-            "name": "Authenticated",
-            "import": "Authenticated",
-        },
-        "Login": {"package": "./Login", "name": "Login", "import": "Login"},
     }  #: Components with replaceable imports/names/packages, such as the Text component.
 
     APP_IMPORTS: set = set()  #: Set of all imports for application.
