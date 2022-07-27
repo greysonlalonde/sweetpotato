@@ -106,19 +106,33 @@ class StyleSheet:
     Todo:
         * Add stylesheet methods.
         * Add examples.
+
+    Example:
+        from sweetpotato.components import StyleSheet
+
+        styles = StyleSheet.create({
+            "container": {"flex": 1, "justifyContent": "center", "alignItems": "center"}
+        })
     """
 
     def __init__(self, styles):
         self.styles = styles
 
     @classmethod
-    def create(cls, styles: dict[str, dict[str, str]]) -> "StyleSheet":
+    def create(cls, styles: dict[str, dict[str, str | int]]) -> "StyleSheet":
+        """Method for creating stylesheet for use with components.
+
+        Args:
+            styles: Dictionary of dicts consisting of styles.
+        """
         return cls(styles)
 
     def compose(self):
+        """Not implemented."""
         raise NotImplementedError
 
     def flatten(self):
+        """Not implemented."""
         raise NotImplementedError
 
     def __getattr__(self, item):

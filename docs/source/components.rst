@@ -23,6 +23,16 @@ react-native
 :class:`~sweetpotato.components.StyleSheet`
 ***************************************
 
+.. code-block:: python
+
+   from sweetpotato.components import StyleSheet, View
+
+   styles = StyleSheet.create({
+       "container": {"flex": 1, "justifyContent": "center", "alignItems": "center"}
+   })
+   view = View(style=styles.container)
+
+
 :class:`~sweetpotato.components.TextInput`
 ***************************************
 
