@@ -148,13 +148,13 @@ class Component(metaclass=MetaComponent):
     Args:
         children: Inner content for component.
         variables: Contains variables (if any) belonging to given component.
+        kwargs: Arbitrary keyword arguments.
 
     Attributes:
         _children: Inner content for component.
         _attrs: String of given attributes for component.
         _variables: Contains variables (if any) belonging to given component.
         parent: Name of parent component, defaults to `'App'`
-        kwargs: Arbitrary keyword arguments.
 
     Example:
         ``component = Component(children="foo")``
@@ -163,10 +163,10 @@ class Component(metaclass=MetaComponent):
     is_composite: bool = False  #: Indicates whether component may have inner content.
 
     def __init__(
-        self,
-        children: Optional[str] = None,
-        variables: Optional[list[str]] = None,
-        **kwargs,
+            self,
+            children: Optional[str] = None,
+            variables: Optional[list[str]] = None,
+            **kwargs,
     ) -> None:
         self._attrs = kwargs
         self._children = children
@@ -237,11 +237,11 @@ class Composite(Component):
     is_root: bool = False  #: Indicates whether component is a top level component.
 
     def __init__(
-        self,
-        children: Optional[list[Union[ComponentVar, CompositeVar]]] = None,
-        state: Optional[dict[str, str]] = None,
-        functions: Optional[list[str]] = None,
-        **kwargs,
+            self,
+            children: Optional[list[Union[ComponentVar, CompositeVar]]] = None,
+            state: Optional[dict[str, str]] = None,
+            functions: Optional[list[str]] = None,
+            **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self._children = children if children else []
