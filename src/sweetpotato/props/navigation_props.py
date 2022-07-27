@@ -26,7 +26,6 @@ SCREEN_PROPS: set = {
     "functions",
     "state",
     "screen_name",
-    "state",
     "screen_type",
     "prop_functions",
 }  #: Default allowed props for Screen component.

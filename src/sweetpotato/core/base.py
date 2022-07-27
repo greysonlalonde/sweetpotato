@@ -153,7 +153,7 @@ class Component(metaclass=MetaComponent):
         _children: Inner content for component.
         _attrs: String of given attributes for component.
         _variables: Contains variables (if any) belonging to given component.
-        parent: Name of parent component, defaults to `'App'`
+        parent: Name of parent component, defaults to `'App'`.
 
     Example:
         component = Component(children="foo")
