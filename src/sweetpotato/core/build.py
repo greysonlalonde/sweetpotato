@@ -76,8 +76,6 @@ class Build:
             f"cd {settings.REACT_NATIVE_PATH} && eas build -p ios --profile preview"
         )
 
-        # raise NotImplementedError
-
     def show(self, verbose: bool = False) -> str:
         """Prints .js rendition of application to console.
 

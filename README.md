@@ -27,7 +27,7 @@ You can view the below example at the following link:
 
 ```python
 from sweetpotato.app import App
-from sweetpotato.components import Text, Button, Image
+from sweetpotato.components import Text, Button, Image, StyleSheet
 from sweetpotato.ui_kitten import Layout
 from sweetpotato.config import settings
 from sweetpotato.navigation import create_bottom_tab_navigator
@@ -35,19 +35,24 @@ from sweetpotato.navigation import create_bottom_tab_navigator
 settings.USE_UI_KITTEN = True
 settings.USE_NAVIGATION = True
 
-view_style = {
-    "justifyContent": "center",
-    "alignItems": "center", "flex": 1,
-}
-image_style = {'height': 200, 'width': 200, 'borderRadius': 50}
+styles = StyleSheet.create({
+    "image": {"height": 200, "width": 200, "borderRadius": 50},
+    "layout": {
+        "justifyContent": "center",
+        "alignItems": "center",
+        "flex": 1,
+    },
+    "text": {"margin": 25},
+})
+
 tab = create_bottom_tab_navigator(name="tab")
 
 image_url = "https://raw.githubusercontent.com/greysonlalonde/sweetpotato/main/media/sweetpotatoes.JPG"
 home_page = Layout(
-    style=view_style,
+    style=styles.layout,
     children=[
-        Image(style=image_style, source={"uri": image_url}),
-        Text(style={'margin': 25}, text="Sweet, Sweet Potatoes"),
+        Image(style=styles.image, source={"uri": image_url}),
+        Text(style=styles.text, text="Sweet, Sweet Potatoes"),
         Button(title="Info", onPress="() => alert('This app was made with sweetpotato')")
     ]
 )

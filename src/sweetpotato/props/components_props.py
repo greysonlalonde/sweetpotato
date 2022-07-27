@@ -382,7 +382,7 @@ TOUCHABLE_OPACITY_PROPS: set = (
     set()
 )  #: Default allowed props for TouchableOpacity component.
 
-STYLE_SHEET_PROPS: set = set()  #: Default allowed props for StyleSheet component.
+STYLE_SHEET_PROPS: set = {"styles"}  #: Default allowed props for StyleSheet component.
 
 APP_PROPS: set = {"state"}  #: Default allowed props for App component.
 

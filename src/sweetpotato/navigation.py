@@ -24,13 +24,14 @@ class RootNavigation(Component):
     functions = [
         "export function navigate(name,params){if(navigationRef.isReady()){navigationRef.navigate(name,params);}}"
     ]
+    parent = None
+    is_root: bool = True
 
 
 class Screen(Composite):
     """React Navigation Screen component.
 
     Args:
-        functions: List of string representation of .js based functions.
         state: Dictionary of allowed state values for component.
         kwargs: Arbitrary keyword arguments.
 
@@ -41,13 +42,11 @@ class Screen(Composite):
     """
 
     is_root: bool = True
-    parent = None
 
     def __init__(
         self,
         screen_type: str,
         screen_name: str,
-        functions: Optional[list[str]] = None,
         **kwargs,
     ) -> None:
         kwargs.update(
@@ -56,7 +55,6 @@ class Screen(Composite):
             }
         )
         super().__init__(**kwargs)
-        self._functions = functions if functions else []
         self.screen_type = f"{screen_type}.{self.name}"
         self.screen_name = screen_name
         self.import_name = "".join(
@@ -93,7 +91,6 @@ class BaseNavigator(Composite):
 
     Attributes:
         name: Name/type of navigator.
-        variables: Contains variables (if any) belonging to given component.
 
     Todo:
         * Add specific props from React Navigation.
@@ -102,7 +99,7 @@ class BaseNavigator(Composite):
     def __init__(self, name: str = None, **kwargs) -> None:
         super().__init__(**kwargs)
         self.name = self._set_custom_name(name=name) if name else self.name
-        self.variables = f"const {self.name} = {self.import_name}()"
+        self._variables = [f"const {self.name} = {self.import_name}()"]
         self.screen_type = self.name.split(".")[0]
         self.name = f"{self.name}.Navigator"
 

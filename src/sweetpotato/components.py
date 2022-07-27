@@ -3,10 +3,9 @@
 See the `React Native docs <https://reactnative.dev/docs/components-and-apis>`_ for more.
 
 Todo:
-    * Add Stylesheet class methods.
     * Add examples to all classes.
 """
-from typing import Optional
+from typing import Optional, Union
 
 from sweetpotato.config import settings
 from sweetpotato.core.base import Component, Composite
@@ -27,6 +26,9 @@ class Text(Component):
     Args:
         text: Inner content for Text component inplace of children.
         kwargs: Arbitrary allowed props for component.
+
+    Example:
+        text = Text(text="foo")
     """
 
     def __init__(self, text: Optional[str] = None, **kwargs) -> None:
@@ -50,7 +52,7 @@ class Button(Composite):
         kwargs: Arbitrary allowed props for component.
 
     Example:
-       ``button = Button(title="foo")``
+        button = Button(title="foo")
     """
 
     def __init__(self, **kwargs) -> None:
@@ -70,7 +72,7 @@ class Image(Component):
     See https://reactnative.dev/docs/image.
 
     Example:
-       ``image = Image(source={"uri": image_source})``
+        image = Image(source={"uri": image_source})
     """
 
 
@@ -95,18 +97,45 @@ class ScrollView(Component):
     """
 
 
-class StyleSheet(Component):
+class StyleSheet:
     """React Native StyleSheet component.
 
     See https://reactnative.dev/docs/stylesheet.
 
+    Args:
+        styles: Dictionary of dicts consisting of styles.
+
+    Example:
+        styles = StyleSheet.create({
+            "container": {"flex": 1, "justifyContent": "center", "alignItems": "center"}
+        })
+
     Todo:
-        * Add stylesheet methods.
-        * Add examples.
+        * Implement compose and flatten methods.
     """
 
-    def __create(self, styles: dict[str, str]) -> None:
+    def __init__(self, styles: dict[str, dict[str, Union[str, int]]]) -> None:
+        self.styles = styles
+
+    @classmethod
+    def create(cls, styles: dict[str, dict[str, Union[str, int]]]) -> "StyleSheet":
+        """Method for creating stylesheet for use with components.
+
+        Args:
+            styles: Dictionary of dicts consisting of styles.
+        """
+        return cls(styles)
+
+    def compose(self) -> None:
+        """Not implemented."""
         raise NotImplementedError
+
+    def flatten(self) -> None:
+        """Not implemented."""
+        raise NotImplementedError
+
+    def __getattr__(self, item: str) -> dict:
+        return self.styles[item]
 
 
 class TouchableOpacity(Composite):

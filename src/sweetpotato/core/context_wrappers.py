@@ -4,7 +4,7 @@ Todo:
     * Add typing.
 """
 from abc import abstractmethod, ABC
-from typing import Union, Optional
+from typing import Union
 
 from sweetpotato.authentication import AuthenticationProvider
 from sweetpotato.components import SafeAreaProvider
@@ -18,7 +18,7 @@ class Wrapper(ABC):
     """Wrapping interface for components."""
 
     @abstractmethod
-    def wrap(self, component, theme: Optional[str] = None, **kwargs) -> CompositeType:
+    def wrap(self, component, **kwargs) -> CompositeType:
         """Abstract component wrapping."""
         return component
 
