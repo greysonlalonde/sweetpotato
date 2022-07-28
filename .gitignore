@@ -153,3 +153,5 @@ cython_debug/
 typing_tests.py
 
 src/sweetpotato/frontend/src/*
+test4.py
+test2.py
