@@ -39,6 +39,7 @@ class DOM(metaclass=ThreadSafe):
                 "state": {},
                 "variables": [],
             }
+
         if component.package not in self.graph_dict[component.parent]["imports"]:
             self.graph_dict[component.parent]["imports"][component.package] = set()
         self.graph_dict[component.parent]["imports"][component.package].add(
@@ -268,6 +269,7 @@ class RootComponent(Composite):
 
     Args:
         component_name: Name of .js class/function/const for component.
+        kwargs: Arbitrary keyword arguments.
 
     Attributes:
         component_name: Name of .js class/function/const for component.
@@ -278,7 +280,7 @@ class RootComponent(Composite):
     package_root: str = f"./{settings.SOURCE_FOLDER}/components"
     is_root: bool = True  #: Indicates whether component is a top level component.
 
-    def __init__(self, component_name: Optional[str] = None, **kwargs):
+    def __init__(self, component_name: Optional[str] = None, **kwargs) -> None:
         super().__init__(**kwargs)
         self.component_name = (
             component_name if component_name else self._set_default_name()

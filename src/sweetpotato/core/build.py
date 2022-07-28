@@ -6,8 +6,10 @@ Todo:
     * Add docstrings for all classes & methods.
     * Add typing.
 """
+import io
 import json
 import os
+import pty
 import subprocess
 import sys
 from typing import Optional
@@ -36,7 +38,9 @@ class Build:
             ]
         )
         for dependency in dependencies:
-            if not self.__check_dependency(dependency):
+            if not self.__check_dependency(dependency) and not self._install_dependency(
+                dependency
+            ):
                 raise ImportError(f"Dependency package {dependency} not found.")
 
     @classmethod
@@ -59,22 +63,39 @@ class Build:
         )
 
     @staticmethod
-    def publish(platform: str) -> None:
+    def publish(platform: str, staging: Optional[str] = "preview") -> str:
         """Publishes app to specified platform / application store.
+
+        Calls the `eas build` command with specified options.
+        User will be prompted to log in if they are not already.
 
         Args:
             platform: Platform for app to be published on.
+            staging: Staging environment for app, default preview
         """
+        cmd = f"eas build -p {platform} --profile {staging}".split(" ")
+
         with open(f"{settings.REACT_NATIVE_PATH}/eas.json", "r+") as file:
             eas_conf = json.load(file)
             if platform == "ios":
-                eas_conf["build"]["preview"][platform] = {"simulator": True}
+                eas_conf["build"][staging][platform] = {"simulator": True}
             file.seek(0)
             json.dump(eas_conf, file)
             file.truncate()
-        os.system(
-            f"cd {settings.REACT_NATIVE_PATH} && eas build -p ios --profile preview"
-        )
+
+        os.chdir(settings.REACT_NATIVE_PATH)
+
+        with io.BytesIO() as script:
+
+            def read(fd) -> bytes:
+                """ "IO helper function."""
+                data = os.read(fd, 1024)
+                script.write(data)
+                return data
+
+            pty.spawn(cmd, read)
+        result = script.getvalue().decode(encoding="utf-8")
+        return result
 
     def show(self, verbose: bool = False) -> str:
         """Prints .js rendition of application to console.
@@ -167,6 +188,21 @@ class Build:
             f"{settings.REACT_NATIVE_PATH}/{screen}.js", "w", encoding="utf-8"
         ) as file:
             file.write(component)
+
+    @staticmethod
+    def _install_dependency(dependency: str) -> None:
+        """Prompts user to install js dependencies if missing.
+
+        Args:
+            dependency: missing dependency.
+
+        Todos:
+            * Add rest of install logic.
+        """
+        sys.stdout.write(f"Dependency package {dependency} not found.\n")
+        install = False if input("Would you like to install? (y/n): ") == "n" else True
+        if install:
+            raise NotImplementedError
 
     @staticmethod
     def __access_check(file: str, mode: int) -> bool:

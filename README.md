@@ -2,6 +2,7 @@
 
 -----
 [![alt text](https://img.shields.io/badge/pypi-0.5.a0-blue)](https://pypi.org/project/sweetpotato)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/sweetpotato)
 [![alt text](https://img.shields.io/badge/license-MIT-green)](https://github.com/greysonlalonde/sweetpotato/blob/main/LICENSE)
 [![Documentation Status](https://readthedocs.org/projects/sweetpotato/badge/?version=latest)](https://sweetpotato.readthedocs.io/en/latest/?badge=latest)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
