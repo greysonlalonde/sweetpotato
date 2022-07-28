@@ -163,8 +163,6 @@ class Build:
             content: Dictionary of screen contents.
         """
         component = cls.__replace_values(content, screen)
-        if settings.APP_COMPONENT != screen:
-            screen = f"src/{screen}"
         with open(
             f"{settings.REACT_NATIVE_PATH}/{screen}.js", "w", encoding="utf-8"
         ) as file:

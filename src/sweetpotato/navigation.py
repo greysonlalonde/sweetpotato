@@ -4,53 +4,54 @@
 See `React Navigation <https://reactnavigation.org/docs/getting-started/#>`_
 """
 
-from typing import Optional, Union
+from typing import Optional
 
-from sweetpotato.core.base import Composite, Component, RootComponent
-from sweetpotato.core.protocols import ComponentType, CompositeType, CompositeVar
+from sweetpotato.config import settings
+from sweetpotato.core.base import Composite, RootComponent
+from sweetpotato.core.protocols import CompositeVar
 
 
 class NavigationContainer(Composite):
     """React Navigation NavigationContainer component."""
 
 
-class RootNavigation(Component):
-    """React Navigation component based on for navigating without the prop.
+class RootNavigation(RootComponent):
+    """React Navigation component based on navigating without the prop.
 
     Based on https://reactnavigation.org/docs/navigating-without-navigation-prop/
     so that we don't have to pass the prop between screens.
     """
 
+    is_composite = False
     functions = [
         "export function navigate(name,params){if(navigationRef.isReady()){navigationRef.navigate(name,params);}}"
     ]
-    parent = None
-    is_root: bool = True
 
 
 class Screen(RootComponent):
     """React Navigation Screen component.
 
     Args:
-        state: Dictionary of allowed state values for component.
+        screen_type: Navigator name/type prefix, shown as {screen_name}.Screen.
+        screen_name: Name of screen.
         kwargs: Arbitrary keyword arguments.
 
     Attributes:
-        screen_name: Name of specific screen.
-        import_name: Name of .js const for screen.
-        functions: String representation of .js based functions.
+        screen_type: Navigator name/type prefix, shown as {screen_name}.Screen.
     """
 
+    package_root: str = f"./{settings.SOURCE_FOLDER}"
+
     def __init__(
-            self,
-            screen_type: str,
-            screen_name: str,
-            **kwargs,
+        self,
+        screen_type: str,
+        screen_name: str,
+        **kwargs,
     ) -> None:
         super().__init__(component_name=screen_name, **kwargs)
         self.screen_type = f"{screen_type}.{self.name}"
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         children = (
             f"{'{'}'{self.component_name}'{'}'}>{'{'}() => <{self.import_name}/> {'}'}"
         )
@@ -75,8 +76,8 @@ class BaseNavigator(Composite):
         super().__init__(**kwargs)
         self.name = self._set_custom_name(name=name) if name else self.name
         self._variables = [f"const {self.name} = {self.import_name}()"]
-        self.screen_type = self.name.split(".")[0]
         self.name = f"{self.name}.Navigator"
+        self._children.append(RootNavigation())
 
     @staticmethod
     def _set_custom_name(name: str) -> str:
@@ -85,11 +86,11 @@ class BaseNavigator(Composite):
         return (".".join(component_name)).title()
 
     def screen(
-            self,
-            screen_name: str,
-            children: CompositeVar,
-            functions: Optional[list] = None,
-            state: Optional[dict[str, str]] = None,
+        self,
+        screen_name: str,
+        children: CompositeVar,
+        functions: Optional[list] = None,
+        state: Optional[dict[str, str]] = None,
     ) -> None:
         """Instantiates and adds screen to navigation component and increments screen count.
 

@@ -4,7 +4,13 @@ from typing import Optional, Union
 
 from sweetpotato.config import settings
 from sweetpotato.core import ThreadSafe
-from sweetpotato.core.protocols import RendererType, ComponentVar, CompositeVar, CompositeType, ComponentType
+from sweetpotato.core.protocols import (
+    RendererType,
+    ComponentVar,
+    CompositeVar,
+    CompositeType,
+    ComponentType,
+)
 
 
 class DOM(metaclass=ThreadSafe):
@@ -162,10 +168,10 @@ class Component(metaclass=MetaComponent):
     is_composite: bool = False  #: Indicates whether component may have inner content.
 
     def __init__(
-            self,
-            children: Optional[str] = None,
-            variables: Optional[list[str]] = None,
-            **kwargs,
+        self,
+        children: Optional[str] = None,
+        variables: Optional[list[str]] = None,
+        **kwargs,
     ) -> None:
         self._attrs = kwargs
         self._children = children
@@ -224,11 +230,11 @@ class Composite(Component):
     is_root: bool = False  #: Indicates whether component is a top level component.
 
     def __init__(
-            self,
-            children: Optional[list[Union[ComponentVar, CompositeVar]]] = None,
-            state: Optional[dict[str, str]] = None,
-            functions: Optional[list[str]] = None,
-            **kwargs,
+        self,
+        children: Optional[list[Union[ComponentVar, CompositeVar]]] = None,
+        state: Optional[dict[str, str]] = None,
+        functions: Optional[list[str]] = None,
+        **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self._children = children if children else []
@@ -258,15 +264,29 @@ class Composite(Component):
 
 
 class RootComponent(Composite):
+    """Root component.
+
+    Args:
+        component_name: Name of .js class/function/const for component.
+
+    Attributes:
+        component_name: Name of .js class/function/const for component.
+        import_name: Name of .js class/function/const for component import.
+
+    """
+
+    package_root: str = f"./{settings.SOURCE_FOLDER}/components"
     is_root: bool = True  #: Indicates whether component is a top level component.
 
     def __init__(self, component_name: Optional[str] = None, **kwargs):
         super().__init__(**kwargs)
-        self.component_name = component_name if component_name else self._set_default_name()
-        self.import_name = "".join(
-            [word.title() for word in component_name.split(" ")]
+        self.component_name = (
+            component_name if component_name else self._set_default_name()
         )
-        self.package = f"./src/{self.import_name}.js"
+        self.import_name = "".join(
+            [word.title() for word in self.component_name.split(" ")]
+        )
+        self.package = f"{self.package_root}/{self.import_name}.js"
         self.__set_parent(self._children)
 
     def _set_default_name(self):
@@ -278,8 +298,9 @@ class RootComponent(Composite):
         Args:
             children: List of components.
         """
-        self._children[0].is_root = True
-        for child in children:
-            if child.is_composite:
-                self.__set_parent(child._children)
-            child.parent = self.import_name
+        if self._children:
+            self._children[0].is_root = True
+            for child in children:
+                if child.is_composite:
+                    self.__set_parent(child._children)
+                child.parent = self.import_name
