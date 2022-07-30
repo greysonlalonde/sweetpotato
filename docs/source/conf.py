@@ -83,7 +83,6 @@ html_static_path = ["_static"]
 
 # default_light_mode = True
 html_theme_options = {
-    "repository_url": "https://github.com/greysonlalonde/sweetpotato",
     "use_repository_button": True,
     "logo_only": True,
     "sidebar_hide_name": True,
@@ -91,6 +90,9 @@ html_theme_options = {
     #     "color-brand-primary": "#7C4DFF",
     #     "color-brand-content": "#7C4DFF",
     # },
+    "source_repository": "https://github.com/greysonlalonde/sweetpotato",
+    "source_branch": "main",
+    "source_directory": "docs/source/",
     "dark_css_variables": {
         "color-brand-primary": "#7C4DFF",
         "color-brand-content": "#7C4DFF",

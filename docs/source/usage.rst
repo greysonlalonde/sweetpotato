@@ -1,8 +1,8 @@
 Usage
 =====
 
-Creating an app
-----------------
+Creating an app 🧑‍💻
+------------------
 
 To create an application, import the :class:`~sweetpotato.app.App` class, give it some child elements *wrapped in a list*, and run the app.
 
@@ -32,14 +32,14 @@ For example:
 
 .. warning::
 
-    Don't forget to wrap your children in a list. Otherwise, a :class:`~TypeError` will be raised.
+    Don't forget to wrap your child components in a list. Otherwise, a :class:`~TypeError` will be raised.
 
 
-Navigation
-----------------
+Navigation 🧭
+--------------
 
 To use navigation (moving between screens), import a navigator from the navigation module, and pass
-your children as arguments to the :meth:`~sweetpotato.navigation.BaseNavigator.screen` method. Make sure to give each screen a unique name.
+your child components as arguments to the :meth:`~sweetpotato.navigation.BaseNavigator.screen` method. Make sure to give each screen a unique name.
 
 .. code-block:: python
 
@@ -58,8 +58,8 @@ your children as arguments to the :meth:`~sweetpotato.navigation.BaseNavigator.s
         app.run()
 
 
-Design
-----------------
+Design 🎨
+----------
 
 Sweetpotato utilizes the React Native `UI Kitten <https://akveo.github.io/react-native-ui-kitten/>`_ framework for quick and aesthetic system design.
 To enable it, simply import the :data:`~sweetpotato.config.settings`, set :attr:`~sweetpotato.config.default_settings.Settings.USE_UI_KITTEN`, and use :mod:`~sweetpotato.ui_kitten` components. Make sure to read the UI Kitten documentation
@@ -104,8 +104,8 @@ Example:
 
 
 
-Functions
-----------------
+Functions ♻️
+-------------
 Sweetpotato supports rendering of pure javascript functions. Pass the functions in a list to the top level component.
 
 Example:

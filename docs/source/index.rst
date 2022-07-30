@@ -1,7 +1,7 @@
-Sweetpotato
+Sweetpotato 🥔
 ===================================
 
-Sweetpotato provides an intuitive wrapper around React Native, making cross-platform development (iOS, Android, Web)
+Sweetpotato provides an intuitive wrapper around `React Native <https://reactnative.dev>`_, making cross-platform development (iOS, Android, Web)
 accessible from Python.
 Check out the :doc:`installation` section, and then head over to :doc:`usage` for further information.
 
@@ -14,6 +14,8 @@ Contents
 ========
 
 .. toctree::
+    :maxdepth: 2
+
     installation
     usage
     components
