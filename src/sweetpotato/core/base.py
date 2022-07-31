@@ -1,147 +1,19 @@
 """Core functionality of React Native class based components."""
-import re
+import json
 from typing import Optional, Union
 
 from sweetpotato.config import settings
 from sweetpotato.core import ThreadSafe
-from sweetpotato.core.protocols import RendererType, ComponentVar, CompositeVar, CompositeType, ComponentType
+from sweetpotato.core.protocols import (
+    RendererType,
+    ComponentVar,
+    CompositeVar,
+    CompositeType,
+    ComponentType,
+)
 
 
-class DOM(metaclass=ThreadSafe):
-    """Mimics the document object model tree."""
-
-    def __init__(self, graph_dict: Optional[dict] = None) -> None:
-        if not graph_dict:
-            graph_dict = {}
-        self.graph_dict = graph_dict
-
-    @property
-    def component(self) -> str:
-        """Returns string representation of main app components."""
-        return self.graph_dict[settings.APP_COMPONENT]["children"]
-
-    def add_node(self, component: CompositeVar) -> None:
-        """Adds a component node to dict.
-
-        Args:
-            component: Composite component to be added on tree.
-        """
-        if component.parent not in self.graph_dict:
-            self.graph_dict[component.parent] = {
-                "imports": {},
-                "functions": [],
-                "state": {},
-                "variables": [],
-            }
-        if component.package not in self.graph_dict[component.parent]["imports"]:
-            self.graph_dict[component.parent]["imports"][component.package] = set()
-        self.graph_dict[component.parent]["imports"][component.package].add(
-            component.import_name,
-        )
-        self.graph_dict[component.parent]["variables"].append(component.variables)
-        self.graph_dict[component.parent]["children"] = component
-        if component.is_composite and component.is_root:
-            self.graph_dict[component.parent]["functions"].append(component.functions)
-
-
-class MetaComponent(type):
-    """Base React Native component metaclass for the Component class.
-
-    Note:
-        The :class:`~sweetpotato.core.base.MetaComponent` metaclass sets attributes for
-        all components, including user-defined ones.
-    """
-
-    __registry: set = set()
-
-    def __call__(cls, *args, **kwargs) -> None:
-        if cls.__name__ not in MetaComponent.__registry:
-            cls.name = MetaComponent.__set_name(cls.__name__)
-            cls.import_name = cls.__set_import(cls.__name__)
-            cls.package = MetaComponent.__set_package(cls.import_name, cls.__dict__)
-            cls.props = MetaComponent.__set_props(cls.import_name, cls.__dict__)
-            MetaComponent.__registry.add(cls.__name__)
-        if set(kwargs.keys()).difference(cls.props):
-            attributes = ", ".join(set(kwargs.keys()).difference(cls.props))
-            raise AttributeError(
-                f"Component {cls.import_name} does not have attribute(s): {attributes}"
-            )
-        return super().__call__(*args, **kwargs)
-
-    @staticmethod
-    def __set_import(name: str) -> str:
-        """Sets React Native :attr`~sweetpotato.core.base.Component.import_name` for component.
-
-        Args:
-            name: React Native component import name.
-
-        Returns:
-            String representation of React Native import name for
-            :class:`~sweetpotato.core.base.Component` and :class:`~sweetpotato.core.base.Composite`
-        """
-        return (
-            name
-            if name not in settings.REPLACE_COMPONENTS
-            else settings.REPLACE_COMPONENTS.get(name).get("import")
-        )
-
-    @staticmethod
-    def __set_name(name: str) -> str:
-        """Sets React Native :attr`~sweetpotato.core.base.Component.name` for component.
-
-        Args:
-            name: React Native component name.
-
-        Returns:
-            String representation of React Native name for
-            :class:`~sweetpotato.core.base.Component` and :class:`~sweetpotato.core.base.Composite`.
-        """
-        return (
-            name
-            if name not in settings.REPLACE_COMPONENTS
-            else settings.REPLACE_COMPONENTS.get(name, name).get("name", name)
-        )
-
-    @staticmethod
-    def __set_package(import_name: str, cls_dict: dict) -> str:
-        """Sets React Native :attr`~sweetpotato.core.base.Component.package` for component.
-
-        Args:
-            import_name: React Native component name.
-            cls_dict: Contains :class:`sweetpotato.core.base.Component` attributes.
-
-        Returns:
-            String representation of React Native package for
-            :class:`~sweetpotato.core.base.Component` and :class:`~sweetpotato.core.base.Composite`.
-        """
-        package = ".".join(cls_dict["__module__"].split(".")[1:2])
-        return (
-            settings.IMPORTS.get(package)
-            if import_name not in settings.REPLACE_COMPONENTS
-            else settings.REPLACE_COMPONENTS.get(import_name).get(
-                "package", import_name
-            )
-        )
-
-    @staticmethod
-    def __set_props(name: str, cls_dict: dict) -> dict:
-        """Imports and sets attribute props for all subclasses.
-
-        Args:
-            name: React Native component name.
-            cls_dict: Contains :class:`~sweetpotato.core.base.Component` attributes.
-        Returns:
-            Dictionary of props from :mod:`sweetpotato.props`.
-        """
-        package = ".".join(cls_dict["__module__"].split(".")[:2])
-        props = f'{"_".join(re.findall("[A-Z][^A-Z]*", name)).upper()}_PROPS'
-        pack = package.split(".")
-        pack.insert(1, "props")
-        package = f'{".".join(pack[:2])}.{pack[-1]}_props'
-        return getattr(__import__(package, fromlist=[props]), props)
-
-
-class Component(metaclass=MetaComponent):
+class Component:
     """Base React Native component with MetaComponent metaclass.
 
     Args:
@@ -153,24 +25,45 @@ class Component(metaclass=MetaComponent):
         _children: Inner content for component.
         _attrs: String of given attributes for component.
         _variables: Contains variables (if any) belonging to given component.
+        props: Allowed props for component.
         parent: Name of parent component, defaults to `'App'`.
 
     Example:
         component = Component(children="foo")
     """
 
+    package: str = "react-native"
+    props: set = {}  #: Set of allowed props for component.
     is_composite: bool = False  #: Indicates whether component may have inner content.
 
     def __init__(
-            self,
-            children: Optional[str] = None,
-            variables: Optional[list[str]] = None,
-            **kwargs,
+        self,
+        component_name: Optional[str] = None,
+        children: Optional[str] = None,
+        variables: Optional[list[str]] = None,
+        **kwargs,
     ) -> None:
+        if set(kwargs.keys()).difference(self.props):
+            attributes = ", ".join(set(kwargs.keys()).difference(self.props))
+            raise AttributeError(
+                f"{self.import_name} component does not have attribute(s): {attributes}"
+            )
+        self.component_name = (
+            component_name if component_name else self._set_default_name()
+        )
+        self._import_name = self.__class__.__name__
         self._attrs = kwargs
         self._children = children
         self._variables = variables if variables else []
         self.parent = settings.APP_COMPONENT
+
+    @property
+    def import_name(self):
+        return self._import_name
+
+    @import_name.setter
+    def import_name(self, name):
+        self._import_name = name
 
     @property
     def children(self) -> Optional[str]:
@@ -185,7 +78,10 @@ class Component(metaclass=MetaComponent):
     @property
     def variables(self) -> Optional[str]:
         """Property returning string of variables (if any) belonging to given component."""
-        return "".join(self._variables)
+        return "\n".join(self._variables)
+
+    def _set_default_name(self):
+        return self.__class__.__name__
 
     def register(self, renderer: RendererType) -> None:
         """Registers a specified visitor with component.
@@ -197,8 +93,8 @@ class Component(metaclass=MetaComponent):
 
     def __repr__(self) -> str:
         if self._children:
-            return f"<{self.name} {self.attrs}>{self.children}</{self.name}>"
-        return f"<{self.name} {self.attrs}/>"
+            return f"<{self.component_name} {self.attrs}>{self.children}</{self.component_name}>"
+        return f"<{self.component_name} {self.attrs}/>"
 
 
 class Composite(Component):
@@ -224,16 +120,14 @@ class Composite(Component):
     is_root: bool = False  #: Indicates whether component is a top level component.
 
     def __init__(
-            self,
-            children: Optional[list[Union[ComponentVar, CompositeVar]]] = None,
-            state: Optional[dict[str, str]] = None,
-            functions: Optional[list[str]] = None,
-            **kwargs,
+        self,
+        children: Optional[list[Union[ComponentVar, CompositeVar]]] = None,
+        functions: Optional[list[str]] = None,
+        **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self._children = children if children else []
         self._functions = functions if functions else []
-        self._state = state if state else {}
 
     @property
     def children(self) -> str:
@@ -257,29 +151,96 @@ class Composite(Component):
             super().register(renderer)
 
 
+class ComponentRegistry(metaclass=ThreadSafe):
+    _registry = {}
+
+    @classmethod
+    @property
+    def registry(cls):
+        return cls._registry
+
+    @classmethod
+    def register(cls, component):
+        if component.component_name not in cls._registry.keys():
+            cls._registry[component.component_name] = component
+
+
 class RootComponent(Composite):
+    """Root component.
+
+    Args:
+        component_name: Name of .js class/function/const for component.
+        kwargs: Arbitrary keyword arguments.
+
+    Attributes:
+        component_name: Name of .js class/function/const for component.
+        import_name: Name of .js class/function/const for component import.
+
+    """
+
+    package_root: str = f"./{settings.SOURCE_FOLDER}/components"
     is_root: bool = True  #: Indicates whether component is a top level component.
+    is_functional: bool = (
+        False  #: Indicates whether component a functional or class component.
+    )
 
-    def __init__(self, component_name: Optional[str] = None, **kwargs):
+    def __init__(
+        self,
+        state: Optional[dict[str, str]] = None,
+        extra_imports: Optional[dict[str, Union[str, set]]] = None,
+        **kwargs,
+    ) -> None:
         super().__init__(**kwargs)
-        self.component_name = component_name if component_name else self._set_default_name()
-        self.import_name = "".join(
-            [word.title() for word in component_name.split(" ")]
+        self._state = state if state else {}
+        self.import_name = (
+            "".join([word.title() for word in self.component_name.split(" ")])
+            if len(self.component_name.split(" ")) > 1
+            else self.component_name
         )
-        self.package = f"./src/{self.import_name}.js"
-        self.__set_parent(self._children)
+        self.package = f"{self.package_root}/{self.import_name}.js"
+        self._imports = {}
+        self._set_parent(self._children)
+        if extra_imports:
+            self._imports.update(extra_imports)
+        ComponentRegistry.register(self)
 
-    def _set_default_name(self):
-        return self.__class__.__name__
+    @property
+    def imports(self):
+        import_string = ""
+        for key, value in self._imports.items():
+            print(f"keys: {key, value}")
+            if value and "RootNavigation" != list(value)[0]:
+                import_string += (
+                    f'import {value} from "{key}";\n'.replace("'", "")
+                    if value
+                    else f'import "{key}"\n'
+                )
 
-    def __set_parent(self, children: list[Union[CompositeType, ComponentType]]) -> None:
+        return import_string
+
+    @property
+    def state(self):
+        return json.dumps(self._state)
+
+    def _set_parent(self, children: list[Union[CompositeType, ComponentType]]) -> None:
         """Sets top level component as root and sets each parent to self.
 
         Args:
             children: List of components.
         """
-        self._children[0].is_root = True
         for child in children:
+            child.parent = self.component_name
+            if (child.is_composite and not child.is_context) or not child.is_composite:
+                if child.package not in self._imports:
+                    self._imports[child.package] = set()
+                self._imports[child.package].add(child.import_name)
             if child.is_composite:
-                self.__set_parent(child._children)
-            child.parent = self.import_name
+                self._functions.append(child.functions)
+                self._variables.append(child.variables)
+                self._set_parent(child._children)
+
+
+class App(RootComponent):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.package = f"{settings.REACT_NATIVE_PATH}/{self.import_name}.js"

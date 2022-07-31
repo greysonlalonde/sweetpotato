@@ -2,13 +2,15 @@
 
 -----
 [![alt text](https://img.shields.io/badge/pypi-0.5.a0-blue)](https://pypi.org/project/sweetpotato)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/sweetpotato)
 [![alt text](https://img.shields.io/badge/license-MIT-green)](https://github.com/greysonlalonde/sweetpotato/blob/main/LICENSE)
 [![Documentation Status](https://readthedocs.org/projects/sweetpotato/badge/?version=latest)](https://sweetpotato.readthedocs.io/en/latest/?badge=latest)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 ### *This project is still in early stages of development and is not stable.*
 
-Sweetpotato provides an intuitive wrapper around React Native, making cross-platform development (iOS, Android, Web)
+Sweetpotato 🥔 provides an intuitive wrapper around [React Native](https://reactnative.dev), making cross-platform
+development (iOS, Android, Web)
 accessible from Python.
 
 - Supported packages include but are not limited to:
@@ -27,8 +29,8 @@ You can view the below example at the following link:
 
 ```python
 from sweetpotato.app import App
-from sweetpotato.components import Text, Button, Image, StyleSheet
-from sweetpotato.ui_kitten import Layout
+from sweetpotato.components import Image, StyleSheet
+from sweetpotato.ui_kitten import Layout, Text, Button
 from sweetpotato.config import settings
 from sweetpotato.navigation import create_bottom_tab_navigator
 

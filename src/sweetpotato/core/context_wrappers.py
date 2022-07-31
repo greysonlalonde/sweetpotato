@@ -9,6 +9,7 @@ from typing import Union
 from sweetpotato.authentication import AuthenticationProvider
 from sweetpotato.components import SafeAreaProvider
 from sweetpotato.config import settings
+from sweetpotato.core.base import App
 from sweetpotato.core.protocols import CompositeType
 from sweetpotato.navigation import NavigationContainer
 from sweetpotato.ui_kitten import ApplicationProvider
@@ -123,7 +124,7 @@ class ContextWrapper(
         self,
         component: Union[CompositeType, None],
         **kwargs,
-    ) -> CompositeType:
+    ) -> "App":
         """Checks and wraps component in provided wrappers, if configured.
 
         Args:
@@ -132,6 +133,17 @@ class ContextWrapper(
         Returns:
             Composite.
         """
-        component.is_root = True
         component = super().wrap(component, **kwargs)
+        component = App(
+            children=[component],
+            state={
+                "authenticated": False,
+            },
+            extra_imports={
+                "react-native-gesture-handler": None,
+                "@eva-design/eva": "* as eva",
+                "@ui-kitten/eva-icons": {"EvaIconsPack"},
+                "./src/components/RootNavigation": "* as RootNavigation",
+            },
+        )
         return component

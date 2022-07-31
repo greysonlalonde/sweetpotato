@@ -31,3 +31,7 @@ SCREEN_PROPS: set = {
 }  #: Default allowed props for Screen component.
 
 BASE_NAVIGATOR_PROPS: set = set()  #: Default allowed props for BaseNavigator component.
+
+ROOT_NAVIGATION_PROPS: set = (
+    set()
+)  #: Default allowed props for RootNavigation component.
