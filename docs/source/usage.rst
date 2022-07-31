@@ -4,22 +4,20 @@ Usage
 Creating an app 🧑‍💻
 ------------------
 
-To create an application, import the :class:`~sweetpotato.app.App` class, give it some child elements *wrapped in a list*, and run the app.
+To create an application, import the :class:`~sweetpotato.app.App` class, give it some child components, and run the app.
 
 For example:
 
 .. code-block:: python
 
-   from sweetpotato.components import View, Text
+   from sweetpotato.components import View, Text, StyleSheet
    from sweetpotato.app import App
 
-   styles = {
-        "justifyContent": "center",
-        "alignItems": "center",
-        "flex": 1,
-   }
+   styles = StyleSheet.create({
+        "container": {"flex": 1, "justifyContent": "center", "alignItems": "center"}
+   })
 
-   content = View(style=styles, children=[Text(text="Hello World")])
+   content = View(style=styles.container, children=[Text(text="Hello World")])
    app = App(component=content)
 
    if __name__ == "__main__":
@@ -28,11 +26,6 @@ For example:
 .. note::
 
     Styles in React Native differ from ordinary CSS by using camel casing. Check out `this page <https://reactnative.dev/docs/style>`_ for more.
-
-
-.. warning::
-
-    Don't forget to wrap your child components in a list. Otherwise, a :class:`~TypeError` will be raised.
 
 
 Navigation 🧭
@@ -75,14 +68,12 @@ Example:
 
    settings.USE_UI_KITTEN = True
 
-   layout_style = {
-       "justifyContent": "center",
-       "alignItems": "center",
-       "flex": 1,
-   }
+   styles = StyleSheet.create({
+        "layout": {"flex": 1, "justifyContent": "center", "alignItems": "center"}
+   })
 
    content = Layout(
-        style=layout_style,
+        style=styles.layout,
         children=[
             Layout(
                 children=[

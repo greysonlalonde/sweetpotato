@@ -19,6 +19,7 @@ Contents
     installation
     usage
     components
+    plugins
     build
     api
 
