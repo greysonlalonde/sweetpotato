@@ -1,5 +1,5 @@
-Custom Components
-==================
+Custom Components 🦄
+=====================
 
 Build a Custom Component ⚒️
 --------------------------

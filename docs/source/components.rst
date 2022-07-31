@@ -1,5 +1,5 @@
 Components
-========
+==========
 
 .. toctree::
     components_list
