@@ -30,4 +30,18 @@ export default class <NAME> extends React.Component {
                 <CHILDREN>
         );
     }
-}"""  #: Default .js string representation of application component.
+}"""  #: Default .js string representation of application class component.
+
+APP_REPR_FUNCTIONAL_DEFAULT: str = """
+import React from 'react';
+<IMPORTS>
+
+<VARIABLES>
+
+export <NAME>() {
+    <FUNCTIONS>
+
+    return (
+            <CHILDREN>
+    );
+}"""  #: Default .js string representation of application functional component.

@@ -9,6 +9,18 @@ from typing import Optional, Union
 
 from sweetpotato.config import settings
 from sweetpotato.core.base import Component, Composite
+from sweetpotato.props.components_props import (
+    ACTIVITY_INDICATOR_PROPS,
+    TEXT_PROPS,
+    TEXT_INPUT_PROPS,
+    BUTTON_PROPS,
+    IMAGE_PROPS,
+    FLAT_LIST_PROPS,
+    SAFE_AREA_PROVIDER_PROPS,
+    SCROLL_VIEW_PROPS,
+    TOUCHABLE_OPACITY_PROPS,
+    VIEW_PROPS,
+)
 
 
 class ActivityIndicator(Component):
@@ -16,6 +28,8 @@ class ActivityIndicator(Component):
 
     See https://reactnative.dev/docs/activityindicator.
     """
+
+    props: set = ACTIVITY_INDICATOR_PROPS
 
 
 class Text(Component):
@@ -31,6 +45,8 @@ class Text(Component):
         text = Text(text="foo")
     """
 
+    props: set = TEXT_PROPS
+
     def __init__(self, text: Optional[str] = None, **kwargs) -> None:
         super().__init__(children=text, **kwargs)
 
@@ -40,6 +56,8 @@ class TextInput(Component):
 
     See https://reactnative.dev/docs/textinput.
     """
+
+    props: set = TEXT_INPUT_PROPS
 
 
 class Button(Composite):
@@ -54,6 +72,8 @@ class Button(Composite):
     Example:
         button = Button(title="foo")
     """
+
+    props: set = BUTTON_PROPS
 
     def __init__(self, **kwargs) -> None:
         title = (
@@ -75,12 +95,16 @@ class Image(Component):
         image = Image(source={"uri": image_source})
     """
 
+    props: set = IMAGE_PROPS
+
 
 class FlatList(Component):
     """React Native FlatList component.
 
     See https://reactnative.dev/docs/flatlist.
     """
+
+    props: set = FLAT_LIST_PROPS
 
 
 class SafeAreaProvider(Composite):
@@ -89,12 +113,17 @@ class SafeAreaProvider(Composite):
     See https://docs.expo.dev/versions/latest/sdk/safe-area-context/.
     """
 
+    package: str = "react-native-safe-area-context"
+    props: set = SAFE_AREA_PROVIDER_PROPS
+
 
 class ScrollView(Component):
     """React Native ScrollView component.
 
     See https://reactnative.dev/docs/scrollview.
     """
+
+    props: set = SCROLL_VIEW_PROPS
 
 
 class StyleSheet:
@@ -144,9 +173,13 @@ class TouchableOpacity(Composite):
     See https://reactnative.dev/docs/touchableopacity.
     """
 
+    props: set = TOUCHABLE_OPACITY_PROPS
+
 
 class View(Composite):
     """React Native View component.
 
     See https://reactnative.dev/docs/view.
     """
+
+    props: set = VIEW_PROPS

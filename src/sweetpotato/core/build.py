@@ -15,7 +15,7 @@ import sys
 from typing import Optional
 
 from sweetpotato.config import settings
-from sweetpotato.core.base import DOM
+from sweetpotato.core.base import ComponentRegistry
 
 
 class Build:
@@ -25,7 +25,7 @@ class Build:
         dependencies: User defined dependencies to replace inbuilt ones.
     """
 
-    storage = DOM()
+    storage = ComponentRegistry()
 
     def __init__(self, dependencies: Optional[list[str]] = None) -> None:
         dependencies = (
@@ -39,7 +39,7 @@ class Build:
         )
         for dependency in dependencies:
             if not self.__check_dependency(dependency) and not self._install_dependency(
-                dependency
+                    dependency
             ):
                 raise ImportError(f"Dependency package {dependency} not found.")
 
@@ -52,15 +52,43 @@ class Build:
         """
 
         platform = "" if not platform else platform
-        for screen, content in cls.storage.graph_dict.items():
-            content["imports"] = cls.__format_imports(content["imports"])
-            cls._write_screen(screen, content)
+        contents = {}
+
+        for screen, content in cls.storage.registry.items():
+            ...
+            contents[screen] = {}
+            print(f"\nrendition: {content.children}")
+            print("screen: ", screen)
+            print(f"imports {content.imports}")
+            print(f"functions {content.functions}")
+            contents[screen]["state"] = content.state
+            contents[screen]["variables"] = content.variables
+            contents[screen]["functions"] = content.functions
+            contents[screen]["children"] = content.children
+            contents[screen]["imports"] = content.imports
+            contents[screen]["package"] = content.package
+            contents[screen]["functional"] = content.is_functional
+            cls._write_screen(screen, contents[screen])
         cls.__format_screens()
-        subprocess.run(
-            f"cd {settings.REACT_NATIVE_PATH} && expo start {platform}",
-            shell=True,
-            check=True,
-        )
+        # subprocess.run(
+        #     f"cd {settings.REACT_NATIVE_PATH} && expo start {platform}",
+        #     shell=True,
+        #     check=True,
+        # )
+        print(contents)
+
+    @classmethod
+    def _write_screen(cls, screen: str, content: dict) -> None:
+        """Writes screen contents to file with screen name as file name.
+
+        Args:
+            screen: Name of screen.
+            content: Dictionary of screen contents.
+        """
+        component = cls.__replace_values(content, screen)
+        os.chdir(settings.REACT_NATIVE_PATH)
+        with open(content["package"], "w", encoding="utf-8") as file:
+            file.write(component)
 
     @staticmethod
     def publish(platform: str, staging: Optional[str] = "preview") -> str:
@@ -86,7 +114,6 @@ class Build:
         os.chdir(settings.REACT_NATIVE_PATH)
 
         with io.BytesIO() as script:
-
             def read(fd) -> bytes:
                 """ "IO helper function."""
                 data = os.read(fd, 1024)
@@ -112,13 +139,6 @@ class Build:
         if not verbose:
             return self.storage.component
         raise NotImplementedError
-
-    @staticmethod
-    def __format_imports(imports_: dict[str, str]) -> str:
-        import_string = ""
-        for key, value in imports_.items():
-            import_string += f'import {value} from "{key}";\n'.replace("'", "")
-        return import_string
 
     @staticmethod
     def __format_screens() -> None:
@@ -154,40 +174,16 @@ class Build:
         Todo:
             * Refactor this travesty.
         """
-        component = settings.APP_REPR.replace("<NAME>", screen)
+        if content["functional"]:
+            str_repr = settings.APP_REPR_FUNCTIONAL_DEFAULT
+        if not content["functional"]:
+            str_repr = settings.APP_REPR
+        component = str_repr.replace("<NAME>", screen)
         if settings.APP_COMPONENT != screen:
             component = component.replace("default", "")
-        if settings.APP_COMPONENT == screen:
-            content[
-                "imports"
-            ] = f"{''.join(settings.APP_IMPORTS)}\n{''.join(content['imports'])}"
-            if settings.USE_NAVIGATION:
-                content[
-                    "imports"
-                ] = f"import 'react-native-gesture-handler';\n{''.join(content['imports'])}"
-                content["state"].update(
-                    **{"navigation": "RootNavigation.navigationRef"}
-                )
         for key in content:
-            if key in ["variables", "functions"]:
-                content[key] = "\n".join(content[key])
-
             component = component.replace(f"<{key.upper()}>", str(content[key]))
         return component
-
-    @classmethod
-    def _write_screen(cls, screen: str, content: dict) -> None:
-        """Writes screen contents to file with screen name as file name.
-
-        Args:
-            screen: Name of screen.
-            content: Dictionary of screen contents.
-        """
-        component = cls.__replace_values(content, screen)
-        with open(
-            f"{settings.REACT_NATIVE_PATH}/{screen}.js", "w", encoding="utf-8"
-        ) as file:
-            file.write(component)
 
     @staticmethod
     def _install_dependency(dependency: str) -> None:
@@ -207,12 +203,12 @@ class Build:
     @staticmethod
     def __access_check(file: str, mode: int) -> bool:
         return (
-            os.path.exists(file) and os.access(file, mode) and not os.path.isdir(file)
+                os.path.exists(file) and os.access(file, mode) and not os.path.isdir(file)
         )
 
     @classmethod
     def __check_dependency(
-        cls, cmd: str, mode: int = os.F_OK | os.X_OK, path: Optional[str] = None
+            cls, cmd: str, mode: int = os.F_OK | os.X_OK, path: Optional[str] = None
     ) -> Optional[str]:
         if os.path.dirname(cmd):
             if cls.__access_check(cmd, mode):
