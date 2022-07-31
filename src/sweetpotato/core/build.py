@@ -39,7 +39,7 @@ class Build:
         )
         for dependency in dependencies:
             if not self.__check_dependency(dependency) and not self._install_dependency(
-                dependency
+                    dependency
             ):
                 raise ImportError(f"Dependency package {dependency} not found.")
 
@@ -114,7 +114,6 @@ class Build:
         os.chdir(settings.REACT_NATIVE_PATH)
 
         with io.BytesIO() as script:
-
             def read(fd) -> bytes:
                 """ "IO helper function."""
                 data = os.read(fd, 1024)
@@ -138,7 +137,7 @@ class Build:
             Implement verbose argument.
         """
         if not verbose:
-            return self.storage.component
+            return self.storage.registry
         raise NotImplementedError
 
     @staticmethod
@@ -209,12 +208,12 @@ class Build:
     @staticmethod
     def __access_check(file: str, mode: int) -> bool:
         return (
-            os.path.exists(file) and os.access(file, mode) and not os.path.isdir(file)
+                os.path.exists(file) and os.access(file, mode) and not os.path.isdir(file)
         )
 
     @classmethod
     def __check_dependency(
-        cls, cmd: str, mode: int = os.F_OK | os.X_OK, path: Optional[str] = None
+            cls, cmd: str, mode: int = os.F_OK | os.X_OK, path: Optional[str] = None
     ) -> Optional[str]:
         if os.path.dirname(cmd):
             if cls.__access_check(cmd, mode):
