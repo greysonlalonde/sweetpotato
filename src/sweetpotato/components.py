@@ -76,11 +76,7 @@ class Button(Composite):
     props: set = BUTTON_PROPS
 
     def __init__(self, **kwargs) -> None:
-        title = (
-            [Text(text=kwargs.pop("title"))]
-            if settings.USE_UI_KITTEN
-            else kwargs.update({"title": f"'{kwargs.pop('title', '')}'"})
-        )
+        title = kwargs.update({"title": f"'{kwargs.pop('title', '')}'"})
         if settings.USE_UI_KITTEN:
             kwargs.update({"children": title})
         super().__init__(**kwargs)

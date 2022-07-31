@@ -28,7 +28,6 @@ class RootNavigation(RootComponent):
 
     is_functional = True
     is_composite = False
-
     is_context = True
     props: set = ROOT_NAVIGATION_PROPS
 
@@ -45,6 +44,9 @@ class RootNavigation(RootComponent):
             },
             **kwargs,
         )
+
+    def __repr__(self):
+        return ""
 
 
 class NavigationContainer(Composite):

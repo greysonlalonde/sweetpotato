@@ -55,12 +55,7 @@ class Build:
         contents = {}
 
         for screen, content in cls.storage.registry.items():
-            ...
             contents[screen] = {}
-            print(f"\nrendition: {content.children}")
-            print("screen: ", screen)
-            print(f"imports {content.imports}")
-            print(f"functions {content.functions}")
             contents[screen]["state"] = content.state
             contents[screen]["variables"] = content.variables
             contents[screen]["functions"] = content.functions
@@ -70,12 +65,11 @@ class Build:
             contents[screen]["functional"] = content.is_functional
             cls._write_screen(screen, contents[screen])
         cls.__format_screens()
-        # subprocess.run(
-        #     f"cd {settings.REACT_NATIVE_PATH} && expo start {platform}",
-        #     shell=True,
-        #     check=True,
-        # )
-        print(contents)
+        subprocess.run(
+            f"cd {settings.REACT_NATIVE_PATH} && expo start {platform}",
+            shell=True,
+            check=True,
+        )
 
     @classmethod
     def _write_screen(cls, screen: str, content: dict) -> None:

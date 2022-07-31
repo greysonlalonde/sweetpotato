@@ -58,11 +58,12 @@ class Component:
         self.parent = settings.APP_COMPONENT
 
     @property
-    def import_name(self):
+    def import_name(self) -> Optional[str]:
+        """Name of component import."""
         return self._import_name
 
     @import_name.setter
-    def import_name(self, name):
+    def import_name(self, name) -> None:
         self._import_name = name
 
     @property
@@ -80,7 +81,7 @@ class Component:
         """Property returning string of variables (if any) belonging to given component."""
         return "\n".join(self._variables)
 
-    def _set_default_name(self):
+    def _set_default_name(self) -> str:
         return self.__class__.__name__
 
     def register(self, renderer: RendererType) -> None:
@@ -175,7 +176,6 @@ class RootComponent(Composite):
     Attributes:
         component_name: Name of .js class/function/const for component.
         import_name: Name of .js class/function/const for component import.
-
     """
 
     package_root: str = f"./{settings.SOURCE_FOLDER}/components"
@@ -205,10 +205,10 @@ class RootComponent(Composite):
         ComponentRegistry.register(self)
 
     @property
-    def imports(self):
+    def imports(self) -> Optional[str]:
+        """Property returning string of imports (if any) belonging to given component."""
         import_string = ""
         for key, value in self._imports.items():
-            print(f"keys: {key, value}")
             if value and "RootNavigation" != list(value)[0]:
                 import_string += (
                     f'import {value} from "{key}";\n'.replace("'", "")
@@ -219,7 +219,8 @@ class RootComponent(Composite):
         return import_string
 
     @property
-    def state(self):
+    def state(self) -> Optional[str]:
+        """Property returning json string of state (if any) belonging to given component."""
         return json.dumps(self._state)
 
     def _set_parent(self, children: list[Union[CompositeType, ComponentType]]) -> None:
