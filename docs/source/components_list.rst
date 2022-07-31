@@ -114,6 +114,42 @@ The UI Kitten equivalent of the :class:`~sweetpotato.components.View` component.
 
    layout = Layout()
 
+:class:`~sweetpotato.ui_kitten.Input`
+***************************************
+
+The UI Kitten equivalent of the :class:`~sweetpotato.components.TextInput` component.
+
+.. code-block:: python
+
+   from sweetpotato.ui_kitten import Input
+
+   input_component = Input()
+
+
+:class:`~sweetpotato.ui_kitten.Button`
+***************************************
+
+The UI Kitten equivalent of the :class:`~sweetpotato.components.Button` component.
+
+.. code-block:: python
+
+   from sweetpotato.ui_kitten import Button
+
+   button = Button()
+
+
+:class:`~sweetpotato.ui_kitten.Text`
+***************************************
+
+The UI Kitten equivalent of the :class:`~sweetpotato.components.Text` component.
+
+.. code-block:: python
+
+   from sweetpotato.ui_kitten import Text
+
+   text = Text()
+
+
 :class:`~sweetpotato.ui_kitten.IconRegistry`
 ***************************************
 

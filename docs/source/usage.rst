@@ -69,8 +69,7 @@ Example:
 
 .. code-block:: python
 
-   from sweetpotato.components import View, Button, Text
-   from sweetpotato.ui_kitten import Layout
+   from sweetpotato.ui_kitten import Layout, Button, Text
    from sweetpotato.config import settings
    from sweetpotato.app import App
 
@@ -85,14 +84,14 @@ Example:
    content = Layout(
         style=layout_style,
         children=[
-            View(
+            Layout(
                 children=[
                     Text(
                         text="I am using",
                     ),
                 ],
             ),
-            View(children=[Button(title="UI Kitten")]),
+            Layout(children=[Button(title="UI Kitten")]),
         ]
    )
 
