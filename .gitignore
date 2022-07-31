@@ -159,3 +159,5 @@ src/sweetpotato/frontend/App.js
 test4.py
 test2.py
 !/src/sweetpotato/frontend/src/components/RootNavigation.js
+!/src/sweetpotato/frontend/src/screens/.gitkeep
+
