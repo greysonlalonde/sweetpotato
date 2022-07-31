@@ -29,8 +29,8 @@ You can view the below example at the following link:
 
 ```python
 from sweetpotato.app import App
-from sweetpotato.components import Text, Button, Image, StyleSheet
-from sweetpotato.ui_kitten import Layout
+from sweetpotato.components import Image, StyleSheet
+from sweetpotato.ui_kitten import Layout, Text, Button
 from sweetpotato.config import settings
 from sweetpotato.navigation import create_bottom_tab_navigator
 

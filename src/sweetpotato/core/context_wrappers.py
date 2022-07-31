@@ -121,9 +121,9 @@ class ContextWrapper(
     """
 
     def wrap(
-            self,
-            component: Union[CompositeType, None],
-            **kwargs,
+        self,
+        component: Union[CompositeType, None],
+        **kwargs,
     ) -> "App":
         """Checks and wraps component in provided wrappers, if configured.
 
@@ -143,7 +143,7 @@ class ContextWrapper(
                 "react-native-gesture-handler": None,
                 "@eva-design/eva": "* as eva",
                 "@ui-kitten/eva-icons": {"EvaIconsPack"},
-                "./src/components/RootNavigation": "* as RootNavigation"
+                "./src/components/RootNavigation": "* as RootNavigation",
             },
         )
         return component

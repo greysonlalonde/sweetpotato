@@ -37,11 +37,11 @@ class Component:
     is_composite: bool = False  #: Indicates whether component may have inner content.
 
     def __init__(
-            self,
-            component_name: Optional[str] = None,
-            children: Optional[str] = None,
-            variables: Optional[list[str]] = None,
-            **kwargs,
+        self,
+        component_name: Optional[str] = None,
+        children: Optional[str] = None,
+        variables: Optional[list[str]] = None,
+        **kwargs,
     ) -> None:
         if set(kwargs.keys()).difference(self.props):
             attributes = ", ".join(set(kwargs.keys()).difference(self.props))
@@ -120,10 +120,10 @@ class Composite(Component):
     is_root: bool = False  #: Indicates whether component is a top level component.
 
     def __init__(
-            self,
-            children: Optional[list[Union[ComponentVar, CompositeVar]]] = None,
-            functions: Optional[list[str]] = None,
-            **kwargs,
+        self,
+        children: Optional[list[Union[ComponentVar, CompositeVar]]] = None,
+        functions: Optional[list[str]] = None,
+        **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self._children = children if children else []
@@ -185,10 +185,10 @@ class RootComponent(Composite):
     )
 
     def __init__(
-            self,
-            state: Optional[dict[str, str]] = None,
-            extra_imports: Optional[dict[str, str]] = None,
-            **kwargs,
+        self,
+        state: Optional[dict[str, str]] = None,
+        extra_imports: Optional[dict[str, str]] = None,
+        **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self._state = state if state else {}
