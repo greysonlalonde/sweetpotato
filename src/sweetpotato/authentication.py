@@ -97,9 +97,14 @@ class AuthenticationProvider(Composite):
 
         stack = create_native_stack_navigator()
         stack.screen(
+            functions=functions,
             state={"username": "", "password": "", "secureTextEntry": True},
-            children=[View(functions=functions, **login_screen())],
+            children=[View(**login_screen())],
             screen_name=login_screen_name,
+            extra_imports={
+                "@react-native-async-storage/async-storage": "AsyncStorage",
+                "expo-secure-store": "* as SecureStore",
+            },
         )
 
         self._children.append(stack)

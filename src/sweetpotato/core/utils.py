@@ -5,7 +5,6 @@ Todo:
 from abc import ABC, abstractmethod
 from typing import Union
 
-from sweetpotato.core.base import DOM
 from sweetpotato.core.protocols import ComponentType, CompositeType
 
 
@@ -26,8 +25,6 @@ class Renderer(ABC):
 class ApplicationRenderer(Renderer):
     """Accepts a top level component and performs all rendering."""
 
-    dom = DOM()
-
     @classmethod
     def accept(cls, obj: CompositeType) -> None:
         """Accepts a component and performs ....
@@ -35,4 +32,4 @@ class ApplicationRenderer(Renderer):
         Args:
             obj: Component object.
         """
-        cls.dom.add_node(obj)
+        ...

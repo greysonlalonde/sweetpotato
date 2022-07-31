@@ -1,59 +1,56 @@
-import {
-  CommonActions,
-  createNavigationContainerRef,
-  DrawerActions,
-  StackActions,
-} from "@react-navigation/native";
+"""
+Default navigation functions.
+"""
 
-export const navigationRef = createNavigationContainerRef();
+NAVIGATION_REF: str = """export const navigationRef = createNavigationContainerRef();"""
 
-export function navigate(name, params) {
+NAVIGATE: str = """export function navigate(name, params) {
   if (navigationRef.isReady()) {
     navigationRef.navigate(name, params);
   }
-}
+}"""
 
-export function push(name, params) {
+PUSH: str = """export function push(name, params) {
   console.log("[PUSH");
   console.log(name);
   console.log(params);
   if (navigationRef.isReady()) {
     navigationRef.dispatch(StackActions.push(name, params));
   }
-}
+}"""
 
-export function getCurrentRoute() {
+GET_CURRENT_ROUTE: str = """export function getCurrentRoute() {
   if (navigationRef.isReady()) {
     return navigationRef.getCurrentRoute();
   }
-}
+}"""
 
-export function setParams(...args) {
+SET_PARAMS: str = """export function setParams(...args) {
   if (navigationRef.isReady()) {
     navigationRef.dispatch(CommonActions.setParams(...args));
   }
-}
+}"""
 
-export function toggleDrawer() {
+TOGGLE_DRAWER: str = """export function toggleDrawer() {
   if (navigationRef.isReady()) {
     navigationRef.dispatch(DrawerActions.toggleDrawer());
   }
-}
+}"""
 
-export function dispatch(...args) {
+DISPATCH: str = """export function dispatch(...args) {
   if (navigationRef.isReady()) {
     navigationRef.dispatch(CommonActions.setParams(...args));
   }
-}
+}"""
 
-export function goBack(...args) {
+GO_BACK: str = """export function goBack(...args) {
   if (navigationRef.isReady()) {
     navigationRef.goBack();
   }
-}
+}"""
 
-export function customNavigate(name, data) {
+CUSTOM_NAVIGATE: str = """export function customNavigate(name, data) {
   if (navigationRef.isReady()) {
     navigationRef.dispatch(CommonActions.push(name, data));
   }
-}
+}"""
