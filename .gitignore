@@ -153,5 +153,9 @@ cython_debug/
 typing_tests.py
 
 src/sweetpotato/frontend/src/*
+src/sweetpotato/frontend/src/components/*
+src/sweetpotato/frontend/src/screens/*
+
 test4.py
 test2.py
+!/src/sweetpotato/frontend/src/components/RootNavigation.js
