@@ -1,6 +1,5 @@
 """
 Default authentication and credential storage functions.
-
 """
 LOGIN: str = """
 login = () => {

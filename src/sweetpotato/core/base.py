@@ -187,13 +187,15 @@ class RootComponent(Composite):
     def __init__(
         self,
         state: Optional[dict[str, str]] = None,
-        extra_imports: Optional[dict[str, str]] = None,
+        extra_imports: Optional[dict[str, Union[str, set]]] = None,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self._state = state if state else {}
-        self.import_name = "".join(
-            [word.title() for word in self.component_name.split(" ")]
+        self.import_name = (
+            "".join([word.title() for word in self.component_name.split(" ")])
+            if len(self.component_name.split(" ")) > 1
+            else self.component_name
         )
         self.package = f"{self.package_root}/{self.import_name}.js"
         self._imports = {}
@@ -206,12 +208,13 @@ class RootComponent(Composite):
     def imports(self):
         import_string = ""
         for key, value in self._imports.items():
-            print(key, value)
-            import_string += (
-                f'import {value} from "{key}";\n'.replace("'", "")
-                if value
-                else f'import "{key}"\n'
-            )
+            print(f"keys: {key, value}")
+            if value and "RootNavigation" != list(value)[0]:
+                import_string += (
+                    f'import {value} from "{key}";\n'.replace("'", "")
+                    if value
+                    else f'import "{key}"\n'
+                )
 
         return import_string
 

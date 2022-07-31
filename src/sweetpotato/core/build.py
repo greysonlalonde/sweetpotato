@@ -176,7 +176,12 @@ class Build:
             * Refactor this travesty.
         """
         if content["functional"]:
-            str_repr = settings.APP_REPR_FUNCTIONAL_DEFAULT
+            str_repr = (
+                "<IMPORTS>\n<FUNCTIONS>"
+                if screen == "RootNavigation"
+                else settings.APP_REPR_FUNCTIONAL_DEFAULT
+            )
+
         if not content["functional"]:
             str_repr = settings.APP_REPR
         component = str_repr.replace("<NAME>", screen)

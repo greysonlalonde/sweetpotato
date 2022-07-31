@@ -6,6 +6,7 @@ https://sweetpotato.readthedocs.io/en/latest/settings.html
 from pathlib import Path
 
 import sweetpotato.functions.authentication_functions as auth_functions
+import sweetpotato.functions.navigation_functions as nav_functions
 from sweetpotato import defaults
 from sweetpotato.core import ThreadSafe
 
@@ -79,6 +80,9 @@ class Settings(metaclass=ThreadSafe):
 
     # Navigation settings
     USE_NAVIGATION: bool = False  #: Indicates whether to use @react-navigation/native.
+    NAVIGATION_FUNCTIONS: list = [
+        v for k, v in nav_functions.__dict__.items() if not k.startswith("__")
+    ]
 
     # React Native settings
     RESOURCE_FOLDER: str = "frontend"  #: Name of expo project resource folder.
